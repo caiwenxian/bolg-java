@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为mapper指定唯一的namespace，通常设置成包名+sql映射的文件名-->
+<mapper namespace="java.dao.java.user.IUserDao">
+
+</mapper>

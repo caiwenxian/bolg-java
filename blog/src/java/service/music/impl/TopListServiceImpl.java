@@ -11,6 +11,7 @@ import model.po.music.SongInfoPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.music.IArtistService;
+import service.music.ISongService;
 import service.music.ITopListService;
 import utils.HttpClientHelper;
 
@@ -31,6 +32,8 @@ public class TopListServiceImpl implements ITopListService{
 
     @Autowired
     IArtistService artistService;
+    @Autowired
+    ISongService songService;
 
     public void addSong(SongInfoPO po) {
 
@@ -69,6 +72,9 @@ public class TopListServiceImpl implements ITopListService{
             po.setName(song.getString("name"));
             po.setArtistId(artistPO.getArtistId());
             //todo 保存操作
+            songService.addSong(po);
+            //爬取歌曲url
+            songService.reptileMp3Url(po.getSongId());
 
         }
 

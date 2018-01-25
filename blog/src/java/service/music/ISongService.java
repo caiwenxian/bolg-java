@@ -24,10 +24,10 @@ public interface ISongService {
 
     /**
      * 爬取歌曲url
-     *
+     * 开启多线程
      * @param
      * @return class
      * @version v1
      */
-    String reptileMp3Url(String songId) throws SerException;
+    void reptileMp3Url(String songId) throws SerException;
 }

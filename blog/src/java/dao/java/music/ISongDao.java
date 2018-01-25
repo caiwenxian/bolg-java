@@ -21,4 +21,22 @@ public interface ISongDao {
      */
     void add(SongInfoPO po) throws QueryException;
 
+    /**
+     * 更新歌曲信息
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void update(SongInfoPO po) throws QueryException;
+
+    /**
+     * 根据songId获取歌曲信息
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    SongInfoPO getBySongId(String id) throws QueryException;
+
 }

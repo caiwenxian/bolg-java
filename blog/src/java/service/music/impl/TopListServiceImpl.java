@@ -9,6 +9,7 @@ import model.enums.music.TopListType;
 import model.po.music.ArtistPO;
 import model.po.music.SongInfoPO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import service.music.IArtistService;
 import service.music.ISongService;
@@ -16,6 +17,7 @@ import service.music.ITopListService;
 import utils.HttpClientHelper;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import java.util.List;
  * @Copy: [com.bjike]
  */
 
-@Service("topListService")
+@Service
 public class TopListServiceImpl implements ITopListService{
 
     @Autowired

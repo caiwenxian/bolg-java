@@ -4,6 +4,7 @@ import dao.java.music.IArtistDao;
 import exception.SerException;
 import model.po.music.ArtistPO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import service.music.IArtistService;
 
 /**
@@ -13,12 +14,13 @@ import service.music.IArtistService;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class ArtistServiceIMpl implements IArtistService {
+@Service
+public class ArtistServiceImpl implements IArtistService {
 
     @Autowired
-    IArtistDao iArtistDao;
+    IArtistDao artistDao;
 
     public void addArtist(ArtistPO po) throws SerException {
-        iArtistDao.addArtist(po);
+        artistDao.addArtist(po);
     }
 }

@@ -2,6 +2,7 @@ package dao.java.music;
 
 import exception.QueryException;
 import model.po.music.SongInfoPO;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Author: [caiwenxian]
@@ -10,6 +11,7 @@ import model.po.music.SongInfoPO;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
+@Repository
 public interface ISongDao {
 
     /**

@@ -9,6 +9,7 @@ import model.constant.NetseaseUrl;
 import model.enums.music.TopListType;
 import model.po.music.SongInfoPO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import service.music.ISongService;
 import utils.HttpClientHelper;
 import utils.RandomUtil;
@@ -23,6 +24,7 @@ import java.util.UUID;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
+@Service
 public class SongServiceImpl implements ISongService {
 
 

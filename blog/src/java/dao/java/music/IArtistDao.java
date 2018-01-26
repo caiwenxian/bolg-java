@@ -2,6 +2,7 @@ package dao.java.music;
 
 import exception.QueryException;
 import model.po.music.ArtistPO;
+import org.springframework.stereotype.Repository;
 
 /**
  * 歌手业务操作
@@ -12,7 +13,7 @@ import model.po.music.ArtistPO;
  * @Copy: [com.bjike]
  */
 
-
+@Repository
 public interface IArtistDao {
 
     /**

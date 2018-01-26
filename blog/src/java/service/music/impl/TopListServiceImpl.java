@@ -8,6 +8,7 @@ import model.dto.music.TopListDTO;
 import model.enums.music.TopListType;
 import model.po.music.ArtistPO;
 import model.po.music.SongInfoPO;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ import utils.HttpClientHelper;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -46,12 +50,11 @@ public class TopListServiceImpl implements ITopListService{
         StringBuffer url = new StringBuffer();
         url.append(NetseaseUrl.API);
         String url2 = TopListType.getUrl(dto.getTopListType().getCode());
-        url.append(dto);
         url.append(url2);
         url.append("&limit=" + dto.getLimit());
         url.append("&order=new");
 
-        String result = HttpClientHelper.sendPost(url.toString(), null, "UTF-8");
+        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
 
         JSONObject jsonObject = JSONObject.parseObject(result);
         JSONObject object = (JSONObject) jsonObject.get("result");
@@ -64,23 +67,17 @@ public class TopListServiceImpl implements ITopListService{
             ArtistPO artistPO = new ArtistPO();
             artistPO.setArtistId(artist.getJSONObject(0).getString("id"));
             artistPO.setName(artist.getJSONObject(0).getString("name"));
-            //todo 保存操作
             artistService.addArtist(artistPO);
-
 
             //保存歌曲
             SongInfoPO po = new SongInfoPO();
             po.setSongId(song.getString("id"));
             po.setName(song.getString("name"));
             po.setArtistId(artistPO.getArtistId());
-            //todo 保存操作
             songService.addSong(po);
             //爬取歌曲url
             songService.reptileMp3Url(po.getSongId());
-
         }
-
-
-
+        System.out.println("爬取列表完成" + Calendar.MILLISECOND);
     }
 }

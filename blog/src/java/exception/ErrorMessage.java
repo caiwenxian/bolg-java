@@ -9,4 +9,8 @@ package exception;
 public class ErrorMessage {
 
    public static final String NOT_FOUND = "该实体不存在";
+
+   public static final String MUSIC_IS_EXIST = "该歌曲已存在";
+
+   public static final String MUSIC_NOT_EXIST = "该歌曲不存在";
 }

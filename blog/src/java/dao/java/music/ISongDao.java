@@ -2,6 +2,7 @@ package dao.java.music;
 
 import exception.QueryException;
 import model.po.music.SongInfoPO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -39,6 +40,6 @@ public interface ISongDao {
      * @return class
      * @version v1
      */
-    SongInfoPO getBySongId(String id) throws QueryException;
+    SongInfoPO getBySongId(@Param("songId") String songId) throws QueryException;
 
 }

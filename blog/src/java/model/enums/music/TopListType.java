@@ -38,10 +38,21 @@ public enum TopListType {
 
     private int code;
 
+
     private TopListType(String name, String url, int code){
         this.name = name;
         this.url = url;
         this.code = code;
+    }
+
+    public static TopListType topListType(String name){
+        for (TopListType top : TopListType.values()) {
+            if (name.equals(top.getName())) {
+                return top;
+            }
+        }
+        return null;
+
     }
 
     // 获取url

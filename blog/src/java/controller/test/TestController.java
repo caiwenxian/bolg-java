@@ -5,8 +5,12 @@ import model.po.user.UserPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import service.common.Result;
+import service.common.impl.ActResult;
 import service.user.IUserService;
 
 import javax.annotation.Resource;
@@ -33,12 +37,15 @@ public class TestController {
 
 
     @GetMapping("/v1/user")
-    public void user() {
+    @ResponseBody
+    public Result user() {
         try {
             userService.addUser(new UserPO("zhangsan", "000000", 1));
+            return ActResult.success("success");
         } catch (SerException e) {
-            e.printStackTrace();
+            return ActResult.error(303, e.getMessage());
         }
+
     }
 
     @GetMapping("/v1/home")

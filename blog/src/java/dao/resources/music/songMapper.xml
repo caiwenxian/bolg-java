@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.music.ISongDao">
+
+    <insert id="add" parameterType="model.po.music.SongInfoPO">
+        INSERT INTO t_song (id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime)VALUES
+         (#{id}, #{name}, #{songId}, #{artistId}, #{lyricId}, #{mp3Url}, #{origin}, NOW(), NOW())
+    </insert>
+
+    <insert id="update" parameterType="model.po.music.SongInfoPO">
+        UPDATE t_song SET mp3Url = #{mp3Url}, modifyTime = NOW() WHERE songId = #{songId}
+    </insert>
+
+    <select id="getBySongId" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
+        SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+         FROM t_song WHERE songId = #{songId}
+    </select>
+</mapper>

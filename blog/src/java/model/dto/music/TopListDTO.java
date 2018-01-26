@@ -25,6 +25,10 @@ public class TopListDTO extends BaseDTO{
         this.topListType = topListType;
     }
 
+    public TopListDTO() {
+
+    }
+
     public TopListDTO(TopListType topListType) {
         this.topListType = topListType;
     }

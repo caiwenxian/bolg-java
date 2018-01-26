@@ -31,28 +31,50 @@ public class SongServiceImpl implements ISongService {
     @Autowired
     ISongDao songDao;
 
+    @Override
     public void addSong(SongInfoPO po) throws SerException {
+        SongInfoPO old = songDao.getBySongId(po.getSongId());
+        if (null != old) {
+//            throw new SerException(ErrorMessage.MUSIC_IS_EXIST);
+            System.out.println(ErrorMessage.MUSIC_IS_EXIST);
+            return;
+        }
         po.setId(RandomUtil.getUid());
         songDao.add(po);
     }
 
-    public void addMp3Url(String songId, String mp3Url) throws SerException {
-        SongInfoPO po = songDao.getBySongId(songId);
-        if (null == po) {
-            throw new SerException(ErrorMessage.NOT_FOUND);
-        }
-        po.setMp3Url(mp3Url);
-        songDao.update(po);
-    }
-
+    @Override
     public void reptileMp3Url(String songId) throws SerException {
         Thread thread = new Thread(new Reptilep(songId));
         thread.start();
     }
 
+    /**
+     * 添加mp3url
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    public void addMp3Url(String songId, String mp3Url) throws SerException {
+        SongInfoPO po = songDao.getBySongId(songId);
+        if (null == po) {
+//            throw new SerException(ErrorMessage.NOT_FOUND);
+            System.out.println(ErrorMessage.MUSIC_NOT_EXIST);
+            return;
+        }
+        po.setMp3Url(mp3Url);
+        songDao.update(po);
+    }
+
+
+    /**
+     * 异步爬取mp3url
+     *
+     */
     class Reptilep implements Runnable {
 
-        String songId;
+        private String songId;
 
         public Reptilep(String songId) {
             this.songId = songId;
@@ -66,7 +88,7 @@ public class SongServiceImpl implements ISongService {
             url.append("&ids=[" + this.songId + "]");
             url.append("&br=3200000");
 
-            String result = HttpClientHelper.sendPost(url.toString(), null, "UTF-8");
+            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
             JSONObject jsonObject = JSONObject.parseObject(result);
             JSONArray songs = jsonObject.getJSONArray("data");
             JSONObject song = songs.getJSONObject(0);
@@ -74,7 +96,9 @@ public class SongServiceImpl implements ISongService {
             String size = song.getString("size");
             String type = song.getString("type");
 
+            System.out.println("爬取mp3url完成");
             try {
+                //添加歌曲mp3url
                 addMp3Url(this.songId, map3Url);
             } catch (SerException e) {
                 e.printStackTrace();

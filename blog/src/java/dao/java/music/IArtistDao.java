@@ -24,4 +24,13 @@ public interface IArtistDao {
      * @version v1
      */
     void addArtist(ArtistPO po) throws QueryException;
+
+    /**
+     * 根据歌手id获取歌手信息
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    ArtistPO getArtistByArtistId(String id) throws QueryException;
 }

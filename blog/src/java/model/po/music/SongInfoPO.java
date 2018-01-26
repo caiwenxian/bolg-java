@@ -11,7 +11,6 @@ import model.po.common.BasePO;
  */
 public class SongInfoPO extends BasePO{
 
-
     /**
      * 歌曲id
      */

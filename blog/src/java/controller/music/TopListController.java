@@ -47,4 +47,31 @@ public class TopListController {
         }
 
     }
+
+    @GetMapping("/tops")
+    @ResponseBody
+    public Result listTopByTopType (String[] names) {
+
+
+//        TopListDTO topListDTO = new TopListDTO();
+//        TopListType topListType = TopListType.topListType(name);
+//        if (null == topListType) {
+//            return ActResult.error(ErrorCode.GENERAL, "榜单不存在");
+//        }
+
+
+        try {
+            for (String name : names) {
+                TopListDTO topListDTO = new TopListDTO();
+                TopListType topListType = TopListType.topListType(name);
+                topListDTO.setTopListType(topListType);
+                topListService.reptileSongs(topListDTO);
+            }
+
+            return ActResult.success("success");
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+
+    }
 }

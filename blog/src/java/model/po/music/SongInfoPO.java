@@ -41,6 +41,8 @@ public class SongInfoPO extends BasePO{
      */
     private String origin;
 
+
+
     public SongInfoPO() {
     }
 

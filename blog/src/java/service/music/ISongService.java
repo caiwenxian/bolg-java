@@ -23,11 +23,30 @@ public interface ISongService {
     void addSong(SongInfoPO po) throws SerException;
 
     /**
-     * 爬取歌曲url
-     * 开启多线程
+     * 根据songId获取歌曲信息
+     *
      * @param
      * @return class
      * @version v1
      */
-    void reptileMp3Url(String songId) throws SerException;
+    SongInfoPO getBySongId(String songId) throws SerException;
+
+    /**
+     * 更新
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void update(SongInfoPO po) throws SerException;
+
+
+    /**
+     * 添加mp3url
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void addMp3Url(String songId, String mp3Url) throws SerException;
 }

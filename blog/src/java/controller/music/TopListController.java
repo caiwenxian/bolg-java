@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import service.common.Result;
 import service.common.impl.ActResult;
 import service.music.ITopListService;
+import service.music.reptile.IReptileSongService;
 
 /**
  * @Author: [caiwenxian]
@@ -26,52 +27,5 @@ import service.music.ITopListService;
 @RequestMapping("/toplist")
 public class TopListController {
 
-    @Autowired
-    ITopListService topListService;
 
-    @GetMapping("/top/{name}")
-    @ResponseBody
-    public Result listTopByTopType (@PathVariable String name) {
-
-        TopListDTO topListDTO = new TopListDTO();
-        TopListType topListType = TopListType.topListType(name);
-        if (null == topListType) {
-            return ActResult.error(ErrorCode.GENERAL, "榜单不存在");
-        }
-        topListDTO.setTopListType(topListType);
-        try {
-            topListService.reptileSongs(topListDTO);
-            return ActResult.success("success");
-        } catch (SerException e) {
-            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
-        }
-
-    }
-
-    @GetMapping("/tops")
-    @ResponseBody
-    public Result listTopByTopType (String[] names) {
-
-
-//        TopListDTO topListDTO = new TopListDTO();
-//        TopListType topListType = TopListType.topListType(name);
-//        if (null == topListType) {
-//            return ActResult.error(ErrorCode.GENERAL, "榜单不存在");
-//        }
-
-
-        try {
-            for (String name : names) {
-                TopListDTO topListDTO = new TopListDTO();
-                TopListType topListType = TopListType.topListType(name);
-                topListDTO.setTopListType(topListType);
-                topListService.reptileSongs(topListDTO);
-            }
-
-            return ActResult.success("success");
-        } catch (SerException e) {
-            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
-        }
-
-    }
 }

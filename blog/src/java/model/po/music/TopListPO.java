@@ -84,4 +84,6 @@ public class TopListPO extends BasePO{
     public void setTrackUpdateTime(String trackUpdateTime) {
         this.trackUpdateTime = trackUpdateTime;
     }
+
+
 }

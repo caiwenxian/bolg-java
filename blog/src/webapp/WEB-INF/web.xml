@@ -38,6 +38,11 @@
         <param-value>60000</param-value>
     </context-param>
 
+    <!--NFDFlightDataTaskListener 监听器-->
+    <listener>
+        <listener-class>utils.timeTask.NFDFlightDataTaskListener</listener-class>
+    </listener>
+
     <!-- Web 项目 Spring 加载 Log4j 的监听 -->
     <!--<listener>-->
     <!--<listener-class>com.lifeshs.common.web.utils.Log4jConfigListener</listener-class>-->

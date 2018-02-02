@@ -2,7 +2,11 @@ package dao.java.music;
 
 import exception.QueryException;
 import model.po.music.ArtistPO;
+import model.po.music.HotArtistPO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 歌手业务操作
@@ -33,4 +37,24 @@ public interface IArtistDao {
      * @version v1
      */
     ArtistPO getArtistByArtistId(String id) throws QueryException;
+
+    /**
+     * 添加热门歌手
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void addHotArtist(List<HotArtistPO> list) throws QueryException;
+
+    /**
+     * 根据姓名获取歌手列表
+     *
+     * @param name
+     * @return class
+     * @version v1
+     */
+    List<ArtistPO> listArtistByName(@Param("name") String name) throws QueryException;
+
+
 }

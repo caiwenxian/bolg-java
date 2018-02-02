@@ -1,14 +1,22 @@
 package service.music.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import dao.java.music.IArtistDao;
 import exception.SerException;
+import model.constant.NetseaseUrl;
 import model.po.music.ArtistPO;
+import model.po.music.HotArtistPO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.music.IArtistService;
+import service.music.reptile.IReptileArtistService;
+import utils.HttpClientHelper;
 import utils.RandomUtil;
+
+import java.util.List;
 
 /**
  * @Author: [caiwenxian]
@@ -22,6 +30,8 @@ public class ArtistServiceImpl implements IArtistService {
 
     @Autowired
     IArtistDao artistDao;
+    @Autowired
+    IReptileArtistService reptileArtistService;
 
     public void addArtist(ArtistPO po) throws SerException {
 
@@ -35,5 +45,31 @@ public class ArtistServiceImpl implements IArtistService {
         }
         po.setId(RandomUtil.getUid());
         artistDao.addArtist(po);
+    }
+
+    @Override
+    public void addHotArtist(List<HotArtistPO> pos) throws SerException {
+        if (pos == null || pos.size() == 0) {
+            return;
+        }
+        for (HotArtistPO po : pos) {
+            po.setId(RandomUtil.getUid());
+        }
+        artistDao.addHotArtist(pos);
+    }
+
+    @Override
+    public List<ArtistPO> listArtistByName(String name) throws SerException {
+        List<ArtistPO> list = artistDao.listArtistByName(name);
+        if (list.size() == 0) { //若本地数据库找不到，则进行爬取
+            reptileArtistService.asynReptile(1, new String[]{name});
+            try {
+                Thread.currentThread().sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            list = artistDao.listArtistByName(name);
+        }
+        return list;
     }
 }

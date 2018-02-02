@@ -3,6 +3,8 @@ package service.music;
 import exception.SerException;
 import model.dto.music.TopListDTO;
 import model.po.music.SongInfoPO;
+import model.po.music.TopListDetailsPO;
+import model.po.music.TopListPO;
 
 import java.util.List;
 
@@ -15,14 +17,43 @@ import java.util.List;
  */
 public interface ITopListService {
 
-    void addSong(SongInfoPO po);
+//    void addSong(SongInfoPO po);
+
 
     /**
-     * 排行榜歌曲爬取
+     * 添加排行榜
      *
      * @param
      * @return class
      * @version v1
      */
-    void reptileSongs(TopListDTO dto) throws SerException;
+    void addTopList(TopListPO po) throws SerException;
+
+    /**
+     * 添加排行榜-歌曲关联
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void addTopListDetails(TopListDetailsPO po) throws SerException;
+
+    /**
+     * 根据排行榜id获取排行榜
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    TopListPO getByTopListId(String topListId) throws SerException;
+
+    /**
+     * 删除排行榜-歌曲关联
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void deleteTopListDetails(String topListId) throws SerException;
+
 }

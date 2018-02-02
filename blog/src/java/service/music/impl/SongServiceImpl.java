@@ -8,9 +8,11 @@ import exception.SerException;
 import model.constant.NetseaseUrl;
 import model.enums.music.TopListType;
 import model.po.music.SongInfoPO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.music.ISongService;
+import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
 import utils.RandomUtil;
 
@@ -30,6 +32,8 @@ public class SongServiceImpl implements ISongService {
 
     @Autowired
     ISongDao songDao;
+    @Autowired
+    IReptileSongService reptileMp3Url;
 
     @Override
     public void addSong(SongInfoPO po) throws SerException {
@@ -37,72 +41,37 @@ public class SongServiceImpl implements ISongService {
         if (null != old) {
 //            throw new SerException(ErrorMessage.MUSIC_IS_EXIST);
             System.out.println(ErrorMessage.MUSIC_IS_EXIST);
-            return;
+            if (StringUtils.isNotBlank(old.getMp3Url())) {
+                return;
+            }
+            reptileMp3Url.reptileMp3Url(old.getSongId());
         }
         po.setId(RandomUtil.getUid());
         songDao.add(po);
+        //爬取mp3url
+        reptileMp3Url.reptileMp3Url(po.getSongId());
     }
 
     @Override
-    public void reptileMp3Url(String songId) throws SerException {
-        Thread thread = new Thread(new Reptilep(songId));
-        thread.start();
+    public SongInfoPO getBySongId(String songId) throws SerException {
+        SongInfoPO po = songDao.getBySongId(songId);
+        return po;
     }
 
-    /**
-     * 添加mp3url
-     *
-     * @param
-     * @return class
-     * @version v1
-     */
+    @Override
+    public void update(SongInfoPO po) throws SerException {
+        songDao.update(po);
+    }
+
+    @Override
     public void addMp3Url(String songId, String mp3Url) throws SerException {
-        SongInfoPO po = songDao.getBySongId(songId);
+        SongInfoPO po = this.getBySongId(songId);
         if (null == po) {
 //            throw new SerException(ErrorMessage.NOT_FOUND);
             System.out.println(ErrorMessage.MUSIC_NOT_EXIST);
             return;
         }
         po.setMp3Url(mp3Url);
-        songDao.update(po);
-    }
-
-
-    /**
-     * 异步爬取mp3url
-     *
-     */
-    class Reptilep implements Runnable {
-
-        private String songId;
-
-        public Reptilep(String songId) {
-            this.songId = songId;
-        }
-
-        public void run() {
-            StringBuffer url = new StringBuffer();
-            url.append(NetseaseUrl.API);
-            url.append("/api/song/enhance/player/url/");
-            url.append("?id=" + this.songId);
-            url.append("&ids=[" + this.songId + "]");
-            url.append("&br=3200000");
-
-            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
-            JSONObject jsonObject = JSONObject.parseObject(result);
-            JSONArray songs = jsonObject.getJSONArray("data");
-            JSONObject song = songs.getJSONObject(0);
-            String map3Url = song.getString("url");
-            String size = song.getString("size");
-            String type = song.getString("type");
-
-            System.out.println("爬取mp3url完成");
-            try {
-                //添加歌曲mp3url
-                addMp3Url(this.songId, map3Url);
-            } catch (SerException e) {
-                e.printStackTrace();
-            }
-        }
+        this.update(po);
     }
 }

@@ -39,7 +39,7 @@ public enum TopListType {
     private int code;
 
 
-    private TopListType(String name, String url, int code){
+    TopListType(String name, String url, int code){
         this.name = name;
         this.url = url;
         this.code = code;

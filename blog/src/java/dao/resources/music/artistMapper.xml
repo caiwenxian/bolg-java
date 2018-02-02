@@ -9,4 +9,16 @@
     <select id="getArtistByArtistId" parameterType="java.lang.String" resultType="model.po.music.ArtistPO">
         SELECT id, artistId, name FROM t_artist WHERE artistId = #{artistId}
     </select>
+
+    <select id="addHotArtist" parameterType="List" >
+        INSERT INTO t_hotartist (id, artistId, num, createTime, modifyTime)VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id, jdbcType=VARCHAR}, #{item.artistId,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER}, NOW(), NOW())
+        </foreach>
+    </select>
+
+    <select id="listArtistByName" parameterType="java.lang.String" resultType="model.po.music.ArtistPO">
+        SELECT id, artistId, name FROM t_artist WHERE name LIKE CONCAT('%', #{name}, '%')
+    </select>
+
 </mapper>

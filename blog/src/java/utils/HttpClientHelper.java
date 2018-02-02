@@ -53,6 +53,12 @@ public class HttpClientHelper {
             con.setDoInput(true);
             con.setUseCaches(false);
             con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("Accept", "*/*");
+            con.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4");
+            con.setRequestProperty("Referer", "http://music.163.com");
+            con.setRequestProperty("Host", "music.163.com");
+            con.setRequestProperty("Cookie", "");
+            con.setRequestProperty("User-Agent", randomUserAgent());
             if (sbParams != null && sbParams.length() > 0) {
                 osw = new OutputStreamWriter(con.getOutputStream(), charset);
                 osw.write(sbParams.substring(0, sbParams.length() - 1));

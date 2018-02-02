@@ -13,7 +13,7 @@
     </select>
 
     <update id="updateTrackUpDateTime" parameterType="model.po.music.TopListPO">
-        UPDATE t_toplist SET tractUpdateTime = #{tractUpdateTime}, modifyTime = NOW()
+        UPDATE t_toplist SET trackUpdateTime = #{trackUpdateTime}, modifyTime = NOW()
         WHERE topListId = #{topListId}
     </update>
 

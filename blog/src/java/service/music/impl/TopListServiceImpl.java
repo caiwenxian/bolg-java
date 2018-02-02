@@ -42,77 +42,18 @@ import java.util.List;
 
 @Service
 public class TopListServiceImpl implements ITopListService{
-
-    @Autowired
-    IArtistService artistService;
-    @Autowired
-    ISongService songService;
+//
+//    @Autowired
+//    IArtistService artistService;
+//    @Autowired
+//    ISongService songService;
     @Autowired
     ITopListDao topListDao;
     @Autowired
     ITopListDetailsDao topListDetailsDao;
 
-    public void addSong(SongInfoPO po) {
-
-    }
-
-    public void reptileSongs(TopListDTO dto) throws SerException{
-
-        StringBuffer url = new StringBuffer();
-        url.append(NetseaseUrl.API);
-        String url2 = TopListType.getUrl(dto.getTopListType().getCode());
-        url.append(url2);
-        url.append("&limit=" + dto.getLimit());
-        url.append("&order=new");
-
-        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
-
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        JSONObject object = (JSONObject) jsonObject.get("result");
-        JSONArray songs = object.getJSONArray("tracks");
-
-        //保存排行榜
-        String topListId = object.getString("id");
-        String topListName = object.getString("name");
-        String trackUpdateTime = object.getString("trackUpdateTime");
-
-        TopListPO old = topListDao.getByTopListId(topListId);
-        if (old != null && trackUpdateTime.equals(old.getTrackUpdateTime())) {
-            System.out.println("官方排行榜暂未更新");
-            throw new SerException("官方排行榜暂未更新");
-        }
-        addTopList(new TopListPO(topListName, topListId, Origin.WANG_YI.name(), trackUpdateTime));
-
-        Iterator<Object> it = songs.iterator();
-        int num = 1;
-        while (it.hasNext()) {
-            JSONObject song = (JSONObject) it.next();
-            JSONArray artist = song.getJSONArray("artists");
-            //保存歌手
-            ArtistPO artistPO = new ArtistPO();
-            artistPO.setArtistId(artist.getJSONObject(0).getString("id"));
-            artistPO.setName(artist.getJSONObject(0).getString("name"));
-            artistService.addArtist(artistPO);
-
-            //保存歌曲
-            SongInfoPO po = new SongInfoPO();
-            String songId = song.getString("id");
-            po.setSongId(songId);
-            po.setName(song.getString("name"));
-            po.setArtistId(artistPO.getArtistId());
-            songService.addSong(po);
-
-            //爬取歌曲url
-            songService.reptileMp3Url(po.getSongId());
-
-            //排行榜-歌曲关联
-            addTopListDetails(new TopListDetailsPO(topListId, songId, num));
-            num ++;
-        }
-        System.out.println("爬取列表完成" + Calendar.MILLISECOND);
-    }
-
-    void addTopList(TopListPO po) {
+    @Override
+    public void addTopList(TopListPO po) {
         TopListPO old = topListDao.getByTopListId(po.getTopListId());
         if (old == null) {
             po.setId(RandomUtil.getUid());
@@ -123,14 +64,8 @@ public class TopListServiceImpl implements ITopListService{
         topListDao.updateTrackUpDateTime(old);
     }
 
-    /**
-     *
-     * 排行榜-歌曲关联
-     * @param
-     * @return class
-     * @version v1
-     */
-    void addTopListDetails(TopListDetailsPO po) {
+    @Override
+    public void addTopListDetails(TopListDetailsPO po) {
         TopListDetailsPO old = topListDetailsDao.getByTopListIdAndSongId(po.getTopListId(), po.getSongId());
         if (null != old) {
             System.out.println("排行榜-歌曲关联已存在");
@@ -138,5 +73,16 @@ public class TopListServiceImpl implements ITopListService{
         }
         po.setId(RandomUtil.getUid());
         topListDetailsDao.add(po);
+    }
+
+    @Override
+    public TopListPO getByTopListId(String topListId) throws SerException {
+        TopListPO old = topListDao.getByTopListId(topListId);
+        return old;
+    }
+
+    @Override
+    public void deleteTopListDetails(String topListId) throws SerException {
+        topListDetailsDao.delete(topListId);
     }
 }

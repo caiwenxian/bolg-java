@@ -38,8 +38,8 @@ public class NetseaseTest {
         String artistId = String.valueOf(((JSONObject)artists.get(0)).get("id"));
         String id = String.valueOf(song.get("id"));
         String name = String.valueOf(song.get("name"));
-        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);
-        System.out.println(songInfoPO.toString());
+//        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null, null);
+//        System.out.println(songInfoPO.toString());
 
     }
 
@@ -58,8 +58,8 @@ public class NetseaseTest {
         String artistId = String.valueOf(((JSONObject)artists.get(0)).get("id"));
         String id = String.valueOf(song.get("id"));
         String name = String.valueOf(song.get("name"));
-        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);
-        System.out.println(songInfoPO.toString());
+//        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);
+//        System.out.println(songInfoPO.toString());
 
     }
 
@@ -78,8 +78,8 @@ public class NetseaseTest {
         String artistId = String.valueOf(((JSONObject)artists.get(0)).get("id"));
         String id = String.valueOf(song.get("id"));
         String name = String.valueOf(song.get("name"));
-        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);
-        System.out.println(songInfoPO.toString());
+//        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);
+//        System.out.println(songInfoPO.toString());
 
     }
 

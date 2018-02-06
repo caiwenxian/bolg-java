@@ -5,6 +5,8 @@ import model.po.music.SongInfoPO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @Author: [caiwenxian]
  * @Date: [2018-01-19 09:38]
@@ -41,5 +43,14 @@ public interface ISongDao {
      * @version v1
      */
     SongInfoPO getBySongId(@Param("songId") String songId) throws QueryException;
+
+    /**
+     * 根据歌名模糊查询
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    List<SongInfoPO> listSongByName(@Param("name") String name) throws QueryException;
 
 }

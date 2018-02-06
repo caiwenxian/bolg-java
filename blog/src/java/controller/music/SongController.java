@@ -1,10 +1,9 @@
 package controller.music;
 
-import dao.java.music.IArtistHotSongDao;
 import exception.ErrorCode;
 import exception.SerException;
-import model.dto.music.ArtistHotSongDTO;
 import model.po.music.ArtistPO;
+import model.po.music.SongInfoPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,30 +12,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.common.Result;
 import service.common.impl.ActResult;
-import service.music.IArtistHotSongService;
-import service.music.IArtistService;
-import service.music.reptile.IReptileSongService;
+import service.music.ISongService;
 
 import java.util.List;
 
 /**
- * 歌手业务
+ * 歌曲业务
+ *
  * @Author: [caiwenxian]
- * @Date: [2018-01-29 17:17]
- * @Description: [ ]
+ * @Date: [2018-02-05 17:52]
+ * @Description: [ 歌曲业务 ]
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-
 @Controller
-@RequestMapping("/artist")
-public class ArtistController {
+@RequestMapping("/song")
+public class SongController {
 
     @Autowired
-    IArtistService artistService;
+    ISongService songService;
 
     /**
-     * 歌手模糊搜索
+     * 歌曲模糊搜索
      *
      * @param
      * @return class
@@ -46,11 +43,10 @@ public class ArtistController {
     @ResponseBody
     public Result search(@PathVariable String name) {
         try {
-            List<ArtistPO> list = artistService.listArtistByName(name);
+            List<SongInfoPO> list = songService.listSongByName(name);
             return ActResult.data(list);
         } catch (SerException e) {
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());
         }
     }
-
 }

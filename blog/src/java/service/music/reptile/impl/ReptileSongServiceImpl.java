@@ -105,7 +105,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
 
     @Override
     public void reptileMp3Url(String songId) throws SerException {
-        Thread thread = new Thread(new Reptilep(songId));
+        Thread thread = new Thread(new ReptilepMp3(songId));
         thread.start();
     }
 
@@ -161,15 +161,84 @@ public class ReptileSongServiceImpl implements IReptileSongService{
         }
     }
 
+    @Override
+    public void reptileSongs(String name) throws SerException {
+        StringBuffer url = new StringBuffer();
+        url.append(NetseaseUrl.API);
+        url.append("/api/search/pc/");
+        url.append("?s=" + name);
+        url.append("&limit=10");
+        url.append("&type=1");
+        url.append("&offset=0");
+
+        String result = HttpClientHelper.sendPost(url.toString(), null, "UTF-8");
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        JSONObject object = (JSONObject) jsonObject.get("result");
+        JSONArray songs = object.getJSONArray("songs");
+        int num = 1;
+        for (Object song1 : songs) {
+            JSONObject song = (JSONObject) song1;
+            SongInfoPO songInfoPO = new SongInfoPO();
+            songInfoPO.setSongId(song.getString("id"));
+            songInfoPO.setName(song.getString("name"));
+            songInfoPO.setNum(num);
+            songService.addSong(songInfoPO);
+            num ++;
+        }
+        System.out.println("爬取歌曲完成");
+    }
+
+    @Override
+    public void asynReptile(int type, String[] params) throws SerException {
+        Thread thread = new Thread(new Reptilep(type, params));
+        thread.start();
+    }
+
+    /**
+     * 异步爬取
+     *
+     * @version v1
+     */
+    class Reptilep implements Runnable {
+
+        private Integer type;
+
+        private String params[];
+
+        public Reptilep(Integer type, String[] params) {
+            this.type = type;
+            this.params = params;
+        }
+
+        public void run() {
+            try {
+                switch (type) {
+                    case 1:  //歌手搜索
+                        reptileSongs(params[0]);
+                        break;
+                    default:
+                        break;
+                }
+            } catch (SerException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    void reptileMp3 () {
+
+    }
+
     /**
      * 异步爬取mp3url
      *
      */
-    class Reptilep implements Runnable {
+    class ReptilepMp3 implements Runnable {
 
         private String songId;
 
-        public Reptilep(String songId) {
+        public ReptilepMp3(String songId) {
             this.songId = songId;
         }
 

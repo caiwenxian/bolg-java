@@ -16,6 +16,7 @@ import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
 import utils.RandomUtil;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,7 +34,7 @@ public class SongServiceImpl implements ISongService {
     @Autowired
     ISongDao songDao;
     @Autowired
-    IReptileSongService reptileMp3Url;
+    IReptileSongService reptileSongService;
 
     @Override
     public void addSong(SongInfoPO po) throws SerException {
@@ -44,12 +45,13 @@ public class SongServiceImpl implements ISongService {
             if (StringUtils.isNotBlank(old.getMp3Url())) {
                 return;
             }
-            reptileMp3Url.reptileMp3Url(old.getSongId());
+            reptileSongService.reptileMp3Url(old.getSongId());
+            return;
         }
         po.setId(RandomUtil.getUid());
         songDao.add(po);
         //爬取mp3url
-        reptileMp3Url.reptileMp3Url(po.getSongId());
+        reptileSongService.reptileMp3Url(po.getSongId());
     }
 
     @Override
@@ -73,5 +75,20 @@ public class SongServiceImpl implements ISongService {
         }
         po.setMp3Url(mp3Url);
         this.update(po);
+    }
+
+    @Override
+    public List<SongInfoPO> listSongByName(String name) throws SerException {
+        List<SongInfoPO> list = songDao.listSongByName(name);
+        if (list.size() == 0) { //若本地数据库找不到，则进行爬取
+            reptileSongService.asynReptile(1, new String[]{name});
+            try {
+                Thread.currentThread().sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            list = songDao.listSongByName(name);
+        }
+        return list;
     }
 }

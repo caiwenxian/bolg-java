@@ -41,16 +41,24 @@ public class SongInfoPO extends BasePO{
      */
     private String origin;
 
+    /**
+     * 序号
+     */
+    private Integer num;
+
 
 
     public SongInfoPO() {
     }
 
-    public SongInfoPO(String songId, String name, String artistId, String lyricId) {
+    public SongInfoPO(String songId, String name, String artistId, String lyricId, String mp3Url, String origin, Integer num) {
         this.songId = songId;
         this.name = name;
         this.artistId = artistId;
         this.lyricId = lyricId;
+        this.mp3Url = mp3Url;
+        this.origin = origin;
+        this.num = num;
     }
 
     @Override
@@ -110,5 +118,13 @@ public class SongInfoPO extends BasePO{
 
     public void setOrigin(String origin) {
         this.origin = origin;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
     }
 }

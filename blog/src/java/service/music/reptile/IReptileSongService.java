@@ -39,4 +39,22 @@ public interface IReptileSongService {
      * @version v1
      */
     void reptileHotSongs(ArtistHotSongDTO dto) throws SerException;
+
+    /**
+     * 爬取歌曲(模糊搜索)
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void reptileSongs(String name) throws SerException;
+
+    /**
+     * 异步爬取
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void asynReptile(int type, String params[]) throws SerException;
 }

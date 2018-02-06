@@ -3,8 +3,8 @@
 <mapper namespace="dao.java.music.ISongDao">
 
     <insert id="add" parameterType="model.po.music.SongInfoPO">
-        INSERT INTO t_song (id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime)VALUES
-         (#{id}, #{name}, #{songId}, #{artistId}, #{lyricId}, #{mp3Url}, #{origin}, NOW(), NOW())
+        INSERT INTO t_song (id, name, songId, artistId, lyricId, mp3Url, origin, num, createTime, modifyTime)VALUES
+         (#{id}, #{name}, #{songId}, #{artistId}, #{lyricId}, #{mp3Url}, #{origin}, #{num}, NOW(), NOW())
     </insert>
 
     <insert id="update" parameterType="model.po.music.SongInfoPO">
@@ -15,4 +15,11 @@
         SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
          FROM t_song WHERE songId = #{songId}
     </select>
+
+    <select id="listSongByName" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
+        SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+         FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC
+    </select>
+
+
 </mapper>

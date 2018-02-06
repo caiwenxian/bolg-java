@@ -3,6 +3,8 @@ package service.music;
 import exception.SerException;
 import model.po.music.SongInfoPO;
 
+import java.util.List;
+
 /**
  * 歌曲基础业务
  * @Author: [caiwenxian]
@@ -49,4 +51,13 @@ public interface ISongService {
      * @version v1
      */
     void addMp3Url(String songId, String mp3Url) throws SerException;
+
+    /**
+     * 根据歌名搜索歌曲列表
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    List<SongInfoPO> listSongByName(String name) throws SerException;
 }

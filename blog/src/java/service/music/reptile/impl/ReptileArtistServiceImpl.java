@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import exception.SerException;
 import model.constant.NetseaseUrl;
+import model.enums.music.Origin;
 import model.po.music.ArtistPO;
 import model.po.music.HotArtistPO;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.music.IArtistService;
@@ -49,6 +49,7 @@ public class ReptileArtistServiceImpl implements IReptileArtistService {
             ArtistPO artistPO = new ArtistPO();
             artistPO.setArtistId(artist.getString("id"));
             artistPO.setName(artist.getString("name"));
+            artistPO.setOrigin(Origin.WANG_YI.getName());
             artistService.addArtist(artistPO);
         }
         System.out.println("爬取歌手完成");
@@ -79,6 +80,7 @@ public class ReptileArtistServiceImpl implements IReptileArtistService {
             ArtistPO artistPO = new ArtistPO();
             artistPO.setArtistId(artist.getString("id"));
             artistPO.setName(artist.getString("name"));
+            artistPO.setOrigin(Origin.WANG_YI.getName());
             artistService.addArtist(artistPO);
             HotArtistPO po = new HotArtistPO(artistPO.getArtistId(), num);
             pos.add(po);

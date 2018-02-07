@@ -21,5 +21,18 @@
          FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC
     </select>
 
+    <select id="countSongByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+         FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%")
+    </select>
+
+    <select id="listTopList" parameterType="List" resultType="model.po.music.SongInfoPO">
+        SELECT s.id, s.name, s.songId, s.artistId, s.lyricId, s.mp3Url, s.origin, s.createTime, s.modifyTime
+        FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
+        WHERE td.topListId IN
+        <foreach collection="ids" item="item" index="index" separator=",">
+            (#{item,jdbcType=VARCHAR})
+        </foreach>
+    </select>
 
 </mapper>

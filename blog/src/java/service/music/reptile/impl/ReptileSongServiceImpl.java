@@ -45,7 +45,8 @@ public class ReptileSongServiceImpl implements IReptileSongService{
 
         StringBuffer url = new StringBuffer();
         url.append(NetseaseUrl.API);
-        String url2 = TopListType.getUrl(dto.getTopListType().getCode());
+        url.append("/api/playlist/detail?id=");
+        String url2 = TopListType.getId(dto.getTopListType().getCode());
         url.append(url2);
         url.append("&limit=" + dto.getLimit());
         url.append("&order=new");
@@ -83,6 +84,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             ArtistPO artistPO = new ArtistPO();
             artistPO.setArtistId(artist.getJSONObject(0).getString("id"));
             artistPO.setName(artist.getJSONObject(0).getString("name"));
+            artistPO.setOrigin(Origin.WANG_YI.getName());
             artistService.addArtist(artistPO);
 
             //保存歌曲
@@ -91,6 +93,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             po.setSongId(songId);
             po.setName(song.getString("name"));
             po.setArtistId(artistPO.getArtistId());
+            po.setOrigin(Origin.WANG_YI.getName());
             songService.addSong(po);
 
             //爬取歌曲url
@@ -136,6 +139,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             String artistId = artist.getString("id");
             artistPO.setArtistId(artistId);
             artistPO.setName(artist.getString("name"));
+            artistPO.setOrigin(Origin.WANG_YI.getName());
             artistService.addArtist(artistPO);
 
             //保存歌曲
@@ -147,6 +151,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
                 po.setSongId(songId);
                 po.setName(song.getString("name"));
                 po.setArtistId(artistPO.getArtistId());
+                po.setOrigin(Origin.WANG_YI.getName());
                 songService.addSong(po);
                 //爬取歌曲url
 //                songService.reptileMp3Url(po.getSongId());
@@ -182,6 +187,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             songInfoPO.setSongId(song.getString("id"));
             songInfoPO.setName(song.getString("name"));
             songInfoPO.setNum(num);
+            songInfoPO.setOrigin(Origin.WANG_YI.getName());
             songService.addSong(songInfoPO);
             num ++;
         }
@@ -189,7 +195,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
     }
 
     @Override
-    public void asynReptile(int type, String[] params) throws SerException {
+    public void asynReptile(int type, Object[] params) throws SerException {
         Thread thread = new Thread(new Reptilep(type, params));
         thread.start();
     }
@@ -203,9 +209,9 @@ public class ReptileSongServiceImpl implements IReptileSongService{
 
         private Integer type;
 
-        private String params[];
+        private Object params[];
 
-        public Reptilep(Integer type, String[] params) {
+        public Reptilep(Integer type, Object[] params) {
             this.type = type;
             this.params = params;
         }
@@ -214,7 +220,10 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             try {
                 switch (type) {
                     case 1:  //歌手搜索
-                        reptileSongs(params[0]);
+                        reptileSongs(String.valueOf(params[0]));
+                        break;
+                    case 2:  //歌手热门歌曲
+                        reptileHotSongs((ArtistHotSongDTO)params[0]);
                         break;
                     default:
                         break;

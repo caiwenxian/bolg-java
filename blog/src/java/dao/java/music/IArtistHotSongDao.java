@@ -2,10 +2,12 @@ package dao.java.music;
 
 import exception.QueryException;
 import model.po.music.ArtistHotSongPO;
+import model.po.music.SongInfoPO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.xml.ws.soap.Addressing;
+import java.util.List;
 
 /**
  * @Author: [caiwenxian]
@@ -36,4 +38,12 @@ public interface IArtistHotSongDao {
      */
     ArtistHotSongPO getBySongIdAndArtistId(@Param("songId") String songId, @Param("artistId") String artistId) throws QueryException;
 
+    /**
+     * 根据歌手id获取热门歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    List<SongInfoPO> listHotSongByArtistId(@Param("artistId") String artistId) throws QueryException;
 }

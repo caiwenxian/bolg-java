@@ -56,5 +56,5 @@ public interface IReptileSongService {
      * @return class
      * @version v1
      */
-    void asynReptile(int type, String params[]) throws SerException;
+    void asynReptile(int type, Object params[]) throws SerException;
 }

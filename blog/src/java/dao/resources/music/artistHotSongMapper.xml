@@ -12,4 +12,14 @@
         WHERE songId = #{songId} AND artistId = #{artistId}
     </select>
 
+    <select id="listHotSongByArtistId" resultType="model.po.music.SongInfoPO">
+        SELECT s.id, s.name, s.songId, s.artistId, s.lyricId, s.mp3Url, s.origin, s.createTime, s.modifyTime
+        FROM t_artist_hotsong ah
+        INNER JOIN t_song s ON ah.songId = s.songId
+        WHERE ah.artistId = #{artistId} ORDER BY ah.num
+    </select>
+
+    <sql id="song">
+　　　　 id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+　　 </sql>
 </mapper>

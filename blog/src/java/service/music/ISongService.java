@@ -1,7 +1,9 @@
 package service.music;
 
 import exception.SerException;
+import model.po.common.PagePO;
 import model.po.music.SongInfoPO;
+import model.vo.music.TopListVO;
 
 import java.util.List;
 
@@ -60,4 +62,31 @@ public interface ISongService {
      * @version v1
      */
     List<SongInfoPO> listSongByName(String name) throws SerException;
+
+    /**
+     * 根据歌名搜索歌曲列表
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    PagePO<SongInfoPO> listSongByNameByPage(String name) throws SerException;
+
+    /**
+     * 获取所有排行榜歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    List<SongInfoPO> listAllTopList() throws SerException;
+
+    /**
+     * 根据排行榜id获取排行榜歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    TopListVO listTopListByTopListId(String topListId) throws SerException;
 }

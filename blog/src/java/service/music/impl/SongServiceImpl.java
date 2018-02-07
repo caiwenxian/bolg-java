@@ -5,9 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import dao.java.music.ISongDao;
 import exception.ErrorMessage;
 import exception.SerException;
+import model.constant.Common;
 import model.constant.NetseaseUrl;
 import model.enums.music.TopListType;
+import model.po.common.Page;
+import model.po.common.PagePO;
+import model.po.common.PaginationPO;
 import model.po.music.SongInfoPO;
+import model.vo.music.TopListVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +21,7 @@ import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
 import utils.RandomUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,5 +96,41 @@ public class SongServiceImpl implements ISongService {
             list = songDao.listSongByName(name);
         }
         return list;
+    }
+
+    @Override
+    public PagePO<SongInfoPO> listSongByNameByPage(String name) throws SerException {
+        int totalSize = songDao.countSongByName(name);
+        List<SongInfoPO> list = songDao.listSongByName(name);
+        if (list.size() == 0) { //若本地数据库找不到，则进行爬取
+            reptileSongService.asynReptile(1, new String[]{name});
+            try {
+                Thread.currentThread().sleep(Common.threadSleepTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            list = songDao.listSongByName(name);
+        }
+        PagePO<SongInfoPO> pagePO = new PagePO<SongInfoPO>(totalSize, list);
+        return pagePO;
+    }
+
+    @Override
+    public List<SongInfoPO> listAllTopList() throws SerException {
+//        List ids = new ArrayList();
+//        for (TopListType topListType : TopListType.values()) {
+//            ids.add(topListType.getId());
+//        }
+//        List<SongInfoPO> list = songDao.listTopList(ids);
+        return null;
+    }
+
+    @Override
+    public TopListVO listTopListByTopListId(String topListId) throws SerException {
+        List ids = new ArrayList();
+        ids.add(topListId);
+        List<SongInfoPO> list = songDao.listTopList(ids);
+        TopListVO topListVO = new TopListVO(TopListType.getName(topListId), topListId, list);
+        return topListVO;
     }
 }

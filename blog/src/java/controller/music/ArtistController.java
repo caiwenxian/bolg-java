@@ -5,6 +5,7 @@ import exception.ErrorCode;
 import exception.SerException;
 import model.dto.music.ArtistHotSongDTO;
 import model.po.music.ArtistPO;
+import model.po.music.SongInfoPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,8 @@ public class ArtistController {
 
     @Autowired
     IArtistService artistService;
+    @Autowired
+    IArtistHotSongService artistHotSongService;
 
     /**
      * 歌手模糊搜索
@@ -52,5 +55,27 @@ public class ArtistController {
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());
         }
     }
+
+    /**
+     * 歌手热门歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/hot-song/{artistId}")
+    @ResponseBody
+    public Result listHotSong(@PathVariable String artistId) {
+        try {
+            List<SongInfoPO> list = artistHotSongService.listHotSongByArtistId(artistId);
+            return ActResult.data(list);
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+    }
+
+
+
+
 
 }

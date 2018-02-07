@@ -1,5 +1,6 @@
 package model.po.music;
 
+import model.enums.music.Origin;
 import model.po.common.BasePO;
 
 /**
@@ -21,11 +22,22 @@ public class ArtistPO extends BasePO{
      */
     private String name;
 
+    /**
+     * 来源
+     */
+    private String origin;
+
     public ArtistPO() {
     }
 
     public ArtistPO(String name) {
         this.name = name;
+    }
+
+    public ArtistPO(String artistId, String name, String origin) {
+        this.artistId = artistId;
+        this.name = name;
+        this.origin = origin;
     }
 
     @Override
@@ -49,5 +61,13 @@ public class ArtistPO extends BasePO{
 
     public void setArtistId(String artistId) {
         this.artistId = artistId;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 }

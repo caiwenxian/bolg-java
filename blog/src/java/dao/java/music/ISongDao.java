@@ -53,4 +53,22 @@ public interface ISongDao {
      */
     List<SongInfoPO> listSongByName(@Param("name") String name) throws QueryException;
 
+    /**
+     * 根据歌名模糊查询总条数
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    int countSongByName(@Param("name") String name) throws QueryException;
+
+    /**
+     * 获取排行榜歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    List<SongInfoPO> listTopList(@Param("ids") List ids) throws QueryException;
+
 }

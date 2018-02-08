@@ -2,7 +2,10 @@ package service.music;
 
 import exception.SerException;
 import model.po.common.PagePO;
+import model.po.music.RecommendSongListPO;
 import model.po.music.SongInfoPO;
+import model.po.music.SongListDetailsPO;
+import model.po.music.SongListPO;
 import model.vo.music.TopListVO;
 
 import java.util.List;
@@ -89,4 +92,42 @@ public interface ISongService {
      * @version v1
      */
     TopListVO listTopListByTopListId(String topListId) throws SerException;
+
+    /**
+     * 添加歌单
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void addSongList(SongListPO po) throws SerException;
+
+    /**
+     * 更新歌单信息
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void updateSongList(String songListId, String trackUpdateTime) throws SerException;
+
+    /**
+     * 添加推荐歌单
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void addRecommendSongList(RecommendSongListPO po) throws SerException;
+
+    /**
+     * 添加歌单详情
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void addSongListDetails(SongListDetailsPO po) throws SerException;
+
+
 }

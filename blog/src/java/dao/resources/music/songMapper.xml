@@ -35,4 +35,39 @@
         </foreach>
     </select>
 
+    <insert id="addSongList" parameterType="model.po.music.SongListPO">
+        INSERT INTO t_songlist (id, songListId, name, picUrl, playCount, origin, trackUpdateTime, createTime, modifyTime)VALUES
+        (#{id}, #{songListId}, #{name}, #{picUrl}, #{playCount}, #{origin}, #{trackUpdateTime}, NOW(), NOW())
+    </insert>
+
+    <select id="getSongListBySongListId" parameterType="java.lang.String" resultType="model.po.music.SongListPO">
+        SELECT id, songListId, name, picUrl, playCount, origin, trackUpdateTime, createTime, modifyTime
+        FROM t_songlist WHERE songListId = #{songListId}
+    </select>
+
+    <update id="updateSongList" parameterType="java.lang.String">
+        UPDATE t_songlist SET trackUpdateTime = #{trackUpdateTime}, modifyTime = NOW()
+        WHERE songListId = #{songListId}
+    </update>
+
+    <insert id="addRecommendSongList" parameterType="model.po.music.RecommendSongListPO">
+        INSERT INTO t_songlist_recommend (id, songListId, num, trackUpdateTime, createTime, modifyTime)VALUES
+        (#{id}, #{songListId}, #{num}, #{trackUpdateTime}, NOW(), NOW())
+    </insert>
+
+    <select id="getRecommendSongListBySongListId" parameterType="java.lang.String" resultType="model.po.music.RecommendSongListPO">
+        SELECT id, songListId, num, createTime, modifyTime
+        FROM t_songlist_recommend WHERE songListId = #{songListId}
+    </select>
+
+    <insert id="addSongListDetails" parameterType="model.po.music.SongListDetailsPO">
+        INSERT INTO t_songlist_details (id, songListId, songId, num, createTime, modifyTime)VALUES
+        (#{id}, #{songListId}, #{songId}, #{num}, NOW(), NOW())
+    </insert>
+
+    <select id="getSongListDetails" resultType="model.po.music.SongListDetailsPO">
+        SELECT id, songListId, songId, num, createTime, modifyTime
+        FROM t_songlist_details WHERE songListId = #{songListId} AND songId = #{songId}
+    </select>
+
 </mapper>

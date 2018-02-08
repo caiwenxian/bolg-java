@@ -11,7 +11,7 @@ import java.util.UUID;
 public class RandomUtil {
 
     static public String getUid() {
-        return UUID.randomUUID().toString();
+        return System.currentTimeMillis() + "-" + UUID.randomUUID().toString();
     }
 
 }

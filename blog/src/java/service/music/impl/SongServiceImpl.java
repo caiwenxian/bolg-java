@@ -11,7 +11,10 @@ import model.enums.music.TopListType;
 import model.po.common.Page;
 import model.po.common.PagePO;
 import model.po.common.PaginationPO;
+import model.po.music.RecommendSongListPO;
 import model.po.music.SongInfoPO;
+import model.po.music.SongListDetailsPO;
+import model.po.music.SongListPO;
 import model.vo.music.TopListVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,5 +135,40 @@ public class SongServiceImpl implements ISongService {
         List<SongInfoPO> list = songDao.listTopList(ids);
         TopListVO topListVO = new TopListVO(TopListType.getName(topListId), topListId, list);
         return topListVO;
+    }
+
+    @Override
+    public void addSongList(SongListPO po) throws SerException {
+        SongListPO old = songDao.getSongListBySongListId(po.getSongListId());
+        if (old != null) {
+            return;
+        }
+        po.setId(RandomUtil.getUid());
+        songDao.addSongList(po);
+    }
+
+    @Override
+    public void updateSongList(String songListId, String trackUpdateTime) throws SerException {
+        songDao.updateSongList(songListId, trackUpdateTime);
+    }
+
+    @Override
+    public void addRecommendSongList(RecommendSongListPO po) throws SerException {
+        RecommendSongListPO old = songDao.getRecommendSongListBySongListId(po.getSongListId());
+        if (old != null) {
+            return;
+        }
+        po.setId(RandomUtil.getUid());
+        songDao.addRecommendSongList(po);
+    }
+
+    @Override
+    public void addSongListDetails(SongListDetailsPO po) throws SerException {
+        SongListDetailsPO old = songDao.getSongListDetails(po.getSongListId(), po.getSongId());
+        if (old != null) {
+            return;
+        }
+        po.setId(RandomUtil.getUid());
+        songDao.addSongListDetails(po);
     }
 }

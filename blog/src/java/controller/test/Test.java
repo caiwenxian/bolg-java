@@ -3,9 +3,11 @@ package controller.test;
 import model.po.common.Page;
 import model.po.common.PaginationPO;
 import model.po.music.SongInfoPO;
+import utils.RandomUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -33,8 +35,10 @@ public class Test {
 //        SongInfoPO songInfoPO1 = (SongInfoPO)list.get(0);
 //        System.out.println(songInfoPO1.getSongId());
 
-
+        System.out.println(Calendar.getInstance().getTimeInMillis() +
+        " " + RandomUtil.getUid());
         page();
+        System.out.println(System.currentTimeMillis());
     }
 
 
@@ -56,5 +60,7 @@ public class Test {
 
         });
     }
+
+
 
 }

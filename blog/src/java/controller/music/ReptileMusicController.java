@@ -146,4 +146,25 @@ public class ReptileMusicController {
         }
 
     }
+
+
+    /**
+     * 推荐歌单
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/songlist-recommend/{offset}/{limit}")
+    @ResponseBody
+    public Result reptileRecommendSongList (@PathVariable Integer offset, @PathVariable Integer limit) {
+
+        try {
+            reptileSongService.reptileRecommendSongList(offset, limit);
+            return ActResult.success("success");
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+
+    }
 }

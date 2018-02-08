@@ -57,4 +57,13 @@ public interface IReptileSongService {
      * @version v1
      */
     void asynReptile(int type, Object params[]) throws SerException;
+
+    /**
+     * 爬取推荐歌单
+     *
+     * @param limit 条数
+     * @return class
+     * @version v1s
+     */
+    void reptileRecommendSongList(Integer offset, Integer limit) throws SerException;
 }

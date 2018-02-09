@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import exception.SerException;
 import model.constant.NetseaseUrl;
 import model.dto.music.ArtistHotSongDTO;
+import model.dto.music.MusicDTO;
+import model.dto.music.SongListDTO;
 import model.dto.music.TopListDTO;
 import model.enums.music.Origin;
 import model.enums.music.TopListType;
@@ -237,7 +239,6 @@ public class ReptileSongServiceImpl implements IReptileSongService{
         }
         System.out.println("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
     }
-
     /**
      * 爬取歌单详情
      * @param songListId
@@ -290,7 +291,84 @@ public class ReptileSongServiceImpl implements IReptileSongService{
 
     }
 
+    @Override
+    public void reptileSongList(MusicDTO dto) throws SerException {
+        int offset = (dto.getPage() - 1) * dto.getLimit();
+        StringBuffer url = new StringBuffer();
+        url.append(NetseaseUrl.API);
+        url.append("/api/search/pc/");
+        url.append("?s=" + dto.getKeyword());
+        url.append("&limit=" + dto.getLimit());
+        url.append("&type=1000");
 
+        String result = HttpClientHelper.sendPost(url.toString(), null, "UTF-8");
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        if (!"200".equals(jsonObject.getString("code"))) {
+            return;
+        }
+        JSONObject object = (JSONObject)jsonObject.get("result");
+        JSONArray songs = object.getJSONArray("playlists");
+        int num = 1;
+        for (Object song1 : songs) {
+            JSONObject song = (JSONObject) song1;
+            String id = song.getString("id");
+            String name = song.getString("name");
+            String picUrl = song.getString("coverImgUrl");
+            Integer playCount = song.getInteger("playCount");
+            SongListPO po = new SongListPO(id, name, picUrl, playCount, Origin.WANG_YI.name(), null);
+            songService.addSongList(po);
+
+            songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
+            num ++;
+
+            reptileSongListDetails(po.getSongListId());
+        }
+        System.out.println("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
+    }
+
+    @Override
+    public void reptileSongListByType(SongListDTO dto) throws SerException {
+//        http://music.163.com/api/playlist/list/?limit=10&order=new&cat=华语&offset=0&total=true
+        int offset = (dto.getPage() - 1) * dto.getLimit();
+        String order = dto.getOrder() == null ? "hot" : dto.getOrder();
+        String cat = dto.getSongListType() == null ? "全部" : dto.getSongListType().getName();
+        StringBuffer url = new StringBuffer();
+        url.append(NetseaseUrl.API);
+        url.append("/api/playlist/list/");
+        url.append("?limit=" + dto.getLimit());
+        url.append("&order=" + order);
+        url.append("&cat=" + cat);
+        url.append("&offset=" + offset);
+        url.append("&total=true");
+
+        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        if (!"200".equals(jsonObject.getString("code"))) {
+            return;
+        }
+//        JSONObject object = (JSONObject)jsonObject.get("result");
+        JSONArray songs = jsonObject.getJSONArray("playlists");
+        int num = 1;
+        for (Object song1 : songs) {
+            JSONObject song = (JSONObject) song1;
+            String id = song.getString("id");
+            String name = song.getString("name");
+            String picUrl = song.getString("coverImgUrl");
+            Integer playCount = song.getInteger("playCount");
+            String trackUpdateTime = song.getString("trackUpdateTime");
+            SongListPO po = new SongListPO(id, name, picUrl, playCount, Origin.WANG_YI.name(), trackUpdateTime);
+            songService.addSongList(po);
+
+            songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
+            num ++;
+
+//            reptileSongListDetails(po.getSongListId());
+            //开启多线程处理
+            new Thread(new Reptilep(3, new Object[]{po.getSongListId()})).start();
+
+        }
+        System.out.println("爬取歌单(按列别)完成:" + Calendar.getInstance().getTime());
+    }
 
     /**
      * 异步爬取
@@ -317,6 +395,10 @@ public class ReptileSongServiceImpl implements IReptileSongService{
                     case 2:  //歌手热门歌曲
                         reptileHotSongs((ArtistHotSongDTO)params[0]);
                         break;
+                    case 3:  //歌单详情
+                        reptileSongListDetails(String.valueOf(params[0]));
+                        break;
+
                     default:
                         break;
                 }

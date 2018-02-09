@@ -2,7 +2,10 @@ package service.music.reptile;
 
 import exception.SerException;
 import model.dto.music.ArtistHotSongDTO;
+import model.dto.music.MusicDTO;
+import model.dto.music.SongListDTO;
 import model.dto.music.TopListDTO;
+import model.enums.music.SongListType;
 
 /**
  * @Author: [caiwenxian]
@@ -66,4 +69,23 @@ public interface IReptileSongService {
      * @version v1s
      */
     void reptileRecommendSongList(Integer offset, Integer limit) throws SerException;
+
+    /**
+     * 爬取歌单（模糊搜索）
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void reptileSongList(MusicDTO dto) throws SerException;
+
+    /**
+     * 根据类别获取歌单
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void reptileSongListByType(SongListDTO dto) throws SerException;
+
 }

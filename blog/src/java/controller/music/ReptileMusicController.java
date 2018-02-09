@@ -3,7 +3,10 @@ package controller.music;
 import exception.ErrorCode;
 import exception.SerException;
 import model.dto.music.ArtistHotSongDTO;
+import model.dto.music.MusicDTO;
+import model.dto.music.SongListDTO;
 import model.dto.music.TopListDTO;
+import model.enums.music.SongListType;
 import model.enums.music.TopListType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -147,7 +150,6 @@ public class ReptileMusicController {
 
     }
 
-
     /**
      * 推荐歌单
      *
@@ -161,6 +163,52 @@ public class ReptileMusicController {
 
         try {
             reptileSongService.reptileRecommendSongList(offset, limit);
+            return ActResult.success("success");
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+
+    }
+
+    /**
+     * 搜索歌单
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/search/songlist/{keyword}")
+    @ResponseBody
+    public Result reptileSongList (@PathVariable String keyword) {
+
+        try {
+            MusicDTO musicDTO = new MusicDTO(keyword);
+            reptileSongService.reptileSongList(musicDTO);
+            return ActResult.success("success");
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+
+    }
+
+    /**
+     * 按列表获取歌单
+     *
+     * @param order "hot"/"new"
+     * @param type 类型 例: "华语"、"韩语"
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/songlist/{order}/{type}")
+    @ResponseBody
+    public Result reptileSongListByType (@PathVariable String order, @PathVariable String type) {
+        try {
+            SongListDTO dto = new SongListDTO();
+            dto.setOrder(order);
+            dto.setSongListType(SongListType.getSongListType(type));
+            dto.setLimit(20);
+            dto.setPage(2);
+            reptileSongService.reptileSongListByType(dto);
             return ActResult.success("success");
         } catch (SerException e) {
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());

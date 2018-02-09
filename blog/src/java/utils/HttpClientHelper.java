@@ -24,6 +24,12 @@ import org.apache.http.message.BasicNameValuePair;
  * @Copy: [com.bjike]
  */
 public class HttpClientHelper {
+
+    /**
+     * 请求数
+     */
+    static int requestNum = 0;
+
     /**
      * @Description:使用HttpURLConnection发送post请求
      * @author:liuyc
@@ -77,6 +83,10 @@ public class HttpClientHelper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
+            if (requestNum/100 == 0) {
+                System.out.println("第" + requestNum + "次请求");
+            }
+            requestNum ++;
             if (osw != null) {
                 try {
                     osw.close();
@@ -294,6 +304,10 @@ public class HttpClientHelper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
+            if (requestNum/100 == 0) {
+                System.out.println("第" + requestNum + "次请求");
+            }
+            requestNum ++;
             if (br != null) {
                 try {
                     br.close();

@@ -40,6 +40,8 @@ public class Test {
         page();
         System.out.println(System.currentTimeMillis());
 
+        threadTest();
+
     }
 
 
@@ -121,6 +123,16 @@ public class Test {
             }
         }
 
+    }
+
+
+    static void threadTest() {
+        for (int i = 0; i < 100; i ++) {
+            Thread thread = new Thread();
+            thread.start();
+            System.out.println(thread.getName());
+            System.out.println(Thread.currentThread().getName());
+        }
     }
 
 

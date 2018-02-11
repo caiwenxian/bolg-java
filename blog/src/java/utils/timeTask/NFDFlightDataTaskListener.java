@@ -1,5 +1,7 @@
 package utils.timeTask;
 
+import org.springframework.stereotype.Component;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -10,10 +12,11 @@ import javax.servlet.ServletContextListener;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
+
 public class NFDFlightDataTaskListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
-//        new TimerManager();
+        new TimerManager();
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

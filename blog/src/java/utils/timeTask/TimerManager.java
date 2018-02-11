@@ -1,5 +1,7 @@
 package utils.timeTask;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -13,8 +15,8 @@ import java.util.Timer;
  */
 public class TimerManager {
     //时间间隔
-//    private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
-    private static final long PERIOD_DAY = 60 * 1000;
+    private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
+//    private static final long PERIOD_DAY = 60 * 1000;
     public TimerManager() {
         Calendar calendar = Calendar.getInstance();
 
@@ -38,7 +40,7 @@ public class TimerManager {
 
         NFDFlightDataTimerTask task = new NFDFlightDataTimerTask();
         //安排指定的任务在指定的时间开始进行重复的固定延迟执行。
-        timer.schedule(task,date,PERIOD_DAY);
+        timer.schedule(task, 3000, PERIOD_DAY);
     }
 
     // 增加或减少天数

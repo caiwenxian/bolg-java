@@ -1,6 +1,16 @@
 package utils.timeTask;
 
 
+import exception.SerException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+import service.task.IReptileMusicTaskService;
+import service.task.impl.ReptileMusicTaskServiceImpl;
+import utils.SpringContextUtil;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimerTask;
@@ -14,15 +24,20 @@ import java.util.TimerTask;
  */
 public class NFDFlightDataTimerTask extends TimerTask {
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    @Override
+
+
     public void run() {
+        System.out.println("开始执行:"+formatter.format(Calendar.getInstance().getTime()));
+
+        ApplicationContext appCtx = SpringContextUtil.getApplicationContext();
+        IReptileMusicTaskService reptileMusicTaskService = (IReptileMusicTaskService)appCtx.getBean(IReptileMusicTaskService.class);
         try {
-            //在这里写你要执行的内容
-            System.out.println("执行任务");
-            System.out.println("执行当前时间"+formatter.format(Calendar.getInstance().getTime()));
-        } catch (Exception e) {
-            System.out.println("-------------解析信息发生异常--------------");
+            reptileMusicTaskService.reptileAllTopList();
+        } catch (SerException e) {
+            e.printStackTrace();
         }
+
+        System.out.println("执行当前时间:"+formatter.format(Calendar.getInstance().getTime()));
     }
 
 }

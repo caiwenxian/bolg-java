@@ -47,6 +47,7 @@ public class SongServiceImpl implements ISongService {
 
     @Override
     public void addSong(SongInfoPO po) throws SerException {
+        System.out.println("线程：" + Thread.currentThread().getName());
         SongInfoPO old = songDao.getBySongId(po.getSongId());
         if (null != old) {
 //            throw new SerException(ErrorMessage.MUSIC_IS_EXIST);
@@ -58,7 +59,10 @@ public class SongServiceImpl implements ISongService {
             return;
         }
         po.setId(RandomUtil.getUid());
-        songDao.add(po);
+        synchronized(this) {
+            songDao.add(po);
+        }
+
         //爬取mp3url
         reptileSongService.reptileMp3Url(po.getSongId());
     }

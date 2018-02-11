@@ -24,6 +24,7 @@
     <!-- 自动扫描(自动注入) -->
     <context:component-scan base-package="service.*" />
     <context:component-scan base-package="dao.*" />
+    <context:component-scan base-package="utils.*" />
 
 
 

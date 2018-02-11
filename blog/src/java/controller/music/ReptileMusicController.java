@@ -206,8 +206,8 @@ public class ReptileMusicController {
             SongListDTO dto = new SongListDTO();
             dto.setOrder(order);
             dto.setSongListType(SongListType.getSongListType(type));
-            dto.setLimit(20);
-            dto.setPage(2);
+            dto.setLimit(10);
+            dto.setPage(1);
             reptileSongService.reptileSongListByType(dto);
             return ActResult.success("success");
         } catch (SerException e) {

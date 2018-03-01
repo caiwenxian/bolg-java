@@ -16,7 +16,7 @@ import javax.servlet.ServletContextListener;
 public class NFDFlightDataTaskListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent sce) {
-        new TimerManager();
+//        new TimerManager();
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

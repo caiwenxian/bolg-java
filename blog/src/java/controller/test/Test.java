@@ -1,13 +1,21 @@
 package controller.test;
 
+import exception.SerException;
 import model.po.common.Page;
 import model.po.common.PaginationPO;
 import model.po.music.SongInfoPO;
-import utils.RandomUtil;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.springframework.context.ApplicationContext;
+import service.music.ISongService;
+import utils.CacheUtil;
+import utils.SpringContextUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -18,6 +26,7 @@ import java.util.List;
  * @Copy: [com.bjike]
  */
 public class Test {
+
 
 
     void test() {
@@ -34,14 +43,16 @@ public class Test {
 //        list.add(songInfoPO);
 //        SongInfoPO songInfoPO1 = (SongInfoPO)list.get(0);
 //        System.out.println(songInfoPO1.getSongId());
+//
+//        System.out.println(Calendar.getInstance().getTimeInMillis() +
+//        " " + RandomUtil.getUid());
+//        page();
+//        System.out.println(System.currentTimeMillis());
+//
+//        threadTest();
 
-        System.out.println(Calendar.getInstance().getTimeInMillis() +
-        " " + RandomUtil.getUid());
-        page();
-        System.out.println(System.currentTimeMillis());
-
-        threadTest();
-
+//        testTransaction();
+//        cache();
     }
 
 
@@ -134,6 +145,35 @@ public class Test {
             System.out.println(Thread.currentThread().getName());
         }
     }
+
+    public static void testTransaction() {
+        ApplicationContext appCtx = SpringContextUtil.getApplicationContext();
+        ISongService songService = (ISongService)appCtx.getBean(ISongService.class);
+        try {
+            songService.update(new SongInfoPO("28196001", null, null, null, null, null, null));
+        } catch (SerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @org.junit.Test
+    public void cache() {
+        CacheManager manager = CacheManager.newInstance("src/resources/spring-ehcache.xml");
+        Cache cache = manager.getCache("HelloWorldCache");
+        cache.put(new Element("key1", "value1"));
+        Element element1 = cache.get("key1");
+        System.out.println("key:{}, value:{}" + element1.getObjectKey() +  element1.getObjectValue());
+
+
+        CacheUtil cacheUtil = new CacheUtil();
+        cacheUtil.put("HelloWorldCache", "key2", "value2");
+//        System.out.println(cacheUtil.get("HelloWorldCache", "key2"));
+
+    }
+
+
+
+
 
 
 }

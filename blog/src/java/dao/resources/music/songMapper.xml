@@ -7,9 +7,9 @@
          (#{id}, #{name}, #{songId}, #{artistId}, #{lyricId}, #{mp3Url}, #{origin}, #{num}, NOW(), NOW())
     </insert>
 
-    <insert id="update" parameterType="model.po.music.SongInfoPO">
+    <update id="update" parameterType="model.po.music.SongInfoPO">
         UPDATE t_song SET mp3Url = #{mp3Url}, modifyTime = NOW() WHERE songId = #{songId}
-    </insert>
+    </update>
 
     <select id="getBySongId" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
         SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
@@ -19,6 +19,11 @@
     <select id="listSongByName" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
         SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
          FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC
+    </select>
+
+    <select id="listSongByNameByPage" resultType="model.po.music.SongInfoPO">
+        SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+         FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC LIMIT #{startRow}, #{endRow}
     </select>
 
     <select id="countSongByName" parameterType="java.lang.String" resultType="java.lang.Integer">

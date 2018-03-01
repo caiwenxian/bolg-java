@@ -1,19 +1,31 @@
 package controller.test;
 
+import controller.security.token.UserToken;
 import exception.SerException;
+import model.po.music.SongInfoPO;
+import model.po.user.LoginPO;
 import model.po.user.UserPO;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import service.common.Result;
 import service.common.impl.ActResult;
+import service.music.ISongService;
 import service.user.IUserService;
+import service.user.ILoginService;
+import utils.CacheManage;
 
-import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.logging.Logger;
 
 /**
  * @Author: [caiwenxian]
@@ -27,11 +39,22 @@ import javax.annotation.Resource;
 @RequestMapping("/test")
 public class TestController {
 
+    final Logger logger = Logger.getLogger(TestController.class.getName());
+
     @Autowired
     IUserService userService;
+    @Autowired
+    ISongService songService;
 
     @GetMapping("/v1/test")
+    @ResponseBody
     public String test() {
+        CacheManage cacheManage = new CacheManage();
+        try {
+            Collection collection = cacheManage.AllSession();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "hello";
     }
 
@@ -52,4 +75,40 @@ public class TestController {
     public ModelAndView home () {
         return new ModelAndView("home/home");
     }
+
+    @GetMapping("v1/transaction")
+    public String test1 () {
+        try {
+            songService.update(new SongInfoPO("28196001", null, null, null, "212", null, null));
+            return "success";
+        } catch (SerException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    @Autowired
+    EhCacheManager cacheManager;
+    @Autowired
+    ILoginService loginService;
+
+    @GetMapping("v1/login")
+    @ResponseBody
+    public String login () {
+        UserToken token = new UserToken("zhangsan", "000000", true, null, null);
+        Subject subject = SecurityUtils.getSubject();
+
+        try {
+            loginService.login(new LoginPO("zhangsan", "000000"));
+//            subject.login(token);
+//            CacheUtil cacheUtil = new CacheUtil();
+//            System.out.println(cacheUtil.get(CacheType.USER_INFO, "zhangsan"));
+
+            return "success";
+        } catch (SerException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
 }

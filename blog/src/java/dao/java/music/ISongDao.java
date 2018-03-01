@@ -4,6 +4,7 @@ import exception.QueryException;
 import model.po.music.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -52,6 +53,16 @@ public interface ISongDao {
      * @version v1
      */
     List<SongInfoPO> listSongByName(@Param("name") String name) throws QueryException;
+
+
+    /**
+     * 根据歌名模糊查询(分页)
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    List<SongInfoPO> listSongByNameByPage(@Param("name") String name, @Param("startRow") int startRow, @Param("endRow") int endRow) throws QueryException;
 
     /**
      * 根据歌名模糊查询总条数

@@ -24,4 +24,22 @@ public interface IUserDao {
      * @version v1
      */
     void addUser(UserPO po) throws SQLException;
+
+    /**
+     * 根据姓名获取用户对象
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    UserPO getUserByName(String name) throws SQLException;
+
+    /**
+     * 根据姓名获取基本信息
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    UserPO getUserInfoByName(String name) throws SQLException;
 }

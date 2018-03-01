@@ -35,4 +35,22 @@ public class UserServiceImpl implements IUserService {
             throw new SerException(e.getMessage());
         }
     }
+
+    @Override
+    public UserPO getUserByName(String name) throws SerException {
+        try {
+            return userDao.getUserByName(name);
+        } catch (SQLException e) {
+            throw new SerException("用户不存在");
+        }
+    }
+
+    @Override
+    public UserPO getUserInfoByName(String name) throws SerException {
+        try {
+            return userDao.getUserInfoByName(name);
+        } catch (SQLException e) {
+            throw new SerException("用户不存在");
+        }
+    }
 }

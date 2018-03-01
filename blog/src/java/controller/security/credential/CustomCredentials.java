@@ -5,6 +5,7 @@ import controller.security.token.UserToken;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import utils.MD5Utils;
 
 
@@ -14,6 +15,9 @@ import utils.MD5Utils;
  * date: 2017/9/25 11:12
  */
 public class CustomCredentials extends SimpleCredentialsMatcher {
+    public CustomCredentials(EhCacheManager ehCacheManager) {
+    }
+
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token,
         AuthenticationInfo info) {

@@ -109,7 +109,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             topListService.addTopListDetails(new TopListDetailsPO(topListId, songId, num));
             num ++;
         }
-        System.out.println("爬取排行榜列表完成" + Calendar.MILLISECOND);
+        System.out.println("爬取排行榜列表完成" + System.currentTimeMillis());
     }
 
     @Override

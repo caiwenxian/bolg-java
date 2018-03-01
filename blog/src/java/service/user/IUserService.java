@@ -20,4 +20,22 @@ public interface IUserService {
      * @version v1
      */
     void addUser(UserPO po) throws SerException;
+
+    /**
+     * 根据姓名获取用户
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    UserPO getUserByName(String name) throws SerException;
+
+    /**
+     * 根据姓名获取基本信息
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    UserPO getUserInfoByName(String name) throws SerException;
 }

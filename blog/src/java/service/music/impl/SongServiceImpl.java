@@ -19,6 +19,8 @@ import model.vo.music.TopListVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import service.music.ISongService;
 import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
@@ -29,7 +31,6 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
  * @Author: [caiwenxian]
  * @Date: [2018-01-19 09:43]
  * @Description: [ ]
@@ -47,19 +48,19 @@ public class SongServiceImpl implements ISongService {
 
     @Override
     public void addSong(SongInfoPO po) throws SerException {
-        System.out.println("线程：" + Thread.currentThread().getName());
-        SongInfoPO old = songDao.getBySongId(po.getSongId());
-        if (null != old) {
+        synchronized (this) {
+            SongInfoPO old = songDao.getBySongId(po.getSongId());
+            if (null != old) {
 //            throw new SerException(ErrorMessage.MUSIC_IS_EXIST);
-            System.out.println(ErrorMessage.MUSIC_IS_EXIST);
-            if (StringUtils.isNotBlank(old.getMp3Url())) {
+                System.out.println(ErrorMessage.MUSIC_IS_EXIST);
+                if (StringUtils.isNotBlank(old.getMp3Url())) {
+                    return;
+                }
+                reptileSongService.reptileMp3Url(old.getSongId());
                 return;
             }
-            reptileSongService.reptileMp3Url(old.getSongId());
-            return;
-        }
-        po.setId(RandomUtil.getUid());
-        synchronized(this) {
+            po.setId(RandomUtil.getUid());
+
             songDao.add(po);
         }
 
@@ -74,6 +75,7 @@ public class SongServiceImpl implements ISongService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = SerException.class)
     public void update(SongInfoPO po) throws SerException {
         songDao.update(po);
     }
@@ -106,9 +108,12 @@ public class SongServiceImpl implements ISongService {
     }
 
     @Override
-    public PagePO<SongInfoPO> listSongByNameByPage(String name) throws SerException {
+    public PagePO<SongInfoPO> listSongByNameByPage(String name, int page, int limit) throws SerException {
         int totalSize = songDao.countSongByName(name);
-        List<SongInfoPO> list = songDao.listSongByName(name);
+        page = page == 0 ? 1 : page;
+        int startRow = (page - 1) * limit;
+        int endRow = page * limit;
+        List<SongInfoPO> list = songDao.listSongByNameByPage(name, startRow, endRow);
         if (list.size() == 0) { //若本地数据库找不到，则进行爬取
             reptileSongService.asynReptile(1, new String[]{name});
             try {

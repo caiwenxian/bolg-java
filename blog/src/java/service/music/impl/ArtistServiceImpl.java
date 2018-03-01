@@ -34,17 +34,19 @@ public class ArtistServiceImpl implements IArtistService {
     IReptileArtistService reptileArtistService;
 
     public void addArtist(ArtistPO po) throws SerException {
+        synchronized (this) {
+            if (StringUtils.isBlank(po.getArtistId())) {
+                throw new SerException("歌手artistId为空");
+            }
+            ArtistPO old = artistDao.getArtistByArtistId(po.getArtistId());
+            if (old != null) {
+                System.out.println("歌手已存在");
+                return;
+            }
+            po.setId(RandomUtil.getUid());
+            artistDao.addArtist(po);
+        }
 
-        if (StringUtils.isBlank(po.getArtistId())) {
-            throw new SerException("歌手artistId为空");
-        }
-        ArtistPO old = artistDao.getArtistByArtistId(po.getArtistId());
-        if (old != null) {
-            System.out.println("歌手已存在");
-            return;
-        }
-        po.setId(RandomUtil.getUid());
-        artistDao.addArtist(po);
     }
 
     @Override

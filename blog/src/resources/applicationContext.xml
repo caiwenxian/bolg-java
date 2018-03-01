@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
-    xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd
-    ">
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
     <import resource="classpath:spring-mybatis.xml"/>
     <!-- <import resource="classpath:spring/lifedf-component.xml"/> -->
     <!-- <aop:aspectj-autoproxy /> -->
@@ -28,15 +28,22 @@
 
 
 
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" order="1"/>
+    <!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" order="1"/>
 
-    <!-- 配置事务管理器-->
+    &lt;!&ndash; 配置事务管理器&ndash;&gt;
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    &lt;!&ndash; 使用注解事务，需要添加Transactional注解属性 &ndash;&gt;
+    <tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+    <!--启用最新的注解器、映射器-->
+    <!--<mvc:annotation-driven/>-->
+
+
     <!-- 拦截器方式配置事物 -->
-    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+    <!--<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
             <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Exception,com.lifeshs.common.exception.common.OperationException"/>
@@ -59,7 +66,7 @@
             <tx:method name="datagrid*" propagation="SUPPORTS"/>
 
         </tx:attributes>
-    </tx:advice>
+    </tx:advice>-->
 
     <!--<aop:config>
         <aop:pointcut id="serviceTransactionPointcut" expression="execution(* service*..*(..))"/>
@@ -68,8 +75,20 @@
 
 
     <!-- 配置druid监控spring jdbc -->
-    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+   <!-- <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
     </bean>
+
+    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:spring-ehcache.xml"/>
+    </bean>
+
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcache"/>
+    </bean>
+
+    &lt;!&ndash; 启用缓存注解开关 &ndash;&gt;
+    <cache:annotation-driven cache-manager="cacheManager"/>-->
+
 
 
 </beans>

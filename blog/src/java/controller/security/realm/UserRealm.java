@@ -1,17 +1,18 @@
 package controller.security.realm;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import controller.security.token.UserToken;
+import exception.SerException;
+import model.po.user.UserPO;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+import service.user.IUserService;
 
 /**
- * 客服用户
  * author: wenxian.cai
  * date: 2017/9/25 11:12
  */
@@ -22,6 +23,9 @@ public class UserRealm extends AuthorizingRealm {
 
 //    @Autowired
 //    CustomerUserService userService;
+    @Autowired
+    IUserService userService;
+
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -56,14 +60,19 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-//        UserToken userToken = (UserToken) authenticationToken;
-//        String userName = userToken.getUsername();
-//        CustomerUserPO user = userService.getUserByUserName(userName);
-//        if (user == null) {
-//            throw new UnknownAccountException("该账号不存在");
-//        }
-//        return new SimpleAuthenticationInfo(userName, user.getPassword(), getName());
-        return new SimpleAuthenticationInfo("mueju", "000000", getName());
+        UserToken userToken = (UserToken) authenticationToken;
+        String userName = userToken.getUsername();
+        UserPO user = null;
+        try {
+            user = userService.getUserByName(userName);
+        } catch (SerException e) {
+            e.printStackTrace();
+        }
+        if (user == null) {
+            throw new UnknownAccountException("该账号不存在");
+        }
+        return new SimpleAuthenticationInfo(userName, user.getPassword(), getName());
+//        return new SimpleAuthenticationInfo("mueju", "000000", getName());
     }
 
     /**

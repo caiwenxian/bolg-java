@@ -14,4 +14,11 @@ public class Common {
      * 线程睡眠时间
      */
     public final static int threadSleepTime = 3000;
+
+    /**
+     * 分页limit
+     */
+    public final static int PAGE_LIMIT = 20;
+
+
 }

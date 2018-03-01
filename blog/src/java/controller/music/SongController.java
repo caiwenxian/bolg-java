@@ -18,6 +18,8 @@ import service.music.ISongService;
 
 import java.util.List;
 
+import static model.constant.Common.PAGE_LIMIT;
+
 /**
  * 歌曲业务
  *
@@ -41,12 +43,12 @@ public class SongController {
      * @return class
      * @version v1
      */
-    @GetMapping("/search/{name}")
+    @GetMapping("/search/{name}/{page}")
     @ResponseBody
-    public Result search(@PathVariable String name) {
+    public Result search(@PathVariable String name,@PathVariable Integer page) {
         try {
 //            List<SongInfoPO> list = songService.listSongByName(name);
-            PagePO<SongInfoPO> pagePO = songService.listSongByNameByPage(name);
+            PagePO<SongInfoPO> pagePO = songService.listSongByNameByPage(name, page, PAGE_LIMIT);
             return ActResult.data(pagePO);
         } catch (SerException e) {
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());

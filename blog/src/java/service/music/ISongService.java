@@ -73,7 +73,7 @@ public interface ISongService {
      * @return class
      * @version v1
      */
-    PagePO<SongInfoPO> listSongByNameByPage(String name) throws SerException;
+    PagePO<SongInfoPO> listSongByNameByPage(String name, int page, int limit) throws SerException;
 
     /**
      * 获取所有排行榜歌曲

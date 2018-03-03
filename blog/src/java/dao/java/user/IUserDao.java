@@ -1,5 +1,6 @@
 package dao.java.user;
 
+import dao.java.impl.DaoImpl;
 import model.po.user.UserPO;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ import java.sql.SQLException;
  */
 
 @Repository
-public interface IUserDao {
+public interface IUserDao{
 
     /**
      * 添加用户
@@ -42,4 +43,6 @@ public interface IUserDao {
      * @version v1
      */
     UserPO getUserInfoByName(String name) throws SQLException;
+
+    UserPO getUser(String id);
 }

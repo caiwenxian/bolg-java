@@ -1,6 +1,7 @@
 package model.po.user;
 
 import model.dto.common.BaseDTO;
+import model.po.base.annotation.TableName;
 import model.po.common.BasePO;
 
 /**
@@ -10,6 +11,8 @@ import model.po.common.BasePO;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
+
+@TableName(name="t_user")
 public class UserPO extends BasePO {
 
     /**

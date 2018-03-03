@@ -1,5 +1,7 @@
 package model.po.common;
 
+import model.po.base.Po;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class BasePO implements Serializable{
+public class BasePO extends Po implements Serializable{
 
     private String id;
 

@@ -2,6 +2,7 @@ package model.po.common;
 
 import model.po.base.Po;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -16,8 +17,10 @@ public class BasePO extends Po implements Serializable{
 
     private String id;
 
+    @Column(name = "createTime")
     private LocalDateTime createTime;
 
+    @Column(name = "modifyTime")
     private LocalDateTime modifyTime;
 
     public String getId() {

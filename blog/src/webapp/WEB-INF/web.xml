@@ -17,7 +17,7 @@
     </context-param>
     <!-- log4j -->
     <!--由载入的Log4j配置文件位置-->
-    <!--<context-param>
+    <context-param>
         <param-name>log4jOutputEnvKey</param-name>
         <param-value>log</param-value>
     </context-param>
@@ -30,7 +30,7 @@
     <context-param>
         <param-name>log4jFileName</param-name>
         <param-value>log4j.properties</param-value>
-    </context-param>-->
+    </context-param>
 
     <!--Spring默认刷新Log4j配置文件的间隔,每分钟扫描一次log配置文件，单位为millisecond -->
     <context-param>
@@ -44,9 +44,9 @@
     </listener>
 
     <!-- Web 项目 Spring 加载 Log4j 的监听 -->
-    <!--<listener>-->
-    <!--<listener-class>com.lifeshs.common.web.utils.Log4jConfigListener</listener-class>-->
-    <!--</listener>-->
+    <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
     <!-- ehcache持久化监听tomcat关闭 -->
     <!--<listener>
         <listener-class>net.sf.ehcache.constructs.web.ShutdownListener</listener-class>

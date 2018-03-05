@@ -1,6 +1,7 @@
 package service.user.impl;
 
 import dao.java.user.IUserDao;
+import dao.java.user.UserDaoImpl;
 import exception.SerException;
 import model.po.user.UserPO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.UUID;
 public class UserServiceImpl implements IUserService {
 
     @Autowired
-    IUserDao userDao;
+    UserDaoImpl userDao;
 
     public void addUser(UserPO po) throws SerException {
         try {

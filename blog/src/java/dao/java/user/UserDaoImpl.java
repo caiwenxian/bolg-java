@@ -2,7 +2,10 @@ package dao.java.user;
 
 import dao.java.impl.DaoImpl;
 import model.po.user.UserPO;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import java.sql.SQLException;
 
 /**
@@ -11,7 +14,11 @@ import java.sql.SQLException;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
+@Repository
 public class UserDaoImpl extends DaoImpl<UserPO, String> implements IUserDao{
+    @Resource(name = "sqlSessionTemplate")
+    private SqlSessionTemplate sqlSessionTemplateASS;
+
     @Override
     public void addUser(UserPO po) throws SQLException {
 
@@ -19,16 +26,16 @@ public class UserDaoImpl extends DaoImpl<UserPO, String> implements IUserDao{
 
     @Override
     public UserPO getUserByName(String name) throws SQLException {
-        return null;
+        return sqlSessionTemplateASS.selectOne("getUserByName", name);
     }
 
     @Override
     public UserPO getUserInfoByName(String name) throws SQLException {
-        return null;
+        return sqlSessionTemplateASS.selectOne("getUserInfoByName", name);
     }
 
-    @Override
+    /*@Override
     public UserPO getUser(String id) {
         return super.get(id);
-    }
+    }*/
 }

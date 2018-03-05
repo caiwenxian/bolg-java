@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * @Copy: [com.bjike]
  */
 
-@Repository
+
 public interface IUserDao{
 
     /**
@@ -44,5 +44,5 @@ public interface IUserDao{
      */
     UserPO getUserInfoByName(String name) throws SQLException;
 
-    UserPO getUser(String id);
+//    UserPO getUser(String id);
 }

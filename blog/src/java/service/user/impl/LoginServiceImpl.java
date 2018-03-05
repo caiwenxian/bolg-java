@@ -3,6 +3,7 @@ package service.user.impl;
 import controller.security.token.UserToken;
 import dao.java.Dao;
 import dao.java.user.IUserDao;
+import dao.java.user.UserDaoImpl;
 import exception.SerException;
 import model.enums.user.CacheType;
 import model.po.user.LoginPO;
@@ -37,9 +38,7 @@ public class LoginServiceImpl implements ILoginService {
     @Autowired
     CacheUtil cacheUtil;
     @Autowired
-    private Dao<UserPO, String> dao;
-    @Autowired
-    private IUserDao userDao;
+    private UserDaoImpl userDao;
 
     @Override
     public void login(LoginPO po) throws SerException {
@@ -55,8 +54,9 @@ public class LoginServiceImpl implements ILoginService {
             UserPO po1 =  cacheUtil.get(CacheType.USER_INFO, "u_" + user.getId(), UserPO.class);
 
             logger.info(po1.toString());
-            UserPO old = userDao.getUser(user.getId());
-            logger.info(old.toString());
+            UserPO po2 = userDao.get(user.getId());
+            logger.info(userDao.get(user.getId()).getCreateTime().toString());
+
 
         } catch (IncorrectCredentialsException ice) {
             // 捕获密码错误异常

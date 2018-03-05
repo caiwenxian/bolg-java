@@ -48,7 +48,7 @@
     <update id="updateLocal">${value}</update>
     
     <!-- 更新全部 -->
-    <update id="update">${value}</update>
+    <update id="updateEntity">${value}</update>
     
     <!-- 条件更新局部 -->
     <update id="updateLocalByPram">${value}</update>

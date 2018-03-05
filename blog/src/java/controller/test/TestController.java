@@ -1,10 +1,12 @@
 package controller.test;
 
 import controller.security.token.UserToken;
+import exception.ActException;
 import exception.SerException;
 import model.po.music.SongInfoPO;
 import model.po.user.LoginPO;
 import model.po.user.UserPO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -24,6 +26,9 @@ import service.user.IUserService;
 import service.user.ILoginService;
 import utils.CacheManage;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -94,20 +99,22 @@ public class TestController {
 
     @GetMapping("v1/login")
     @ResponseBody
-    public String login () {
+    public String login (HttpServletRequest request, HttpServletResponse response) throws ActException {
         UserToken token = new UserToken("zhangsan", "000000", true, null, null);
         Subject subject = SecurityUtils.getSubject();
 
         try {
             loginService.login(new LoginPO("zhangsan", "000000"));
-//            subject.login(token);
-//            CacheUtil cacheUtil = new CacheUtil();
-//            System.out.println(cacheUtil.get(CacheType.USER_INFO, "zhangsan"));
-
+            String refUrl = request.getParameter("refUrl");
+            if (StringUtils.isNotBlank(refUrl)) {
+                response.sendRedirect(refUrl);
+            }
             return "success";
         } catch (SerException e) {
             e.printStackTrace();
             return e.getMessage();
+        } catch (IOException e) {
+            return "success";
         }
     }
 

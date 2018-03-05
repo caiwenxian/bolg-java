@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,16 +59,16 @@ public interface Formatter {
      * @time 2016��5��3������3:39:51
      * @email 719348277@qq.com
      */
-    class SqlUtil<T extends Po> {
+    /*class SqlUtil<T extends Po> {
 
 
-        /**
+        *//**
          * ��ȡʵ�����ĳ���ֶ�
          *
          * @param t
          * @param fieldName
          * @return
-         */
+         *//*
         public Field getField(Class<?> t, String fieldName) {
             Field[] fields = t.getDeclaredFields();
             for (Field field : fields) {
@@ -77,12 +79,12 @@ public interface Formatter {
             return null;
         }
 
-        /**
+        *//**
          * ��ȡ��ѯsql���ֶ��б�
          *
          * @param po
          * @return
-         */
+         *//*
         public List<Pram> getPramListOfSelect(Po po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<? extends Po> thisClass = po.getClass();
@@ -127,12 +129,12 @@ public interface Formatter {
             return list;
         }
 
-        /**
+        *//**
          * ��ȡʵ�����Ӧ�ı���
          *
          * @param po
          * @return
-         */
+         *//*
         public String getTableName(Po po) {
             Class<? extends Po> c = po.getClass();
             if (c.isAnnotationPresent(TableName.class)) {
@@ -198,12 +200,12 @@ public interface Formatter {
             return list;
         }
 
-        /**
+        *//**
          * ͨ��Class��ȡ���ɶ�ӦSql�ֶ�
          *
          * @param po
          * @return
-         */
+         *//*
         public List<Pram> getPramList(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<? extends Po> thisClass = po;
@@ -307,42 +309,49 @@ public interface Formatter {
         }
 
 
-        /**
+        *//**
          * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
+         * 修改：获取本身属性和父类属性
          *
          * @param po
          * @return
-         */
+         *//*
         public List<Pram> getPramListOfSelect(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
-            Class<? extends Po> thisClass = po;
-            Field[] fields = thisClass.getDeclaredFields();
+//            Class<? extends Po> thisClass = po;
+            Class<?> clazz = po;
+//            Field[] fields = thisClass.getDeclaredFields();
+//            Field[] fields1 = po.getSuperclass().getDeclaredFields();
             try {
-                Object o = thisClass.newInstance();
-                for (Field f : fields) {
-                    if (!f.isAnnotationPresent(TempField.class)) {
-                        String fName = f.getName();
-                        //�ж��Ƿ���boolean����
-                        String getf = "get";
-                        String fieldType = f.getGenericType().toString();
-                        if (fieldType.indexOf("boolean") != -1 || fieldType.indexOf("Boolean") != -1) {
-                            getf = "is";
-                        }
-                        if (f.isAnnotationPresent(FieldName.class)) {
-                            String fieldName = f.getAnnotation(FieldName.class).name();
-                            Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
-                            Object getValue = get.invoke(o);
-                            Pram pram = new Pram(fieldName + " as " + fName, getValue);
-                            list.add(pram);
-                        } else {
-                            String fieldName = toTableString(fName);
-                            Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
-                            Object getValue = get.invoke(o);
-                            Pram pram = new Pram(fieldName + " as " + fName, getValue);
-                            list.add(pram);
+                for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                    Field[] fields = clazz.getDeclaredFields();
+                    Object o = po.newInstance();
+                    for (Field f : fields) {
+                        if (!f.isAnnotationPresent(TempField.class)) {
+                            String fName = f.getName();
+                            //�ж��Ƿ���boolean����
+                            String getf = "get";
+                            String fieldType = f.getGenericType().toString();
+                            if (fieldType.indexOf("boolean") != -1 || fieldType.indexOf("Boolean") != -1) {
+                                getf = "is";
+                            }
+                            if (f.isAnnotationPresent(FieldName.class)) {
+                                String fieldName = f.getAnnotation(FieldName.class).name();
+                                Method get = po.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
+                                Object getValue = get.invoke(o);
+                                Pram pram = new Pram(fieldName + " as " + fName, getValue);
+                                list.add(pram);
+                            } else {
+                                String fieldName = toTableString(fName);
+                                Method get = po.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
+                                Object getValue = get.invoke(o);
+                                Pram pram = new Pram(fieldName + " as " + fName, getValue);
+                                list.add(pram);
+                            }
                         }
                     }
                 }
+
             } catch (NoSuchMethodException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -365,12 +374,12 @@ public interface Formatter {
             return list;
         }
 
-        /**
+        *//**
          * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
          *
          * @param po
          * @return
-         */
+         *//*
         public List<Pram> getPramListByBean(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<?> thisClass = po;
@@ -426,12 +435,12 @@ public interface Formatter {
             return list;
         }
 
-        /**
+        *//**
          * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
          *
          * @param po
          * @return
-         */
+         *//*
         public List<Pram> getPramListByBeanOfSelect(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<?> thisClass = po;
@@ -484,12 +493,12 @@ public interface Formatter {
             return list;
         }
 
-        /**
+        *//**
          * ��ȡSql�ֶ���
          *
          * @param po
          * @return
-         */
+         *//*
         public String getTableName(Class<T> po) {
             if (po.isAnnotationPresent(TableName.class)) {
                 return po.getAnnotation(TableName.class).name();
@@ -504,12 +513,12 @@ public interface Formatter {
             }
         }
 
-        /**
+        *//**
          * ��ȡSql�ֶ���
          *
          * @param po
          * @return
-         */
+         *//*
         public String getTableNameByBean(Class<T> po) {
             if (po.isAnnotationPresent(TableName.class)) {
                 return po.getAnnotation(TableName.class).name();
@@ -522,13 +531,13 @@ public interface Formatter {
             }
         }
 
-        /**
+        *//**
          * 获取实体类中的某个�??
          *
          * @param po
          * @param fileName
          * @return
-         */
+         *//*
         public static <T> Serializable getFileValue(Class<T> po, String fileName) {
             try {
                 Method method = po.getMethod("get" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1));
@@ -557,13 +566,13 @@ public interface Formatter {
             return null;
         }
 
-        /**
+        *//**
          * 取字段名
          *
          * @param po
          * @param fileName
          * @return
-         */
+         *//*
         public Serializable getFileValue(Po po, String fileName) {
             try {
                 Class<? extends Po> cla = po.getClass();
@@ -591,67 +600,97 @@ public interface Formatter {
         }
 
 
-        /**
+        *//**
          * 将某个�?��?�过反射强制赋给实体�?
-         *
+         * 修改：父类也赋值
          * @param po
          * @param fileName
          * @param fileValue
          * @return
-         */
+         *//*
         public static boolean setFileValue(Po po, String fileName, Serializable fileValue) {
             Class<? extends Po> thisClass = po.getClass();
+            Class<?> clazz = po.getClass();
             try {
+
+
                 if ("ID".equalsIgnoreCase(fileName)) {
-                    try {
-                        Field field = thisClass.getDeclaredField(fileName);
-                        String calssName = field.getType().getName();
-                        if (calssName.equals("int") || calssName.equals("java.lang.Integer")) {
-                            if (Integer.MAX_VALUE > new Integer("" + fileValue)) {
-                                Integer val = new Integer("" + fileValue);
+//                    for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                        try {
+//                            Field field = thisClass.getDeclaredField(fileName);
+                            Field field = thisClass.getSuperclass().getDeclaredField(fileName);
+                            String calssName = field.getType().getName();
+                            if (calssName.equals("int") || calssName.equals("java.lang.Integer")) {
+                                if (Integer.MAX_VALUE > new Integer("" + fileValue)) {
+                                    Integer val = new Integer("" + fileValue);
+                                    Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
+                                    method.invoke(po, val);
+                                    return true;
+                                } else {
+                                    throw new SerException("ID type is not a corresponding type at " + "set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1) + "\n"
+                                            + "the will give value type is " + fileValue.getClass().getName() + "\n"
+                                            + "the filed type type is " + field.getType().getName());
+                                }
+                            } else if (calssName.equals("long") || calssName.equals("java.lang.Long")) {
+                                Long val = new Long("" + fileValue);
                                 Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
                                 method.invoke(po, val);
                                 return true;
                             } else {
-                                throw new SerException("ID type is not a corresponding type at " + "set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1) + "\n"
-                                        + "the will give value type is " + fileValue.getClass().getName() + "\n"
-                                        + "the filed type type is " + field.getType().getName());
+                                Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
+                                method.invoke(po, fileValue);
+                                return true;
                             }
-                        } else if (calssName.equals("long") || calssName.equals("java.lang.Long")) {
-                            Long val = new Long("" + fileValue);
-                            Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
-                            method.invoke(po, val);
-                            return true;
-                        } else {
-                            Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
-                            method.invoke(po, fileValue);
-                            return true;
+                        } catch (SerException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        } catch (NoSuchFieldException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
-                    } catch (SerException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    } catch (NoSuchFieldException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+//                    }
                 }
+
                 if (null != fileValue) {
                     try {
-                        Method method = null;
-                        if (fileValue instanceof String) {
-                            method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), String.class);
-                        } else if (fileValue instanceof Integer) {
-                            method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Integer.TYPE);
-                        } else if (fileValue instanceof Long) {
-                            method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Long.TYPE);
-                        } else if (fileValue instanceof Double) {
-                            method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Double.TYPE);
-                        } else if (fileValue instanceof Short) {
-                            method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Short.TYPE);
+                        for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                            Field[] fields = clazz.getDeclaredFields();
+                            boolean bool = false;
+                            for (Field field : fields) {
+                                if (field.getName().equals(fileName)) {
+                                    bool = true;
+                                    break;
+                                }
+                            }
+                            if (!bool) {
+                                continue;
+                            }
+                            Method method = null;
+                            if (fileValue instanceof String) {
+                                method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), String.class);
+                            } else if (fileValue instanceof Integer) {
+                                method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Integer.TYPE);
+                            } else if (fileValue instanceof Long) {
+                                method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Long.TYPE);
+                            } else if (fileValue instanceof Double) {
+                                method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Double.TYPE);
+                            } else if (fileValue instanceof Short) {
+                                method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Short.TYPE);
+                            } else if (fileValue instanceof Timestamp) {
+                                method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), LocalDateTime.class);
+                                *//**
+                                 * @author caiwenxian
+                                 * @date 18-3-5 下午3:23
+                                 * @see 由于数据库存储类型为Timestamp，故转化为localDateTime类型
+                                 *//*
+                                fileValue = Timestamp.valueOf(String.valueOf(fileValue));
+                                fileValue = ((Timestamp) fileValue).toLocalDateTime();
+                            }
+
+
+                            method.invoke(po, fileValue);
                         }
 
-
-                        method.invoke(po, fileValue);
                     } catch (NoSuchMethodException e) {
 
                         // TODO: handle exception
@@ -667,6 +706,8 @@ public interface Formatter {
                         }
                     }
                 }
+
+
                 return true;
             } catch (NoSuchMethodException e) {
                 // TODO Auto-generated catch block
@@ -688,21 +729,23 @@ public interface Formatter {
         }
 
 
-        /**
+        *//**
          * �շ��ʶת�»��߱�ʶ
+         * 修改：不进行转化
          *
          * @param text
          * @return
-         */
+         *//*
         public static String toTableString(String text) {
             String tName = text.substring(0, 1).toLowerCase();
             for (int i = 1; i < text.length(); i++) {
-                if (!Character.isLowerCase(text.charAt(i))) {
-                    tName += "_";
-                }
+//                if (!Character.isLowerCase(text.charAt(i))) {
+//                    tName += "_";
+//                }
                 tName += text.substring(i, i + 1);
             }
-            return tName.toLowerCase();
+//            return tName.toLowerCase();
+            return tName;
         }
 
         public String getTableNameByClazz(Class<? extends Po> po) {
@@ -718,5 +761,5 @@ public interface Formatter {
             }
         }
 
-    }
+    }*/
 }

@@ -68,7 +68,7 @@ public class UserPO extends BasePO {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(int type) {
         this.type = type;
     }
 }

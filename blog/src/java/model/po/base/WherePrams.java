@@ -44,14 +44,6 @@ public class WherePrams {
 				this.pram = " where " + file + where + " '" + value + "'";
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
 //		this.pram = " where " + file + where + "?";
 //		if("like".equals(where)){
 //			parms.add("%" + value + "%");

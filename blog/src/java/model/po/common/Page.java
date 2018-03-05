@@ -12,7 +12,6 @@ import java.util.List;
 public interface Page<T> {
 
 
-
     int init();
 
     List<T> initData(int pageIndex, int pageSize);

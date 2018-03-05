@@ -7,6 +7,7 @@ import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
@@ -27,7 +28,11 @@ public class MyAdviceFilter extends AccessControlFilter {
 		Subject subject = getSubject(request, response);
 		if (subject.getPrincipal() == null) {//表示没有登录，重定向到登录页面
 			saveRequest(request);
-			WebUtils.issueRedirect(request, response, unauthorizedUrl);
+			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+			String refUrl = httpServletRequest.getRequestURI();
+			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+			request.setAttribute("refUrl", refUrl);
+			WebUtils.issueRedirect(request, httpServletResponse, unauthorizedUrl + "?refUrl=" + refUrl);
 		} else {
 			if (StringUtils.hasText(unauthorizedUrl)) {//如果有未授权页面跳转过去
 				WebUtils.issueRedirect(request, response, unauthorizedUrl);

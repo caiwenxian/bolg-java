@@ -8,36 +8,37 @@ import java.util.List;
 
 public class GenericsUtils {
 
+
 	/**
-	 * ���͹�����
+	 * 泛型工具类
 	 */
 	/**
-	 * ͨ������,���ָ����ĸ���ķ��Ͳ�����ʵ������. ��DaoSupport<Buyer>
-	 * 
+	 * 通过反射,获得指定类的父类的泛型参数的实际类型. 如DaoSupport<Buyer>
+	 *
 	 * @param clazz
-	 *            clazz ��Ҫ�������,�������̳з��͸���
+	 *            clazz 需要反射的类,该类必须继承范型父类
 	 * @param index
-	 *            ���Ͳ�����������,��0��ʼ.
-	 * @return ���Ͳ�����ʵ������, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ���
+	 *            泛型参数所在索引,从0开始.
+	 * @return 范型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
 	public static Class<?> getSuperClassGenricType(Class<?> clazz, int index) {
 
-		Type genType = clazz.getGenericSuperclass();// �õ����͸���
+		Type genType = clazz.getGenericSuperclass();// 得到泛型父类
 
-		// ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�ֱ�ӷ���Object.class
+		// 如果没有实现ParameterizedType接口，即不支持泛型，直接返回Object.class
 		if (!(genType instanceof ParameterizedType)) {
 
 			return Object.class;
 		}
 
-		// ���ر�ʾ������ʵ�����Ͳ�����Type���������,������ŵĶ��Ƕ�Ӧ���͵�Class, ��BuyerServiceBean extends
-		// DaoSupport<Buyer,Contact>�ͷ���Buyer��Contact����
+		// 返回表示此类型实际类型参数的Type对象的数组,数组里放的都是对应类型的Class, 如BuyerServiceBean extends
+		// DaoSupport<Buyer,Contact>就返回Buyer和Contact类型
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 		if (index >= params.length || index < 0) {
 
-			throw new RuntimeException("�����������"
-					+ (index < 0 ? "����С��0" : "�����˲���������"));
+			throw new RuntimeException("你输入的索引"
+					+ (index < 0 ? "不能小于0" : "超出了参数的总数"));
 		}
 		if (!(params[index] instanceof Class)) {
 
@@ -47,11 +48,11 @@ public class GenericsUtils {
 	}
 
 	/**
-	 * ͨ������,���ָ����ĸ���ĵ�һ�����Ͳ�����ʵ������. ��DaoSupport<Buyer>
-	 * 
+	 * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如DaoSupport<Buyer>
+	 *
 	 * @param clazz
-	 *            clazz ��Ҫ�������,�������̳з��͸���
-	 * @return ���Ͳ�����ʵ������, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ���
+	 *            clazz 需要反射的类,该类必须继承泛型父类
+	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
 	public static Class<?> getSuperClassGenricType(Class<?> clazz) {
@@ -60,12 +61,12 @@ public class GenericsUtils {
 	}
 
 	/**
-	 * ͨ������,��÷�������ֵ���Ͳ�����ʵ������. ��: public Map<String, Buyer> getNames(){}
-	 * 
+	 * 通过反射,获得方法返回值泛型参数的实际类型. 如: public Map<String, Buyer> getNames(){}
+	 *
 	 * @param Method
-	 *            method ����
-	 * @param int index ���Ͳ�����������,��0��ʼ.
-	 * @return ���Ͳ�����ʵ������, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ���
+	 *            method 方法
+	 * @param int index 泛型参数所在索引,从0开始.
+	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
 	public static Class<?> getMethodGenericReturnType(Method method, int index) {
@@ -79,8 +80,8 @@ public class GenericsUtils {
 
 			if (index >= typeArguments.length || index < 0) {
 
-				throw new RuntimeException("�����������"
-						+ (index < 0 ? "����С��0" : "�����˲���������"));
+				throw new RuntimeException("你输入的索引"
+						+ (index < 0 ? "不能小于0" : "超出了参数的总数"));
 			}
 			return (Class<?>) typeArguments[index];
 		}
@@ -88,11 +89,11 @@ public class GenericsUtils {
 	}
 
 	/**
-	 * ͨ������,��÷�������ֵ��һ�����Ͳ�����ʵ������. ��: public Map<String, Buyer> getNames(){}
-	 * 
+	 * 通过反射,获得方法返回值第一个泛型参数的实际类型. 如: public Map<String, Buyer> getNames(){}
+	 *
 	 * @param Method
-	 *            method ����
-	 * @return ���Ͳ�����ʵ������, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ���
+	 *            method 方法
+	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
 	public static Class<?> getMethodGenericReturnType(Method method) {
@@ -101,24 +102,24 @@ public class GenericsUtils {
 	}
 
 	/**
-	 * ͨ������,��÷������������index��������������з��Ͳ�����ʵ������. ��: public void add(Map<String,
+	 * 通过反射,获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map<String,
 	 * Buyer> maps, List<String> names){}
-	 * 
+	 *
 	 * @param Method
-	 *            method ����
-	 * @param int index �ڼ����������
-	 * @return ��������ķ��Ͳ�����ʵ�����ͼ���, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ��ؿռ���
+	 *            method 方法
+	 * @param int index 第几个输入参数
+	 * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
 	 */
 	public static List<Class<?>> getMethodGenericParameterTypes(Method method,
-			int index) {
+																int index) {
 
 		List<Class<?>> results = new ArrayList<Class<?>>();
 		Type[] genericParameterTypes = method.getGenericParameterTypes();
 
 		if (index >= genericParameterTypes.length || index < 0) {
 
-			throw new RuntimeException("�����������"
-					+ (index < 0 ? "����С��0" : "�����˲���������"));
+			throw new RuntimeException("你输入的索引"
+					+ (index < 0 ? "不能小于0" : "超出了参数的总数"));
 		}
 		Type genericParameterType = genericParameterTypes[index];
 
@@ -136,12 +137,12 @@ public class GenericsUtils {
 	}
 
 	/**
-	 * ͨ������,��÷������������һ��������������з��Ͳ�����ʵ������. ��: public void add(Map<String, Buyer>
+	 * 通过反射,获得方法输入参数第一个输入参数的所有泛型参数的实际类型. 如: public void add(Map<String, Buyer>
 	 * maps, List<String> names){}
-	 * 
+	 *
 	 * @param Method
-	 *            method ����
-	 * @return ��������ķ��Ͳ�����ʵ�����ͼ���, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ��ؿռ���
+	 *            method 方法
+	 * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
 	 */
 	public static List<Class<?>> getMethodGenericParameterTypes(Method method) {
 
@@ -149,12 +150,12 @@ public class GenericsUtils {
 	}
 
 	/**
-	 * ͨ������,���Field���Ͳ�����ʵ������. ��: public Map<String, Buyer> names;
-	 * 
+	 * 通过反射,获得Field泛型参数的实际类型. 如: public Map<String, Buyer> names;
+	 *
 	 * @param Field
-	 *            field �ֶ�
-	 * @param int index ���Ͳ�����������,��0��ʼ.
-	 * @return ���Ͳ�����ʵ������, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ���
+	 *            field 字段
+	 * @param int index 泛型参数所在索引,从0开始.
+	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
 	public static Class<?> getFieldGenericType(Field field, int index) {
@@ -167,8 +168,8 @@ public class GenericsUtils {
 			Type[] fieldArgTypes = aType.getActualTypeArguments();
 			if (index >= fieldArgTypes.length || index < 0) {
 
-				throw new RuntimeException("�����������"
-						+ (index < 0 ? "����С��0" : "�����˲���������"));
+				throw new RuntimeException("你输入的索引"
+						+ (index < 0 ? "不能小于0" : "超出了参数的总数"));
 			}
 			return (Class<?>) fieldArgTypes[index];
 		}
@@ -176,12 +177,12 @@ public class GenericsUtils {
 	}
 
 	/**
-	 * ͨ������,���Field���Ͳ�����ʵ������. ��: public Map<String, Buyer> names;
-	 * 
+	 * 通过反射,获得Field泛型参数的实际类型. 如: public Map<String, Buyer> names;
+	 *
 	 * @param Field
-	 *            field �ֶ�
-	 * @param int index ���Ͳ�����������,��0��ʼ.
-	 * @return ���Ͳ�����ʵ������, ���û��ʵ��ParameterizedType�ӿڣ�����֧�ַ��ͣ�����ֱ�ӷ���
+	 *            field 字段
+	 * @param int index 泛型参数所在索引,从0开始.
+	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
 	public static Class<?> getFieldGenericType(Field field) {

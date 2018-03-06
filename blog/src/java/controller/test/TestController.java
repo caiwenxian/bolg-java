@@ -105,6 +105,8 @@ public class TestController {
 
         try {
             loginService.login(new LoginPO("zhangsan", "000000"));
+
+            Object object = subject.getSession().getAttribute(subject.getSession().getId());
             String refUrl = request.getParameter("refUrl");
             if (StringUtils.isNotBlank(refUrl)) {
                 response.sendRedirect(refUrl);

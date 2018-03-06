@@ -51,11 +51,12 @@ public class LoginServiceImpl implements ILoginService {
             //存储到缓存
             UserPO user = userService.getUserInfoByName(po.getName());
             cacheUtil.put(CacheType.USER_INFO, "u_" + user.getId(), user);
-            UserPO po1 =  cacheUtil.get(CacheType.USER_INFO, "u_" + user.getId(), UserPO.class);
+//            UserPO po1 =  cacheUtil.get(CacheType.USER_INFO, "u_" + user.getId(), UserPO.class);
 
-            logger.info(po1.toString());
+           /* logger.info(po1.toString());
             UserPO po2 = userDao.get(user.getId());
-            logger.info(userDao.get(user.getId()).getCreateTime().toString());
+            logger.info(userDao.get(user.getId()).getCreateTime().toString());*/
+           subject.getSession().setAttribute(subject.getSession().getId(), user);
 
 
         } catch (IncorrectCredentialsException ice) {

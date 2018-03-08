@@ -1,10 +1,8 @@
 package model.po.user;
 
-import model.po.base.validate.ADD;
 import model.po.common.BasePO;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 /**
  * @Author: [caiwenxian]
@@ -12,10 +10,9 @@ import javax.validation.constraints.Size;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
-public class LoginPO extends BasePO{
+public class LoginPO extends BasePO {
 
-    @NotBlank(groups = {ADD.class}, message = "帐号不能为空")
-//    @Size(min=3, max=8, message = "帐号长度3-8字符")
+    @NotNull(message = "帐号不能为空")
     private String name;
 
     private String password;

@@ -22,6 +22,13 @@
 		<property name="securityManager" ref="securityManager"/>
 	</bean>-->
 
+	<!-- validated 校验配置start -->
+	<!--<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" >
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+	</bean>
+	<mvc:annotation-driven validator="validator" />-->
+
+
 	<!-- ApplicationContext -->
 	<bean class="utils.SpringContextUtil" lazy-init="false"></bean>
 
@@ -90,6 +97,8 @@
 	<bean id="cacheUtil" class="utils.CacheUtil">
 		<property name="manager" ref="cacheManager2"/>
 	</bean>
+
+	<!--<mvc:annotation-driven/>-->
 
 
 

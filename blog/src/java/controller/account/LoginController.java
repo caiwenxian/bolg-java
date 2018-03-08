@@ -12,19 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import service.user.ILoginService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
+ * 登录控制器
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-02-25 17:05]
  * @Description: [ ]
@@ -65,7 +65,7 @@ public class LoginController {
      */
     @PostMapping()
     @ResponseBody
-    public String login(@Validated(ADD.class) LoginPO loginPO, BindingResult result, HttpServletRequest request, HttpServletResponse response) throws ActException {
+    public String login(LoginPO loginPO, BindingResult result, HttpServletRequest request, HttpServletResponse response) throws ActException {
         UserToken token = new UserToken("zhangsan", "000000", true, null, null);
         Subject subject = SecurityUtils.getSubject();
 
@@ -73,6 +73,7 @@ public class LoginController {
             loginService.login(new LoginPO("zhangsan", "000000"));
 
             Object object = subject.getSession().getAttribute(subject.getSession().getId());
+
             String refUrl = request.getParameter("refUrl");
             if (StringUtils.isNotBlank(refUrl)) {
                 response.sendRedirect(refUrl);

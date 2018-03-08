@@ -5,6 +5,7 @@ import dao.java.Dao;
 import dao.java.user.IUserDao;
 import dao.java.user.UserDaoImpl;
 import exception.SerException;
+import model.bo.user.Client;
 import model.enums.user.CacheType;
 import model.po.user.LoginPO;
 import model.po.user.UserPO;
@@ -15,6 +16,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.user.IClientService;
 import service.user.IUserService;
 import service.user.ILoginService;
 import utils.CacheUtil;
@@ -39,6 +41,8 @@ public class LoginServiceImpl implements ILoginService {
     CacheUtil cacheUtil;
     @Autowired
     private UserDaoImpl userDao;
+    @Autowired
+    private IClientService clientService;
 
     @Override
     public void login(LoginPO po) throws SerException {
@@ -50,13 +54,15 @@ public class LoginServiceImpl implements ILoginService {
 
             //存储到缓存
             UserPO user = userService.getUserInfoByName(po.getName());
-            cacheUtil.put(CacheType.USER_INFO, "u_" + user.getId(), user);
+//            cacheUtil.put(CacheType.USER_INFO, "u_" + user.getId(), user);
 //            UserPO po1 =  cacheUtil.get(CacheType.USER_INFO, "u_" + user.getId(), UserPO.class);
 
            /* logger.info(po1.toString());
             UserPO po2 = userDao.get(user.getId());
             logger.info(userDao.get(user.getId()).getCreateTime().toString());*/
-           subject.getSession().setAttribute(subject.getSession().getId(), user);
+//            subject.getSession().setAttribute(subject.getSession().getId(), user);
+            Client client = new Client(user.getName(), user.getType());
+            clientService.addCurrentUser(client);
 
 
         } catch (IncorrectCredentialsException ice) {

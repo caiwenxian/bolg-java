@@ -5,6 +5,7 @@ import exception.ActException;
 import exception.SerException;
 import model.po.base.validate.ADD;
 import model.po.user.LoginPO;
+import model.vo.user.TokenVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -14,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import service.common.Result;
+import service.common.impl.ActResult;
 import service.user.ILoginService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,25 +68,25 @@ public class LoginController {
      */
     @PostMapping()
     @ResponseBody
-    public String login(LoginPO loginPO, BindingResult result, HttpServletRequest request, HttpServletResponse response) throws ActException {
+    public Result login(LoginPO loginPO, BindingResult result, HttpServletRequest request, HttpServletResponse response) throws ActException {
         UserToken token = new UserToken("zhangsan", "000000", true, null, null);
         Subject subject = SecurityUtils.getSubject();
 
         try {
             loginService.login(new LoginPO("zhangsan", "000000"));
 
-            Object object = subject.getSession().getAttribute(subject.getSession().getId());
-
             String refUrl = request.getParameter("refUrl");
             if (StringUtils.isNotBlank(refUrl)) {
                 response.sendRedirect(refUrl);
             }
-            return "success";
+            TokenVO tokenVO = new TokenVO(subject.getSession().getId().toString());
+            return ActResult.data(tokenVO);
         } catch (SerException e) {
             e.printStackTrace();
-            return e.getMessage();
+            return ActResult.error(e.getMessage());
         } catch (IOException e) {
-            return "success";
+            e.printStackTrace();
+            return ActResult.error(e.getMessage());
         }
     }
 

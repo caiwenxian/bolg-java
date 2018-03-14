@@ -24,6 +24,20 @@ public class BaseDTO implements Serializable{
      */
     protected Integer page = 1;
 
+    private int startRow;
+
+    private int endRow;
+
+    public BaseDTO() {
+        this.startRow = (this.page - 1) * this.limit;
+        this.endRow = this.page * this.limit;
+    }
+
+    public BaseDTO(Integer limit, Integer page) {
+        this.limit = limit;
+        this.page = page;
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -42,6 +56,22 @@ public class BaseDTO implements Serializable{
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public int getStartRow() {
+        return startRow;
+    }
+
+    public void setStartRow(int startRow) {
+        this.startRow = startRow;
+    }
+
+    public int getEndRow() {
+        return endRow;
+    }
+
+    public void setEndRow(int endRow) {
+        this.endRow = endRow;
     }
 }
 

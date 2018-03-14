@@ -2,6 +2,8 @@ package controller.music;
 
 import exception.ErrorCode;
 import exception.SerException;
+import model.dto.common.BaseDTO;
+import model.enums.music.TopListType;
 import model.po.common.PagePO;
 import model.po.music.ArtistPO;
 import model.po.music.SongInfoPO;
@@ -48,6 +50,7 @@ public class SongController {
     public Result search(@PathVariable String name,@PathVariable Integer page) {
         try {
 //            List<SongInfoPO> list = songService.listSongByName(name);
+            page = page == null ? 1 : page;
             PagePO<SongInfoPO> pagePO = songService.listSongByNameByPage(name, page, PAGE_LIMIT);
             return ActResult.data(pagePO);
         } catch (SerException e) {
@@ -73,6 +76,25 @@ public class SongController {
         }
     }
 
-
+    /**
+     * 获取热门歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/hotsong/{page}")
+    @ResponseBody
+    public Result listHotSong(@PathVariable Integer page) {
+        try {
+            BaseDTO dto = new BaseDTO();
+            dto.setPage(page);
+            dto.setLimit(20);
+            PagePO vo = songService.listHotSong(dto);
+            return ActResult.data(vo);
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+    }
 
 }

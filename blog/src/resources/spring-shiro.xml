@@ -87,32 +87,32 @@
                   value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
         <property name="cookie" ref="rememberMeCookie"/>
     </bean>
-        <!-- 会话DAO -->
-        <bean id="sessionDAO"
-              class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
-            <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
-            <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
-        </bean>
+    <!-- 会话DAO -->
+    <bean id="sessionDAO"
+          class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+        <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
+        <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+    </bean>
 
-        <!-- 会话验证调度器 -->
-        <!-- <bean id="sessionValidationScheduler"
-               class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
-             <property name="sessionValidationInterval" value="1800000"/>
-             <property name="sessionManager" ref="sessionManager"/>
-         </bean>-->
+    <!-- 会话验证调度器 -->
+    <!-- <bean id="sessionValidationScheduler"
+           class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
+         <property name="sessionValidationInterval" value="1800000"/>
+         <property name="sessionManager" ref="sessionManager"/>
+     </bean>-->
 
-        <!-- 会话管理器 -->
-        <bean id="sessionManager"
-              class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-            <property name="globalSessionTimeout" value="1800000"/><!-- 1800000
+    <!-- 会话管理器 -->
+    <bean id="sessionManager"
+          class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="1800000"/><!-- 1800000
                 ：30分钟 --> <!-- 450000 -->
-            <property name="deleteInvalidSessions" value="true"/>
-            <property name="sessionValidationSchedulerEnabled" value="true"/>
-            <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>-->
-            <property name="sessionDAO" ref="sessionDAO"/>
-            <property name="sessionIdCookieEnabled" value="true"/>
-            <property name="sessionIdCookie" ref="sessionIdCookie"/>
-        </bean>
+        <property name="deleteInvalidSessions" value="true"/>
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>-->
+        <property name="sessionDAO" ref="sessionDAO"/>
+        <property name="sessionIdCookieEnabled" value="true"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    </bean>
 
     <!-- 安全管理器 -->
     <!--<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -148,7 +148,6 @@
     </bean> -->
 
 
-
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
@@ -157,10 +156,10 @@
         <property name="unauthorizedUrl" value="/login"/>
         <property name="filters">
             <map>
-                 <!--<entry key="authc">-->
-                     <!--&lt;!&ndash; <bean class="org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter"/> &ndash;&gt;-->
-                     <!--<bean class="controller.security.filter.PassThruFilter"/>-->
-                 <!--</entry>-->
+                <!--<entry key="authc">-->
+                <!--&lt;!&ndash; <bean class="org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter"/> &ndash;&gt;-->
+                <!--<bean class="controller.security.filter.PassThruFilter"/>-->
+                <!--</entry>-->
                 <!--<entry key="permission">
                     <bean class="com.lifeshs.security.shiro.RoleAuthorizationFilter">
                     </bean>

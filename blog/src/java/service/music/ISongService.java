@@ -1,7 +1,10 @@
 package service.music;
 
 import exception.SerException;
+import model.dto.common.BaseDTO;
+import model.dto.music.MusicDTO;
 import model.po.common.PagePO;
+import model.po.common.PaginationPO;
 import model.po.music.RecommendSongListPO;
 import model.po.music.SongInfoPO;
 import model.po.music.SongListDetailsPO;
@@ -92,6 +95,15 @@ public interface ISongService {
      * @version v1
      */
     TopListVO listTopListByTopListId(String topListId) throws SerException;
+
+    /**
+     * 获取热门歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    PagePO listHotSong(BaseDTO dto) throws SerException;
 
     /**
      * 添加歌单

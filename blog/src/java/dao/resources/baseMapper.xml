@@ -10,7 +10,7 @@
     </insert>
  
     <!-- 整体新增 -->
-    <insert id="add">
+    <insert id="addEntity">
         ${value}
     </insert>
     

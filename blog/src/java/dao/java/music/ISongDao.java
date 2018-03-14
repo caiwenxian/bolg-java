@@ -83,6 +83,24 @@ public interface ISongDao {
     List<SongInfoPO> listTopList(@Param("ids") List ids) throws QueryException;
 
     /**
+     * 获取单个排行榜歌曲总条数
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    int countTopList(@Param("id") String id) throws QueryException;
+
+    /**
+     * 获取单个排行榜歌曲
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    List<SongInfoPO> listTopListByPage(@Param("id") String id, @Param("startRow") int startRow, @Param("endRow") int endRow) throws QueryException;
+
+    /**
      * 添加歌单
      *
      * @param

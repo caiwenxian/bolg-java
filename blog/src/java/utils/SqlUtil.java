@@ -121,33 +121,38 @@ public class SqlUtil<T extends Po> {
     public static <T extends Po> List<Pram> getPramListofStatic(Po po) {
         List<Pram> list = new ArrayList<Pram>();
         Class<? extends Po> thisClass = po.getClass();
-        Field[] fields = thisClass.getDeclaredFields();
+//        Field[] fields = thisClass.getDeclaredFields();
+        Class<?> clazz = po.getClass();
         try {
-            for (Field f : fields) {
-                if (!f.getName().equalsIgnoreCase("ID") && !f.isAnnotationPresent(TempField.class)) {
-                    String fName = f.getName();
+            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field f : fields) {
+                    if (!f.getName().equalsIgnoreCase("ID") && !f.isAnnotationPresent(TempField.class)) {
+                        String fName = f.getName();
 
-                    //�ж��Ƿ���boolean����
-                    String getf = "get";
-                    String fieldType = f.getGenericType().toString();
-                    if (fieldType.indexOf("boolean") != -1 || fieldType.indexOf("Boolean") != -1) {
-                        getf = "is";
-                    }
-                    if (f.isAnnotationPresent(FieldName.class)) {
-                        String fieldName = f.getAnnotation(FieldName.class).name();
-                        Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
-                        Object getValue = get.invoke(po);
-                        Pram pram = new Pram(fieldName, getValue);
-                        list.add(pram);
-                    } else {
-                        String fieldName = new SqlUtil<T>().toTableString(fName);
-                        Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
-                        Object getValue = get.invoke(po);
-                        Pram pram = new Pram(fieldName, getValue);
-                        list.add(pram);
+                        //�ж��Ƿ���boolean����
+                        String getf = "get";
+                        String fieldType = f.getGenericType().toString();
+                        if (fieldType.indexOf("boolean") != -1 || fieldType.indexOf("Boolean") != -1) {
+                            getf = "is";
+                        }
+                        if (f.isAnnotationPresent(FieldName.class)) {
+                            String fieldName = f.getAnnotation(FieldName.class).name();
+                            Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
+                            Object getValue = get.invoke(po);
+                            Pram pram = new Pram(fieldName, getValue);
+                            list.add(pram);
+                        } else {
+                            String fieldName = new SqlUtil<T>().toTableString(fName);
+                            Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
+                            Object getValue = get.invoke(po);
+                            Pram pram = new Pram(fieldName, getValue);
+                            list.add(pram);
+                        }
                     }
                 }
             }
+
         } catch (NoSuchMethodException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -603,7 +608,14 @@ public class SqlUtil<T extends Po> {
                         Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
                         method.invoke(po, val);
                         return true;
-                    } else {
+                    } else if (calssName.equals("String") || calssName.equals("java.lang.String")) {
+                        String val = new String("" + fileValue);
+                        Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
+                        method.invoke(po, val);
+                        return true;
+                    }
+
+                    else {
                         Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
                         method.invoke(po, fileValue);
                         return true;

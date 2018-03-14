@@ -12,11 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import utils.GenericsUtils;
+import utils.RandomUtil;
 import utils.SqlUtil;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -119,8 +121,11 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
         String values = "";
 
         List<Pram> pramList = SqlUtil.getPramListofStatic(po);
-
+        pramList.add(new Pram("id", RandomUtil.getUid()));
         for (int i = 0; i < pramList.size(); i++) {
+            if ("createTime".equals(pramList.get(i).getFile()) || "modifyTime".equals(pramList.get(i).getFile())) {
+                    pramList.get(i).setValue(LocalDateTime.now());
+            }
             prams += pramList.get(i).getFile();
             if (pramList.get(i).getValue() == null) {
                 values += "null";
@@ -132,12 +137,14 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
                 prams += ",";
                 values += ",";
             }
+
+
         }
         sql += prams + ") value (" + values + ");";
 
-        SqlUtil.setFileValue(po, "id", nextId());
+//        SqlUtil.setFileValue(po, "id", RandomUtil.getUid());
 
-        return sqlSessionTemplateASS.insert("add", sql);
+        return sqlSessionTemplateASS.insert("addEntity", sql);
     }
 
     @Override

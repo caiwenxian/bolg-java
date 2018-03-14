@@ -40,6 +40,18 @@
         </foreach>
     </select>
 
+    <select id="countTopList"  resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
+        WHERE td.topListId = #{id}
+    </select>
+
+    <select id="listTopListByPage"  resultType="model.po.music.SongInfoPO">
+        SELECT s.id, s.name, s.songId, s.artistId, s.lyricId, s.mp3Url, s.origin, s.createTime, s.modifyTime
+        FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
+        WHERE td.topListId = #{id} ORDER BY td.num limit #{startRow}, #{endRow}
+    </select>
+
     <insert id="addSongList" parameterType="model.po.music.SongListPO">
         INSERT INTO t_songlist (id, songListId, name, picUrl, playCount, origin, trackUpdateTime, createTime, modifyTime)VALUES
         (#{id}, #{songListId}, #{name}, #{picUrl}, #{playCount}, #{origin}, #{trackUpdateTime}, NOW(), NOW())
@@ -60,7 +72,8 @@
         (#{id}, #{songListId}, #{num}, #{trackUpdateTime}, NOW(), NOW())
     </insert>
 
-    <select id="getRecommendSongListBySongListId" parameterType="java.lang.String" resultType="model.po.music.RecommendSongListPO">
+    <select id="getRecommendSongListBySongListId" parameterType="java.lang.String"
+            resultType="model.po.music.RecommendSongListPO">
         SELECT id, songListId, num, createTime, modifyTime
         FROM t_songlist_recommend WHERE songListId = #{songListId}
     </select>

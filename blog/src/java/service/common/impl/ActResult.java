@@ -56,6 +56,10 @@ public class ActResult implements Result{
         return new ActResult(code, msg, null);
     }
 
+    public static ActResult error(String msg) {
+        return new ActResult(303, msg, null);
+    }
+
     public static ActResult data(Object data) {
         return new ActResult(0, null, data);
     }

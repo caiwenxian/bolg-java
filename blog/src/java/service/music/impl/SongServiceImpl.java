@@ -7,6 +7,7 @@ import exception.ErrorMessage;
 import exception.SerException;
 import model.constant.Common;
 import model.constant.NetseaseUrl;
+import model.dto.common.BaseDTO;
 import model.enums.music.TopListType;
 import model.po.common.Page;
 import model.po.common.PagePO;
@@ -144,6 +145,20 @@ public class SongServiceImpl implements ISongService {
         List<SongInfoPO> list = songDao.listTopList(ids);
         TopListVO topListVO = new TopListVO(TopListType.getName(topListId), topListId, list);
         return topListVO;
+    }
+
+    @Override
+    public PagePO listHotSong(BaseDTO dto) throws SerException {
+        String id = TopListType.B.getId();
+        int count = songDao.countTopList(id);
+        int page = dto.getPage();
+        page = page < 1 ? 1 : page;
+        int startRow = (page - 1) * dto.getLimit();
+        int endRow = page * dto.getLimit();
+        List<SongInfoPO> list = songDao.listTopListByPage(id, startRow, endRow);
+        PagePO pagePO = new PagePO(count, list);
+
+        return pagePO;
     }
 
     @Override

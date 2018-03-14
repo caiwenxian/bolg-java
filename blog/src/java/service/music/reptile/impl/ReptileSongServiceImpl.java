@@ -389,7 +389,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
         public void run() {
             try {
                 switch (type) {
-                    case 1:  //歌手搜索
+                    case 1:  //歌曲搜索
                         reptileSongs(String.valueOf(params[0]));
                         break;
                     case 2:  //歌手热门歌曲

@@ -6,6 +6,7 @@ import model.po.common.PagePO;
 import model.po.knowledge.ArticlePO;
 import model.po.music.ArtistPO;
 import model.to.ArticleTO;
+import model.vo.knowledge.ArticleVO;
 
 /**
  * @Author: [caiwenxian]
@@ -31,7 +32,7 @@ public interface IKnowledgeService {
      * @return class
      * @version v1
      */
-    ArticlePO getArticle(String id);
+    ArticleVO getArticle(String id) throws SerException, Exception;
 
     /**
      * 添加文章
@@ -41,4 +42,5 @@ public interface IKnowledgeService {
      * @version v1
      */
     void addArticle(ArticleTO to) throws SerException, Exception;
+
 }

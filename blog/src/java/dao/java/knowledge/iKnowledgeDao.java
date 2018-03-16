@@ -16,4 +16,8 @@ public interface iKnowledgeDao {
     int countArticle(ArticleDTO dto);
 
     List<ArticlePO> listArticle(ArticleDTO dto);
+
+    void addArticle(ArticlePO po);
+
+    ArticlePO getArticle(String id);
 }

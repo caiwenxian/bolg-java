@@ -235,6 +235,11 @@
             <version>5.4.1.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-typehandlers-jsr310</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 
     </dependencies>
     <dependencyManagement>

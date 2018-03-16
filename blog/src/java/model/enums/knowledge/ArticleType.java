@@ -11,17 +11,33 @@ public enum ArticleType {
     /**
      * 技术类别
      */
-    TECHNOLOGY(1),
+    TECHNOLOGY(1, "技术"),
 
     /**
      * 生活类别
      */
-    LIFE(2);
+    LIFE(2, "生活");
 
     private Integer code;
 
+    private String name;
+
+    public static String getName(Integer code) {
+        for (ArticleType type : ArticleType.values()) {
+            if (type.getCode().equals(code)) {
+                return type.getName();
+            }
+        }
+        return null;
+    }
+
     ArticleType(Integer code) {
         this.code = code;
+    }
+
+    ArticleType(Integer code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public static ArticleType articleType(Integer code) {
@@ -39,5 +55,13 @@ public enum ArticleType {
 
     public void setCode(Integer code) {
         this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

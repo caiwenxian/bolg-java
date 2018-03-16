@@ -7,13 +7,15 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
+ * 基础类
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-01-18 17:50]
  * @Description: [ ]
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class BasePO extends Po implements Serializable{
+public class BasePO extends Po implements Serializable {
 
     private String id;
 
@@ -46,4 +48,5 @@ public class BasePO extends Po implements Serializable{
     public void setModifyTime(LocalDateTime modifyTime) {
         this.modifyTime = modifyTime;
     }
+
 }

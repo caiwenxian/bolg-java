@@ -20,6 +20,10 @@ public class ArticleTO extends BasePO{
 
     private ArticleType type;
 
+    private String title;
+
+    private String contentText;
+
     public ArticleTO(){}
 
     public ArticleTO(String content) {
@@ -30,6 +34,13 @@ public class ArticleTO extends BasePO{
         this.content = content;
         this.status = status;
         this.type = type;
+    }
+
+    public ArticleTO(String content, ArticleStatus status, ArticleType type, String title) {
+        this.content = content;
+        this.status = status;
+        this.type = type;
+        this.title = title;
     }
 
     public String getContent() {
@@ -54,5 +65,21 @@ public class ArticleTO extends BasePO{
 
     public void setType(ArticleType type) {
         this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContentText() {
+        return contentText;
+    }
+
+    public void setContentText(String contentText) {
+        this.contentText = contentText;
     }
 }

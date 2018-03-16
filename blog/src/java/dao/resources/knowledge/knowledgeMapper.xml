@@ -11,8 +11,8 @@
         </where>
     </select>
 
-    <select id="listArticleByPage" resultType="model.po.knowledge.ArticlePO">
-        SELECT * FROM t_article
+    <select id="listArticleByPage" resultMap="article">
+        SELECT id, content, title, status, type, contentText, createTime, modifyTime FROM t_article
         <where>
             <if test="title != null">
                 title = #{title}
@@ -21,6 +21,25 @@
         ORDER BY createTime DESC limit #{startRow}, #{endRow}
     </select>
 
+    <insert id="addArticle" parameterType="model.po.knowledge.ArticlePO">
+        INSERT INTO t_article (id, title, content, type, status, contentText, createTime, modifyTime)
+         VALUES (#{id}, #{title}, #{content}, #{type}, #{status}, #{contentText}, NOW(), NOW())
+    </insert>
 
+    <select id="getArticle" resultMap="article">
+        SELECT * FROM t_article WHERE id = #{id}
+    </select>
+
+
+    <resultMap id="article" type="model.po.knowledge.ArticlePO">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="title" column="title"/>
+        <result property="status" column="status"/>
+        <result property="type" column="type"/>
+        <result property="contentText" column="contentText"/>
+        <result property="createTime" column="createTime"/>
+        <result property="modifyTime" column="modifyTime"/>
+    </resultMap>
 
 </mapper>

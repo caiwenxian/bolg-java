@@ -27,6 +27,17 @@ public class KnowledgeDaoImpl extends DaoImpl<ArticlePO, String> implements iKno
     }
 
     public List<ArticlePO> listArticle(ArticleDTO dto){
-        return sqlSessionTemplateASS.selectList("listArticleByPage", dto);
+        List list = sqlSessionTemplateASS.selectList("listArticleByPage", dto);
+        return list;
+    }
+
+    @Override
+    public void addArticle(ArticlePO po) {
+        sqlSessionTemplateASS.insert("addArticle", po);
+    }
+
+    @Override
+    public ArticlePO getArticle(String id) {
+        return sqlSessionTemplateASS.selectOne("getArticle", id);
     }
 }

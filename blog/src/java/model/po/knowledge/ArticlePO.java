@@ -23,6 +23,11 @@ public class ArticlePO extends BasePO {
 
     private Integer type;
 
+    private String title;
+
+    private String contentText;
+
+
     public ArticlePO() {
     }
 
@@ -34,6 +39,21 @@ public class ArticlePO extends BasePO {
         this.content = content;
         this.status = status;
         this.type = type;
+    }
+
+    public ArticlePO(byte[] content, Integer status, Integer type, String title) {
+        this.content = content;
+        this.status = status;
+        this.type = type;
+        this.title = title;
+    }
+
+    public ArticlePO(byte[] content, Integer status, Integer type, String title, String contentText) {
+        this.content = content;
+        this.status = status;
+        this.type = type;
+        this.title = title;
+        this.contentText = contentText;
     }
 
     public byte[] getContent() {
@@ -58,5 +78,21 @@ public class ArticlePO extends BasePO {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContentText() {
+        return contentText;
+    }
+
+    public void setContentText(String contentText) {
+        this.contentText = contentText;
     }
 }

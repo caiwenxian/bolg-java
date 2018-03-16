@@ -18,7 +18,11 @@ public class ArticleVO extends BasePO{
 
     private ArticleStatus status;
 
-    private ArticleType type;
+    private String type;
+
+    private String title;
+
+    private String contentText;
 
     public ArticleVO(){}
 
@@ -26,10 +30,17 @@ public class ArticleVO extends BasePO{
         this.content = content;
     }
 
-    public ArticleVO(String content, ArticleStatus status, ArticleType type) {
+    public ArticleVO(String content, ArticleStatus status, String type) {
         this.content = content;
         this.status = status;
         this.type = type;
+    }
+
+    public ArticleVO(String content, ArticleStatus status, String type, String title) {
+        this.content = content;
+        this.status = status;
+        this.type = type;
+        this.title = title;
     }
 
     public String getContent() {
@@ -48,11 +59,27 @@ public class ArticleVO extends BasePO{
         this.status = status;
     }
 
-    public ArticleType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ArticleType type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContentText() {
+        return contentText;
+    }
+
+    public void setContentText(String contentText) {
+        this.contentText = contentText;
     }
 }

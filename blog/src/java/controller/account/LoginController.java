@@ -52,8 +52,12 @@ public class LoginController {
      */
     @GetMapping()
     @ResponseBody
-    public ModelAndView loginPage(HttpServletRequest request) {
+    public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String refUrl = request.getParameter("refUrl");
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            response.sendRedirect(refUrl);
+        }
         ModelAndView modelAndView = new ModelAndView("account/login");
         modelAndView.addObject("refUrl", refUrl);
         return modelAndView;

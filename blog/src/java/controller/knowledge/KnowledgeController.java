@@ -33,6 +33,49 @@ public class KnowledgeController {
     private IKnowledgeService knowledgeService;
 
     /**
+     * 跳转文章列表
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("")
+    @ResponseBody
+    public ModelAndView articlePage(){
+        ModelAndView modelAndView = new ModelAndView("/knowledge/knowledge");
+        return modelAndView;
+    }
+
+    /**
+     * 跳转文章详细
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/article/details/{id}")
+    @ResponseBody
+    public ModelAndView articleDetailsPage(@PathVariable String id){
+        ModelAndView modelAndView = new ModelAndView("/knowledge/article-details");
+        modelAndView.addObject("id", id);
+        return modelAndView;
+    }
+
+    /**
+     * 跳转文章发布
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/article/publish")
+    @ResponseBody
+    public ModelAndView articlePublishPage(){
+        ModelAndView modelAndView = new ModelAndView("/knowledge/knowledge-publish");
+        return modelAndView;
+    }
+
+    /**
      * 发布文章
      *
      * @param
@@ -112,20 +155,7 @@ public class KnowledgeController {
         return ActResult.success("success");
     }
 
-    /**
-     * 跳转文章详细
-     *
-     * @param
-     * @return class
-     * @version v1
-     */
-    @GetMapping("/article/details/{id}")
-    @ResponseBody
-    public ModelAndView articleDetailsPage(@PathVariable String id){
-        ModelAndView modelAndView = new ModelAndView("/blog/view/article-details.html");
-        modelAndView.addObject("id", id);
-        return modelAndView;
-    }
+
 
 
 }

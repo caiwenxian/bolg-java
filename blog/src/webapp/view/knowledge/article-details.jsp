@@ -14,12 +14,12 @@
         <div class="div-article-details">
             <div class="title" v-text="article.title"></div>
             <div class="div-article-top">
-                <label>张三</label>
+                <label>{{article.userName}}</label>
                 <label>{{article.createTime | date('yyyy-MM-dd')}}</label>
                 <label>{{article.type}}</label>
                 <!--<div class="div-article-top-right">-->
-                    <label>观阅数：12</label>
-                    <label>评论数：13</label>
+                    <label>观阅数：{{article.browseAmount}}</label>
+                    <label>评论数：{{article.commentAmount}}</label>
                 <!--</div>-->
             </div>
             <hr style="border: 1px whitesmoke dashed;">

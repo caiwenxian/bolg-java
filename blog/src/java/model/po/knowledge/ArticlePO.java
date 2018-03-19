@@ -4,6 +4,7 @@ import model.enums.knowledge.ArticleStatus;
 import model.enums.knowledge.ArticleType;
 import model.po.base.annotation.TableName;
 import model.po.common.BasePO;
+import model.po.user.UserPO;
 
 /**
  * 文章
@@ -26,6 +27,14 @@ public class ArticlePO extends BasePO {
     private String title;
 
     private String contentText;
+
+    private String userId;
+
+    private String userName;
+
+    private Integer browseAmount;
+
+    private Integer commentAmount;
 
 
     public ArticlePO() {
@@ -94,5 +103,37 @@ public class ArticlePO extends BasePO {
 
     public void setContentText(String contentText) {
         this.contentText = contentText;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Integer getBrowseAmount() {
+        return browseAmount;
+    }
+
+    public void setBrowseAmount(Integer browseAmount) {
+        this.browseAmount = browseAmount;
+    }
+
+    public Integer getCommentAmount() {
+        return commentAmount;
+    }
+
+    public void setCommentAmount(Integer commentAmount) {
+        this.commentAmount = commentAmount;
     }
 }

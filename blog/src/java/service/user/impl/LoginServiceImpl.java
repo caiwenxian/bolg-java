@@ -60,7 +60,7 @@ public class LoginServiceImpl implements ILoginService {
 //            UserPO po2 = userDao.get(user.getId());
 //            logger.info(userDao.get(user.getId()).getCreateTime().toString());
 //            subject.getSession().setAttribute(subject.getSession().getId(), user);
-            Client client = new Client(user.getName(), user.getType());
+            Client client = new Client(user.getId(), user.getName(), user.getType());
             clientService.addCurrentUser(client);
 
 

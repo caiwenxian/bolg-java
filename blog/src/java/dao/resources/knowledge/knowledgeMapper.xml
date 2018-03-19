@@ -12,22 +12,25 @@
     </select>
 
     <select id="listArticleByPage" resultMap="article">
-        SELECT id, content, title, status, type, contentText, createTime, modifyTime FROM t_article
+        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount, a.commentAmount,  u.id as userId, u.name as userName
+        FROM t_article a LEFT JOIN t_user u ON a.userId = u.id
         <where>
             <if test="title != null">
-                title = #{title}
+                a.title = #{title}
             </if>
         </where>
-        ORDER BY createTime DESC limit #{startRow}, #{endRow}
+        ORDER BY a.createTime DESC limit #{startRow}, #{endRow}
     </select>
 
     <insert id="addArticle" parameterType="model.po.knowledge.ArticlePO">
-        INSERT INTO t_article (id, title, content, type, status, contentText, createTime, modifyTime)
-         VALUES (#{id}, #{title}, #{content}, #{type}, #{status}, #{contentText}, NOW(), NOW())
+        INSERT INTO t_article (id, title, content, type, status, contentText, userId, createTime, modifyTime)
+         VALUES (#{id}, #{title}, #{content}, #{type}, #{status}, #{contentText}, #{userId}, NOW(), NOW())
     </insert>
 
     <select id="getArticle" resultMap="article">
-        SELECT * FROM t_article WHERE id = #{id}
+        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount, a.commentAmount, u.id as userId, u.name as userName
+        FROM t_article a LEFT JOIN t_user u ON a.userId = u.id
+        WHERE a.id = #{id}
     </select>
 
 
@@ -40,6 +43,10 @@
         <result property="contentText" column="contentText"/>
         <result property="createTime" column="createTime"/>
         <result property="modifyTime" column="modifyTime"/>
+        <result property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+        <result property="browseAmount" column="browseAmount"/>
+        <result property="commentAmount" column="commentAmount"/>
     </resultMap>
 
 </mapper>

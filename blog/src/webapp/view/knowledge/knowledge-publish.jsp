@@ -118,9 +118,10 @@
 
     .w-e-text-container {
         height: 500px !important;
+        z-index: 10 !important;
         /*max-height: 500px;*/
     }
-    #editor div {
+    .w-e-toolbar {
         z-index: 100 !important;
     }
 </style>

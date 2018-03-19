@@ -16,15 +16,17 @@
             <div><a href="javascript:void(0)"><p class="p-article-title" @click="goDetails(article.id)">{{article.title}}</p></a></div>
             <div class="div-article-content" v-text="article.contentText"></div>
             <div class="div-article-bottom">
-                <label>张三</label>
+                <label>{{article.userName}}</label>
                 <label>{{article.createTime | date('yyyy-MM-dd')}}</label>
                 <label>{{article.type}}</label>
                 <div class="div-article-bottom-right">
-                    <label>观阅数：12</label>
-                    <label>评论数：13</label>
+                    <label>观阅数：{{article.browseAmount}}</label>
+                    <label>评论数：{{article.commentAmount}}</label>
                 </div>
             </div>
         </div>
+
+        <div id="page" style="text-align: center; margin-top: 10px;"></div>
     </div>
 </div>
 </body>
@@ -32,9 +34,23 @@
 </html>
 <script src="/static/js/knowledge.js?v=1.1.1"></script>
 <script>
-    layui.use('layer', function () {
+    layui.use(['layer', 'laypage'], function () {
 
         var layer = layui.layer;
+
+        var laypage = layui.laypage;
+
+        laypage.render({
+            elem: 'page'
+            ,count: article.vm.article.totalSize
+            ,theme: '#1E9FFF'
+            ,jump: function(obj, first){
+                if(!first){
+                    article.vm.article.page = obj.curr;
+
+                }
+            }
+        });
     });
     common.changeNav(1);
     article.init();

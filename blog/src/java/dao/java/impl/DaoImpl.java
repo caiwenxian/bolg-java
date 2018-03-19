@@ -332,6 +332,7 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
         }
         String sql = "update " + tableName + " set ";
         List<Pram> prams = sqlUtil.getPramList(po);
+        int len = 0;
         for (int i = 0; i < prams.size(); i++) {
             if (null != prams.get(i).getValue()) {
                 sql += prams.get(i).getFile() + "=";
@@ -348,7 +349,11 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
                 if (i < prams.size() - 1) {
                     sql += ",";
                 }
+                len ++;
             }
+        }
+        if (len < prams.size()) {
+            sql = sql.substring(0, sql.length() - 1);
         }
         sql += " where id='" + id + "';";
 

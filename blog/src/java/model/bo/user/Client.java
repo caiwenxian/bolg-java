@@ -13,6 +13,11 @@ public class Client {
     /**
      * 账户
      */
+    private String userId;
+
+    /**
+     * 账户
+     */
     private String name;
 
     /**
@@ -24,6 +29,12 @@ public class Client {
     }
 
     public Client(String name, Integer type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    public Client(String userId, String name, Integer type) {
+        this.userId = userId;
         this.name = name;
         this.type = type;
     }
@@ -50,5 +61,13 @@ public class Client {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

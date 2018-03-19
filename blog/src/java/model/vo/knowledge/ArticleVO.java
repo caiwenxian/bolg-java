@@ -24,6 +24,12 @@ public class ArticleVO extends BasePO{
 
     private String contentText;
 
+    private String userName;
+
+    private Integer browseAmount;
+
+    private Integer commentAmount;
+
     public ArticleVO(){}
 
     public ArticleVO(String content) {
@@ -81,5 +87,29 @@ public class ArticleVO extends BasePO{
 
     public void setContentText(String contentText) {
         this.contentText = contentText;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Integer getBrowseAmount() {
+        return browseAmount == null ? 0 : browseAmount;
+    }
+
+    public void setBrowseAmount(Integer browseAmount) {
+        this.browseAmount = browseAmount;
+    }
+
+    public Integer getCommentAmount() {
+        return commentAmount == null ? 0 : commentAmount;
+    }
+
+    public void setCommentAmount(Integer commentAmount) {
+        this.commentAmount = commentAmount;
     }
 }

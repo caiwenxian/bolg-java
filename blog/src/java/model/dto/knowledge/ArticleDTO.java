@@ -13,6 +13,7 @@ public class ArticleDTO extends BaseDTO {
     private String title;
 
     public ArticleDTO() {
+
     }
 
     public ArticleDTO(String title) {

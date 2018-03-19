@@ -155,7 +155,24 @@ public class KnowledgeController {
         return ActResult.success("success");
     }
 
-
+    /**
+     * 更新文章观阅数
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @PutMapping("/article/browseAmount/{id}")
+    @ResponseBody
+    public Result updateArticleBrowseAmount(@PathVariable String id){
+        try {
+            knowledgeService.updateArticleBrowseAmount(id);
+            return ActResult.success("success");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ActResult.success("success");
+    }
 
 
 }

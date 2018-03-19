@@ -36,8 +36,8 @@ body {
 .body {
 }
 .body-main {
-    min-height: 800px;
-    margin-bottom: 100px;
+    min-height: 600px;
+    margin-bottom: 30px;
     position: relative;
     width: 1170px;
     left: 19%;

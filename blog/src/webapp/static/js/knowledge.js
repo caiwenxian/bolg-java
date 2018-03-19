@@ -32,11 +32,27 @@ article.vm = new Vue({
                     return;
                 }
                 vm.article.list = result.data.data;
+                vm.article.totalSize = result.data.totalSize;
 
             });
         },
         goDetails: function (id) {
+            var data = {
+                id: id
+            }
+            var url = '/knowledge/article/browseAmount/' + id;
+            http.put(url, data, null);
             window.location.href = '/knowledge/article/details/' + id;
+        }
+    },
+    computed: {
+        articlePage: function () {
+            return this.article.page;
+        }
+    },
+    watch: {
+        articlePage: function() {
+            this.listArticle();
         }
     },
     filters: {

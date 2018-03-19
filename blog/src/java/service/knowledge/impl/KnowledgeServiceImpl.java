@@ -2,6 +2,7 @@ package service.knowledge.impl;
 
 import dao.java.knowledge.KnowledgeDaoImpl;
 import exception.SerException;
+import model.bo.user.Client;
 import model.dto.knowledge.ArticleDTO;
 import model.enums.knowledge.ArticleStatus;
 import model.enums.knowledge.ArticleType;
@@ -10,12 +11,15 @@ import model.po.knowledge.ArticlePO;
 import model.to.ArticleTO;
 import model.vo.knowledge.ArticleVO;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.knowledge.IKnowledgeService;
+import service.user.IClientService;
 import utils.RandomUtil;
 import utils.SerializeUtil;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +35,8 @@ public class KnowledgeServiceImpl implements IKnowledgeService {
 
     @Autowired
     KnowledgeDaoImpl knowledgeDao;
+    @Autowired
+    IClientService clientService;
 
     @Override
     public PagePO<ArticlePO> ListArticle(ArticleDTO dto) throws Exception {
@@ -47,10 +53,14 @@ public class KnowledgeServiceImpl implements IKnowledgeService {
             vo.setType(ArticleType.getName(po.getType()));
             vo.setTitle(po.getTitle());
             vo.setCreateTime(po.getCreateTime());
-            /*将content字段反序列化*/
 //            列表不用获取html内容
 //            vo.setContent((String) SerializeUtil.deSerialize(po.getContent()));
-            vo.setContentText(po.getContentText() == null ? null : po.getContentText().substring(0, 100));
+            if (StringUtils.isNotBlank(po.getContentText())) {
+                vo.setContentText(po.getContentText().length() > 150 ? po.getContentText().substring(0, 150) + "..." : po.getContentText());
+            }
+            vo.setUserName(po.getUserName());
+            vo.setBrowseAmount(po.getBrowseAmount());
+            vo.setCommentAmount(po.getCommentAmount());
             vos.add(vo);
 
         }
@@ -67,14 +77,18 @@ public class KnowledgeServiceImpl implements IKnowledgeService {
         vo.setCreateTime(po.getCreateTime());
         /*将content字段反序列化*/
         vo.setContent((String) SerializeUtil.deSerialize(po.getContent()));
-
+        vo.setUserName(po.getUserName());
+        vo.setBrowseAmount(po.getBrowseAmount());
+        vo.setCommentAmount(po.getCommentAmount());
         return vo;
     }
 
     @Override
     public void addArticle(ArticleTO to) throws SerException, Exception {
-
+        Client client = clientService.getCurrentUser();
+        String userId = client.getUserId();
         ArticlePO po = new ArticlePO();
+        po.setUserId(userId);
         BeanUtils.copyProperties(po, to);
         if (null != to.getStatus()) {
             po.setStatus(to.getStatus().getCode());
@@ -87,5 +101,19 @@ public class KnowledgeServiceImpl implements IKnowledgeService {
         po.setContent(content);
         po.setId(RandomUtil.getUid());
         knowledgeDao.addArticle(po);
+    }
+
+    @Override
+    public void updateArticleBrowseAmount(String articleId) throws SerException {
+        ArticlePO po = knowledgeDao.getArticle(articleId);
+        if (null == po) {
+            throw new SerException("更新实体不存在");
+        }
+        ArticlePO entity = new ArticlePO();
+        entity.setId(articleId);
+        entity.setBrowseAmount(po.getBrowseAmount() == null ? 1 : po.getBrowseAmount() + 1);
+        entity.setModifyTime(LocalDateTime.now());
+
+        knowledgeDao.updateLocal(entity);
     }
 }

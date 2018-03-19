@@ -41,6 +41,26 @@ http.post = function (url, data, callback) {
     });
 }
 
+http.put = function (url, data, callback) {
+    $.ajax({
+        method: 'PUT',
+        url: http.URL + url,
+        data: data,
+        async: false,
+        success: function (result) {
+            if (typeof callback == 'function') {
+                callback(result);
+            }
+        },
+        error: function (result) {
+            if (result.status === 101) {
+                layer.msg("未登录")
+            }
+            console.log(result)
+        }
+    });
+}
+
 http.create_netease = function (path, method, data, callback, errorcallback) {
     return new Promise(function (resolve, reject) {
         var ne_req = '';

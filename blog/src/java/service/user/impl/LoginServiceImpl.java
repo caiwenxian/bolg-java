@@ -51,19 +51,17 @@ public class LoginServiceImpl implements ILoginService {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-
-            //存储到缓存
-            UserPO user = userService.getUserInfoByName(po.getName());
 //            cacheUtil.put(CacheType.USER_INFO, "u_" + user.getId(), user);
 //            UserPO po1 =  cacheUtil.get(CacheType.USER_INFO, "u_" + user.getId(), UserPO.class);
 
 //            UserPO po2 = userDao.get(user.getId());
 //            logger.info(userDao.get(user.getId()).getCreateTime().toString());
 //            subject.getSession().setAttribute(subject.getSession().getId(), user);
+
+            //存储到shiro管理的缓存
+            UserPO user = userService.getUserInfoByName(po.getName());
             Client client = new Client(user.getId(), user.getName(), user.getType());
             clientService.addCurrentUser(client);
-
-
         } catch (IncorrectCredentialsException ice) {
             // 捕获密码错误异常
             throw new SerException("password error!");

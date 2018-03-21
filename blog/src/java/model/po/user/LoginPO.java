@@ -21,6 +21,8 @@ public class LoginPO extends BasePO {
 
     private String verifyCode;
 
+    private String refUrl;
+
     public LoginPO() {
     }
 
@@ -65,5 +67,13 @@ public class LoginPO extends BasePO {
 
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
+    }
+
+    public String getRefUrl() {
+        return refUrl;
+    }
+
+    public void setRefUrl(String refUrl) {
+        this.refUrl = refUrl;
     }
 }

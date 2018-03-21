@@ -13,10 +13,19 @@ http.get = function (url, data, callback) {
             }
         },
         error: function (result) {
-            if (result.status === 101) {
+            if (result.status === 401) {
                 layer.msg("未登录")
             }
-            console.log(result)
+            if (result.status === 500) {
+                layui.use('layer', function () {
+                    layer.open({
+                        title: '信息'
+                        ,content: result.responseText
+                    });
+                })
+
+
+            }
         }
     });
 }
@@ -33,10 +42,19 @@ http.post = function (url, data, callback) {
             }
         },
         error: function (result) {
-            if (result.status === 101) {
+            if (result.status === 401) {
                 layer.msg("未登录")
             }
-            console.log(result)
+            if (result.status === 500) {
+                layui.use('layer', function () {
+                    layer.open({
+                        title: '信息'
+                        ,content: result.responseText
+                    });
+                })
+
+
+            }
         }
     });
 }
@@ -53,10 +71,19 @@ http.put = function (url, data, callback) {
             }
         },
         error: function (result) {
-            if (result.status === 101) {
+            if (result.status === 401) {
                 layer.msg("未登录")
             }
-            console.log(result)
+            if (result.status === 500) {
+                layui.use('layer', function () {
+                    layer.open({
+                        title: '信息'
+                        ,content: result.responseText
+                    });
+                })
+
+
+            }
         }
     });
 }

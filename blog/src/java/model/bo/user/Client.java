@@ -1,5 +1,7 @@
 package model.bo.user;
 
+import java.io.Serializable;
+
 /**
  * 在线用户信息
  *
@@ -8,7 +10,7 @@ package model.bo.user;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
-public class Client {
+public class Client implements Serializable{
 
     /**
      * 账户
@@ -25,6 +27,11 @@ public class Client {
      */
     private Integer type;
 
+    /**
+     * token
+     */
+    private String token;
+
     public Client() {
     }
 
@@ -37,6 +44,13 @@ public class Client {
         this.userId = userId;
         this.name = name;
         this.type = type;
+    }
+
+    public Client(String userId, String name, Integer type, String token) {
+        this.userId = userId;
+        this.name = name;
+        this.type = type;
+        this.token = token;
     }
 
     @Override
@@ -69,5 +83,13 @@ public class Client {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

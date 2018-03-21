@@ -65,6 +65,7 @@ public class KnowledgeServiceImpl implements IKnowledgeService {
 
         }
         PagePO pagePO = new PagePO(count, vos);
+//        throw new Exception("code");
         return pagePO;
     }
 

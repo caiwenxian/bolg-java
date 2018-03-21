@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import service.common.Result;
 import service.common.impl.ActResult;
+import service.user.IClientService;
 import service.user.ILoginService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,8 @@ public class LoginController {
     final Logger logger = Logger.getLogger(LoginController.class.getName());
     @Autowired
     ILoginService loginService;
+    @Autowired
+    IClientService clientService;
 
     /**
      * 登录页面
@@ -55,7 +58,7 @@ public class LoginController {
     public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String refUrl = request.getParameter("refUrl");
         Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated()) {
+        if (subject.isAuthenticated() && StringUtils.isNotBlank(refUrl)) {
             response.sendRedirect(refUrl);
         }
         ModelAndView modelAndView = new ModelAndView("account/login");
@@ -73,25 +76,36 @@ public class LoginController {
     @PostMapping()
     @ResponseBody
     public Result login(LoginPO loginPO, BindingResult result, HttpServletRequest request, HttpServletResponse response) throws ActException {
-        UserToken token = new UserToken("zhangsan", "000000", true, null, null);
-        Subject subject = SecurityUtils.getSubject();
-
+        if (StringUtils.isBlank(loginPO.getName()) || StringUtils.isBlank(loginPO.getPassword())) {
+            return ActResult.error(Result.MSG_PARAMS_MISS);
+        }
         try {
-            loginService.login(new LoginPO("zhangsan", "000000"));
+            loginService.login(loginPO);
 
-            String refUrl = request.getParameter("refUrl");
+            /*String refUrl = request.getParameter("refUrl");
             if (StringUtils.isNotBlank(refUrl)) {
                 response.sendRedirect(refUrl);
-            }
-            TokenVO tokenVO = new TokenVO(subject.getSession().getId().toString());
-            return ActResult.data(tokenVO);
+            }*/
+            return ActResult.data(clientService.getCurrentUser().getToken());
         } catch (SerException e) {
             e.printStackTrace();
             return ActResult.error(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ActResult.error(e.getMessage());
         }
+    }
+
+    /**
+     * 退出登录
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @PostMapping("/logout")
+    @ResponseBody
+    public Result logout(HttpServletRequest request, HttpServletResponse response) throws ActException {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return ActResult.success("success");
     }
 
 }

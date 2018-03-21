@@ -1,10 +1,13 @@
 package controller.knowledge;
 
+import exception.SerException;
 import model.dto.knowledge.ArticleDTO;
 import model.enums.knowledge.ArticleStatus;
 import model.po.common.PagePO;
 import model.to.ArticleTO;
 import model.vo.knowledge.ArticleVO;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,8 +44,9 @@ public class KnowledgeController {
      */
     @GetMapping("")
     @ResponseBody
-    public ModelAndView articlePage(){
+    public ModelAndView articlePage() throws SerException {
         ModelAndView modelAndView = new ModelAndView("/knowledge/knowledge");
+//        throw new SerException("code");
         return modelAndView;
     }
 
@@ -85,6 +89,10 @@ public class KnowledgeController {
     @PostMapping("/publish")
     @ResponseBody
     public Result publish(ArticleTO to){
+        Subject subject = SecurityUtils.getSubject();
+        if (subject == null || !subject.isAuthenticated()) {
+            return ActResult.error(Result.MSG_NOT_LOGIN_OPERATE);
+        }
         try {
             to.setStatus(ArticleStatus.PUBLISH);
             knowledgeService.addArticle(to);
@@ -105,6 +113,10 @@ public class KnowledgeController {
     @PostMapping("/draft")
     @ResponseBody
     public Result saveDraft(ArticleTO to){
+        Subject subject = SecurityUtils.getSubject();
+        if (subject == null || !subject.isAuthenticated()) {
+            return ActResult.error(Result.MSG_NOT_LOGIN_OPERATE);
+        }
         try {
             to.setStatus(ArticleStatus.DRAFT);
             knowledgeService.addArticle(to);
@@ -124,16 +136,17 @@ public class KnowledgeController {
      */
     @GetMapping("/articles/{page}")
     @ResponseBody
-    public Result listArticle(@PathVariable Integer page, ArticleDTO dto){
+    public Result listArticle(@PathVariable Integer page, ArticleDTO dto) throws SerException {
         try {
             dto.setPage(page);
             dto.setTitle(dto.getTitle() == "" ? null : dto.getTitle());
             PagePO pagePO = knowledgeService.ListArticle(dto);
             return ActResult.data(pagePO);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new SerException("code");
+//            e.printStackTrace();
         }
-        return ActResult.success("success");
+//        return ActResult.success("success");
     }
 
     /**

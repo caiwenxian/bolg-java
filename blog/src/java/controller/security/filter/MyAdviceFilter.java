@@ -52,7 +52,7 @@ public class MyAdviceFilter extends AccessControlFilter {
 			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 			if (isAjaxRequest(httpServletRequest)) {
 				//ajax返回未登录状态码
-				WebUtils.toHttp(response).sendError(101, "NOT_LOGIN");
+				WebUtils.toHttp(response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "NOT_LOGIN");
 				return false;
 			}
 

@@ -177,7 +177,8 @@
                 /login/** = anon
                 /register/** = anon
                 /test/** = anon
-                /** = authc
+                <!--/** = authc-->
+                /knowledge/article/publish = authc
             </value>
         </property>
     </bean>

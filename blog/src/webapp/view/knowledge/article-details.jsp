@@ -93,7 +93,7 @@
         padding: 10px 10px;
         margin-top: 20px;
         box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
-        margin-top: -70px;
+        /*margin-top: -70px;*/
     }
 
     .layui-input-block{

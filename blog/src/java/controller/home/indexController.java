@@ -33,9 +33,10 @@ public class indexController {
 
     @GetMapping()
     public ModelAndView index() throws SerException {
-        Subject subject = SecurityUtils.getSubject();
-        Client client = clientService.getCurrentUser();
-        logger.info(client.toString());
+//        Subject subject = SecurityUtils.getSubject();
+//        Client client = clientService.getCurrentUser();
+//        logger.info(client.toString());
         return new ModelAndView("home/home");
+//        return new ModelAndView("knowledge/knowledge");
     }
 }

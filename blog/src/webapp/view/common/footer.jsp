@@ -9,7 +9,7 @@
         text-align: center;
         margin-top: 15px;
         background: #2F4056;
-        padding: 5px 0;
+        padding: 20px 0;
         color: #d3d2d2;
     }
 </style>

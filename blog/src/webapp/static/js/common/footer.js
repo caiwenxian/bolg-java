@@ -9,7 +9,7 @@ document.writeln("    .footer {");
 document.writeln("        text-align: center;");
 document.writeln("        margin-top: 15px;");
 document.writeln("        background: #2F4056;");
-document.writeln("        padding: 5px 0;");
+document.writeln("        padding: 20px 0;");
 document.writeln("        color: #d3d2d2;");
 document.writeln("    }");
 document.writeln("</style>");

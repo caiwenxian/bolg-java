@@ -9,6 +9,17 @@ package service.common;
  */
 public interface Result {
 
+    public static final String MSG_NOT_LOGIN_OPERATE = "用户未登录，不可操作";
+
+    public static final String MSG_NOT_LOGIN = "用户未登录";
+
+    public static final String MSG_PARAMS_MISS = "参数缺失";
+
+    public static final int CODE_NOT_LOGIN = 401;
+
+    public static final int CODE_SERVE_ERROR = 500;
+
+
     /**
      * 消息码
      */

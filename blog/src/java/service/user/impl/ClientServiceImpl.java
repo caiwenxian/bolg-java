@@ -33,6 +33,7 @@ public class ClientServiceImpl implements IClientService {
     public void addCurrentUser(Client client) throws SerException {
         try {
             Subject subject = SecurityUtils.getSubject();
+            client.setToken(subject.getSession().getId().toString());
             subject.getSession().setAttribute(subject.getSession().getId(), client);
         } catch (Exception e) {
             throw new SerException("添加在线用户失败");

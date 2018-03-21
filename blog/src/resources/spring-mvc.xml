@@ -72,6 +72,8 @@
 
 	<!-- 全局异常处理 -->
 	<!--<bean id="systemExceptionHandler" class="com.lifeshs.support.plantform.handler.SystemExceptionHandler" />-->
+	<!--配置异常对象处理器  该类要实现HandlerExceptionResolver接口  -->
+	<bean id="exceptionResolver" class="exception.ExceptionResolver"/>
 
 	<!--test-->
 	<!--<beans>-->

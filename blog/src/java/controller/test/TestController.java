@@ -120,4 +120,11 @@ public class TestController {
         }
     }
 
+    @GetMapping("/v1/header")
+    @ResponseBody
+    public ModelAndView header () {
+        return new ModelAndView("common/header");
+    }
+
+
 }

@@ -1,10 +1,9 @@
 package service.knowledge.impl;
 
-import dao.java.knowledge.KnowledgeDaoImpl;
+import dao.java.knowledge.impl.KnowledgeDaoImpl;
 import exception.SerException;
 import model.bo.user.Client;
 import model.dto.knowledge.ArticleDTO;
-import model.enums.knowledge.ArticleStatus;
 import model.enums.knowledge.ArticleType;
 import model.po.common.PagePO;
 import model.po.knowledge.ArticlePO;

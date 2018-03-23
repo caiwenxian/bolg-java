@@ -102,6 +102,13 @@
 
 	<!--<mvc:annotation-driven/>-->
 
+	<!-- 自定义拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="controller.security.interceptor.MyInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
 
 </beans>

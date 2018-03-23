@@ -1,9 +1,11 @@
 package controller.knowledge;
 
 import exception.SerException;
+import model.dto.knowledge.ArticleCommentDTO;
 import model.dto.knowledge.ArticleDTO;
 import model.enums.knowledge.ArticleStatus;
 import model.po.common.PagePO;
+import model.po.knowledge.ArticleCommentPO;
 import model.to.ArticleTO;
 import model.vo.knowledge.ArticleVO;
 import org.apache.shiro.SecurityUtils;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import service.common.Result;
 import service.common.impl.ActResult;
+import service.knowledge.IArticleCommentService;
 import service.knowledge.IKnowledgeService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.logging.Logger;
 
 /**
@@ -34,6 +38,8 @@ public class KnowledgeController {
 
     @Autowired
     private IKnowledgeService knowledgeService;
+    @Autowired
+    private IArticleCommentService articleCommentService;
 
     /**
      * 跳转文章列表
@@ -59,7 +65,7 @@ public class KnowledgeController {
      */
     @GetMapping("/article/details/{id}")
     @ResponseBody
-    public ModelAndView articleDetailsPage(@PathVariable String id){
+    public ModelAndView articleDetailsPage(@PathVariable String id) {
         ModelAndView modelAndView = new ModelAndView("/knowledge/article-details");
         modelAndView.addObject("id", id);
         return modelAndView;
@@ -74,7 +80,7 @@ public class KnowledgeController {
      */
     @GetMapping("/article/publish")
     @ResponseBody
-    public ModelAndView articlePublishPage(){
+    public ModelAndView articlePublishPage() {
         ModelAndView modelAndView = new ModelAndView("/knowledge/knowledge-publish");
         return modelAndView;
     }
@@ -88,7 +94,7 @@ public class KnowledgeController {
      */
     @PostMapping("/publish")
     @ResponseBody
-    public Result publish(ArticleTO to){
+    public Result publish(ArticleTO to) {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return ActResult.error(Result.MSG_NOT_LOGIN_OPERATE);
@@ -112,7 +118,7 @@ public class KnowledgeController {
      */
     @PostMapping("/draft")
     @ResponseBody
-    public Result saveDraft(ArticleTO to){
+    public Result saveDraft(ArticleTO to) {
         Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return ActResult.error(Result.MSG_NOT_LOGIN_OPERATE);
@@ -136,10 +142,11 @@ public class KnowledgeController {
      */
     @GetMapping("/articles/{page}")
     @ResponseBody
-    public Result listArticle(@PathVariable Integer page, ArticleDTO dto) throws SerException {
+    public Result listArticle(@PathVariable Integer page, ArticleDTO dto, HttpServletResponse response) throws SerException {
         try {
             dto.setPage(page);
             dto.setTitle(dto.getTitle() == "" ? null : dto.getTitle());
+            dto.setStatus(ArticleStatus.PUBLISH.getCode());
             PagePO pagePO = knowledgeService.ListArticle(dto);
             return ActResult.data(pagePO);
         } catch (Exception e) {
@@ -158,7 +165,7 @@ public class KnowledgeController {
      */
     @GetMapping("/article/{id}")
     @ResponseBody
-    public Result getArticle(@PathVariable String id){
+    public Result getArticle(@PathVariable String id) {
         try {
             ArticleVO vo = knowledgeService.getArticle(id);
             return ActResult.data(vo);
@@ -177,7 +184,7 @@ public class KnowledgeController {
      */
     @PutMapping("/article/browseAmount/{id}")
     @ResponseBody
-    public Result updateArticleBrowseAmount(@PathVariable String id){
+    public Result updateArticleBrowseAmount(@PathVariable String id) {
         try {
             knowledgeService.updateArticleBrowseAmount(id);
             return ActResult.success("success");
@@ -187,5 +194,44 @@ public class KnowledgeController {
         return ActResult.success("success");
     }
 
+
+    /**
+     * 获取文章评论
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @GetMapping("/article/comment/{page}")
+    @ResponseBody
+    public Result listArticleComment(@PathVariable Integer page) {
+        try {
+            ArticleCommentDTO dto = new ArticleCommentDTO();
+            dto.setPage(page);
+            dto.setLimit(20);
+            PagePO pagePO = articleCommentService.listArticleComment(dto);
+            return ActResult.data(pagePO);
+        } catch (Exception e) {
+            return ActResult.success(e.getMessage());
+        }
+    }
+
+    /**
+     * 添加文章评论
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @PostMapping("/article/comment")
+    @ResponseBody
+    public Result addArticleComment(ArticleCommentPO po) {
+        try {
+            articleCommentService.addComment(po);
+            return ActResult.success();
+        } catch (Exception e) {
+            return ActResult.success(e.getMessage());
+        }
+    }
 
 }

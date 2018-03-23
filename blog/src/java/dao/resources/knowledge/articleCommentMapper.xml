@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.knowledge.IArticleCommentDao">
+
+    <select id="countArticleComment" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_article_comment
+        <where>
+            <if test="articleId != null">
+                articleId = #{articleId}
+            </if>
+        </where>
+    </select>
+
+    <select id="listArticleCommentByPage" resultMap="article">
+        SELECT ac.comment as ac_comment, ac.id as ac_id, ac.parentId as ac_parentId, ac.createTime, ac.modifyTime,
+        u.name as u_name, ac.userId as u_id
+        a.id as a._id
+
+        FROM t_article_comment ac
+        LEFT JOIN t_user u ON ac.userId = u.id
+        LEFT JOIN t_article a ON a.id = ac.articleId
+        <where>
+            <if test="articleId != null">
+                articleId = #{articleId}
+            </if>
+        </where>
+        ORDER BY a.createTime DESC limit #{startRow}, #{endRow}
+    </select>
+
+    <insert id="addArticleComment" parameterType="model.po.knowledge.ArticlePO">
+        INSERT INTO t_article (id, userId, articleId, parentId, comment, createTime, modifyTime)
+        VALUES (#{id}, #{userId}, #{articleId}, #{parentId}, #{comment}, NOW(), NOW())
+    </insert>
+
+
+
+    <resultMap id="article" type="model.po.knowledge.ArticlePO">
+        <id property="id" column="id"/>
+        <result property="userId" column="userId"/>
+        <result property="articleId" column="articleId"/>
+        <result property="parentId" column="parentId"/>
+        <result property="comment" column="comment"/>
+        <result property="createTime" column="createTime"/>
+        <result property="modifyTime" column="modifyTime"/>
+    </resultMap>
+
+</mapper>

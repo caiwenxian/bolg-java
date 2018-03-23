@@ -46,8 +46,7 @@ public class LoginServiceImpl implements ILoginService {
 
     @Override
     public void login(LoginPO po) throws SerException {
-        po.setName("zhangsan");
-        UserToken token = new UserToken("zhangsan", "000000", false, null, null);
+        UserToken token = new UserToken(po.getName(), po.getPassword(), false, null, null);
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
@@ -64,13 +63,13 @@ public class LoginServiceImpl implements ILoginService {
             clientService.addCurrentUser(client);
         } catch (IncorrectCredentialsException ice) {
             // 捕获密码错误异常
-            throw new SerException("password error!");
+            throw new SerException("密码错误!");
         } catch (UnknownAccountException uae) {
             // 捕获未知用户名异常
-            throw new SerException("username error!");
+            throw new SerException("用户名不存在!");
         } catch (ExcessiveAttemptsException eae) {
             // 捕获错误登录过多的异常
-            throw new SerException("times error");
+            throw new SerException("登录次数过多!");
         }
     }
 

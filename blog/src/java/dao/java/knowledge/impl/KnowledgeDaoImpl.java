@@ -1,6 +1,7 @@
-package dao.java.knowledge;
+package dao.java.knowledge.impl;
 
 import dao.java.impl.DaoImpl;
+import dao.java.knowledge.IKnowledgeDao;
 import model.dto.knowledge.ArticleDTO;
 import model.po.knowledge.ArticlePO;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 
 @Repository
-public class KnowledgeDaoImpl extends DaoImpl<ArticlePO, String> implements iKnowledgeDao {
+public class KnowledgeDaoImpl extends DaoImpl<ArticlePO, String> implements IKnowledgeDao {
 
     @Resource(name = "sqlSessionTemplate")
     private SqlSessionTemplate sqlSessionTemplateASS;

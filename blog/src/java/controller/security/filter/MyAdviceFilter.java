@@ -58,6 +58,8 @@ public class MyAdviceFilter extends AccessControlFilter {
 
 			String refUrl = httpServletRequest.getRequestURI();
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//			httpServletResponse.setHeader("Access-Control-Allow-Headers", "*");
+
 			request.setAttribute("refUrl", refUrl);
 			WebUtils.issueRedirect(request, httpServletResponse, unauthorizedUrl + "?refUrl=" + refUrl);
 		} else {

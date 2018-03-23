@@ -9,7 +9,7 @@ import service.common.Result;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class ActResult implements Result{
+public class ActResult implements Result {
 
     private int code = 0;
     private String msg;
@@ -52,12 +52,20 @@ public class ActResult implements Result{
         return new ActResult(0, msg, null);
     }
 
+    public static ActResult success() {
+        return new ActResult(0, "操作成功", null);
+    }
+
     public static ActResult error(int code, String msg) {
         return new ActResult(code, msg, null);
     }
 
     public static ActResult error(String msg) {
         return new ActResult(303, msg, null);
+    }
+
+    public static ActResult error() {
+        return new ActResult(Result.CODE_SERVE_ERROR, "操作失败", null);
     }
 
     public static ActResult data(Object data) {

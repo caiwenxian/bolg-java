@@ -11,7 +11,7 @@ import java.util.List;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
-public interface iKnowledgeDao {
+public interface IKnowledgeDao {
 
     int countArticle(ArticleDTO dto);
 

@@ -12,6 +12,8 @@ public class ArticleDTO extends BaseDTO {
 
     private String title;
 
+    private int status;
+
     public ArticleDTO() {
 
     }
@@ -20,11 +22,30 @@ public class ArticleDTO extends BaseDTO {
         this.title = title;
     }
 
+    public ArticleDTO(String title, int status) {
+        this.title = title;
+        this.status = status;
+    }
+
+    public ArticleDTO(Integer limit, Integer page, String title, int status) {
+        super(limit, page);
+        this.title = title;
+        this.status = status;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

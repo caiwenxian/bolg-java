@@ -5,6 +5,10 @@ http.get = function (url, data, callback) {
     $.ajax({
         method: 'GET',
         url: http.URL + url,
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
         data: data,
         async: false,
         success: function (result) {
@@ -34,6 +38,10 @@ http.post = function (url, data, callback) {
     $.ajax({
         method: 'POST',
         url: http.URL + url,
+        xhrFields: {
+            withCredentials: true
+        },
+        crossDomain: true,
         data: data,
         async: false,
         success: function (result) {

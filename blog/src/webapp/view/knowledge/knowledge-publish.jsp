@@ -14,15 +14,15 @@
     <form class="layui-form" action="">
         <label class="layui-form-label">文章类型：</label>
         <div class="layui-form-item select-article-type">
-            <select name="type" v-model="articleType">
-                <option value="TECHNOLOGY" selected="">技术</option>
+            <select name="type" <%--v-model="articleType"--%>  lay-filter = 'articleType'>
+                <option value="TECHNOLOGY" >技术</option>
                 <option value="LIFE">生活</option>
             </select>
         </div>
         <p></p>
         <label class="layui-form-label">文章标题：</label>
         <div class="layui-input-block" style="margin-bottom: 15px;">
-            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off"
+            <input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off"
                    class="layui-input" v-model="articleTitle">
         </div>
         <p></p>
@@ -42,11 +42,6 @@
                    @click="saveDraft()">
         </div>
     </form>
-
-
-
-
-
     <div id="preview" class="div-preview none" v-html="articleContent">
 
     </div>
@@ -70,6 +65,9 @@
 
         layui.code();
         var form = layui.form;
+        form.on('select(articleType)', function(data){
+            publish.vm.articleType = data.value;
+        });
     });
 
     var E = window.wangEditor;
@@ -93,6 +91,10 @@
 <style>
     .div-publish {
         margin-top: 20px;
+    }
+
+    .div-publish input {
+        margin-right: 5px;
     }
 
     .div-preview {
@@ -121,6 +123,7 @@
         z-index: 10 !important;
         /*max-height: 500px;*/
     }
+
     .w-e-toolbar {
         z-index: 100 !important;
     }

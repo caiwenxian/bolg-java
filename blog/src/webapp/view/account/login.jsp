@@ -89,12 +89,13 @@
         http.post(url, data, function (result) {
 
             if (result.code !== 0) {
-                layer.msg("登录失败");
+                layer.msg(result.msg);
                 return;
             }
             layer.msg("登录成功");
             if ('${refUrl}' !== '') {
                 window.location.href = '${refUrl}';
+                return;
             }
             window.location.href = '/index';
 

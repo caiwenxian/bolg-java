@@ -38,6 +38,7 @@ publish.vm = new Vue({
                     return;
                 }
                 layer.msg("发布成功");
+                window.location.href = '/knowledge';
                 // music.vm.list = result;
             });
         },
@@ -73,6 +74,7 @@ publish.vm = new Vue({
             publish.vm.articleContent = editor.txt.html();
             publish.vm.articleContent = publish.vm.articleContent.replace("<pre><code>", "<pre class='layui-code'>");
             publish.vm.articleContent = publish.vm.articleContent.replace("</code></pre>", "</pre>");
+            console.log('publish.vm.articleContent:' + publish.vm.articleContent)
             // publish.vm.articleContent.replace("pre/>", "<pre class='layui-code'");
             layer.open({
                 type: 1,

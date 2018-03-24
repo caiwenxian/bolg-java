@@ -49,3 +49,26 @@ $(function(){
         }
     );
 });
+
+/*common.checkStatus = function () {
+    var url = '/account/checkStatus';
+    http.get(url, null, function (result) {
+        $('.img-photo').css('margin-top', '0px');
+        if (result.code === 401) {  //未登录
+            $('.li-login').removeClass('none');
+            $('.li-register').removeClass('none');
+            $('.li-logout').addClass('none');
+            return;
+        }
+        $('.li-logout').removeClass('none');
+    })
+}*/
+
+common.checkStatus1 = function (callback) {
+    var url = '/account/checkStatus';
+    http.get(url, null, function (result) {
+        if (typeof callback === 'function') {
+            return callback(result);
+        }
+    })
+}

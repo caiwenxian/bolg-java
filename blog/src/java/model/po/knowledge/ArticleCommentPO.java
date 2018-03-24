@@ -1,5 +1,6 @@
 package model.po.knowledge;
 
+import model.po.base.annotation.TableName;
 import model.po.common.BasePO;
 
 /**
@@ -10,18 +11,27 @@ import model.po.common.BasePO;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
+@TableName(name = "t_article_comment")
 public class ArticleCommentPO extends BasePO {
 
-    /** 用户id */
+    /**
+     * 用户id
+     */
     private String userId;
 
-    /** 文章id */
+    /**
+     * 文章id
+     */
     private String articleId;
 
-    /** 被回复的评论id */
+    /**
+     * 被回复的评论id
+     */
     private String parentId;
 
-    /** 评论内容*/
+    /**
+     * 评论内容
+     */
     private String comment;
 
     public ArticleCommentPO() {

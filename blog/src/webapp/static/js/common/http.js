@@ -1,6 +1,11 @@
 var http = {};
 http.URL = 'http://localhost:8080';
 
+var notLoginMsg = function () {
+    layui.use('layer', function () {
+        layer.msg("用户未登录");
+    });
+}
 http.get = function (url, data, callback) {
     $.ajax({
         method: 'GET',
@@ -12,14 +17,16 @@ http.get = function (url, data, callback) {
         data: data,
         async: false,
         success: function (result) {
+            /*if (result.code === 401) {
+                notLoginMsg();
+                return;
+            }*/
             if (typeof callback == 'function') {
                 callback(result);
             }
         },
         error: function (result) {
-            if (result.status === 401) {
-                layer.msg("未登录")
-            }
+
             if (result.status === 500) {
                 layui.use('layer', function () {
                     layer.open({
@@ -45,14 +52,16 @@ http.post = function (url, data, callback) {
         data: data,
         async: false,
         success: function (result) {
+            /*if (result.code === 401) {
+                notLoginMsg();
+                return;
+            }*/
             if (typeof callback == 'function') {
                 callback(result);
             }
         },
         error: function (result) {
-            if (result.status === 401) {
-                layer.msg("未登录")
-            }
+
             if (result.status === 500) {
                 layui.use('layer', function () {
                     layer.open({
@@ -74,14 +83,15 @@ http.put = function (url, data, callback) {
         data: data,
         async: false,
         success: function (result) {
+           /* if (result.code === 401) {
+                notLoginMsg();
+                return;
+            }*/
             if (typeof callback == 'function') {
                 callback(result);
             }
         },
         error: function (result) {
-            if (result.status === 401) {
-                layer.msg("未登录")
-            }
             if (result.status === 500) {
                 layui.use('layer', function () {
                     layer.open({

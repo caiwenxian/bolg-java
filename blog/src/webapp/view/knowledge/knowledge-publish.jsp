@@ -42,7 +42,9 @@
                    @click="saveDraft()">
         </div>
     </form>
-    <div id="preview" class="div-preview none" v-html="articleContent">
+    <div id="preview" class="div-preview " >
+        <h2 v-text="articleTitle" style="text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 20px;"></h2>
+        <div v-html="articleContent"></div>
 
     </div>
 </div>
@@ -100,6 +102,8 @@
     .div-preview {
         min-width: 1170px;
         min-height: 400px;
+        display: none;
+        padding: 10px 40px;
     }
 
     pre code {

@@ -7,7 +7,7 @@
 <script src="/static/js/common/header.js"></script>
 <body>
 <div class="body" id="vue-content">
-    <div class="body-main vue-content" >
+    <div class="body-main vue-content">
         <!--<fieldset class="layui-elem-field layui-field-title">
             <legend>文章详情</legend>
         </fieldset>-->
@@ -18,8 +18,8 @@
                 <label>{{article.createTime | date('yyyy-MM-dd')}}</label>
                 <label>{{article.type}}</label>
                 <!--<div class="div-article-top-right">-->
-                    <label>观阅数：{{article.browseAmount}}</label>
-                    <label>评论数：{{article.commentAmount}}</label>
+                <label>观阅数：{{article.browseAmount}}</label>
+                <label>评论数：{{article.commentAmount}}</label>
                 <!--</div>-->
             </div>
             <hr style="border: 1px whitesmoke dashed;">
@@ -34,7 +34,9 @@
             <legend>评论</legend>
         </fieldset>
         <div class="layui-input-block">
-            <textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="resize: none;"></textarea>
+            <textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="resize: none;"
+                      v-model="comment.comment"></textarea>
+            <div class="div-no-login">未登录，请先登录</div>
         </div>
         <button class="layui-btn" lay-submit lay-filter="formDemo" @click="commitComment()">提交评论</button>
     </div>
@@ -60,7 +62,7 @@
 
 </script>
 <style>
-    .div-article-details .title{
+    .div-article-details .title {
         font-size: 24px;
         font-weight: 500;
         line-height: 150%;
@@ -73,9 +75,11 @@
         color: #14b0e6;
         padding: 5px;
     }
+
     .div-article-top label {
         margin-left: 10px;
     }
+
     /*.div-article-top-right {
         !*position: absolute;*!
         right: 5px;
@@ -92,13 +96,28 @@
         background-color: white;
         padding: 10px 10px;
         margin-top: 20px;
-        box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
+        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .1);
         /*margin-top: -70px;*/
     }
 
-    .layui-input-block{
+    .layui-input-block {
         margin-bottom: 10px;
         margin-left: 0px !important;
 
+    }
+
+    p {
+        margin: 10px 0;
+        line-height: 1.5;
+    }
+
+    .div-no-login{
+        position: absolute;
+        width: 100%;
+        min-height: 100px;
+        top: 0;
+        text-align: center;
+        line-height: 100px;
+        color: #666;
     }
 </style>

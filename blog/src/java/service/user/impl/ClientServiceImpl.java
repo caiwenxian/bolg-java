@@ -23,9 +23,12 @@ public class ClientServiceImpl implements IClientService {
         try {
             Subject subject = SecurityUtils.getSubject();
             Client client = (Client) subject.getSession().getAttribute(subject.getSession().getId());
+            if (client == null) {
+                throw new SerException(401, "用户未登录");
+            }
             return client;
         } catch (Exception e) {
-            throw new SerException("获取当前用户失败");
+            throw new SerException(401, "用户未登录");
         }
     }
 

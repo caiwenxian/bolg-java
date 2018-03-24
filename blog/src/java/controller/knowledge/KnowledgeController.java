@@ -1,5 +1,6 @@
 package controller.knowledge;
 
+import exception.ActException;
 import exception.SerException;
 import model.dto.knowledge.ArticleCommentDTO;
 import model.dto.knowledge.ArticleDTO;
@@ -225,12 +226,12 @@ public class KnowledgeController {
      */
     @PostMapping("/article/comment")
     @ResponseBody
-    public Result addArticleComment(ArticleCommentPO po) {
+    public Result addArticleComment(ArticleCommentPO po) throws ActException{
         try {
             articleCommentService.addComment(po);
             return ActResult.success();
-        } catch (Exception e) {
-            return ActResult.success(e.getMessage());
+        } catch (SerException e) {
+            return ActResult.error(e.getCode(), e.getMessage());
         }
     }
 

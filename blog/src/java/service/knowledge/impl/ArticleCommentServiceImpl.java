@@ -11,6 +11,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.knowledge.IArticleCommentService;
+import service.user.IClientService;
 import utils.RandomUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,11 +32,19 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
 
     @Autowired
     ArticleCommentDaoImpl articleCommentDao;
+    @Autowired
+    IClientService clientService;
 
     @Override
     public void addComment(ArticleCommentPO po) throws SerException {
-        po.setId(RandomUtil.getUid());
-        articleCommentDao.add(po);
+        try {
+            po.setUserId(clientService.getCurrentUser().getUserId());
+            po.setId(RandomUtil.getUid());
+            articleCommentDao.add(po);
+        } catch (SerException e) {
+            throw new SerException(e.getCode(), e.getMessage());
+        }
+
     }
 
     @Override

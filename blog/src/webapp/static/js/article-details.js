@@ -128,12 +128,12 @@ details.vm = new Vue({
         /**收起回复编辑框*/
         hideComment: function (index, isDetails) {
             if (isDetails) {
-                if ($('.comment-reply-details').eq(index).hasClass('none')) {
-                    $('.comment-reply-details').eq(index).removeClass('none');
+                if ($('.li-comment').eq(index).find('.comment-reply-details').hasClass('none')) {
+                    $('.li-comment').eq(index).find('.comment-reply-details').removeClass('none');
                     $('.comment-bottom .reply-btn').eq(index).text('收起回复');
                     return;
                 }
-                $('.comment-reply-details').eq(index).addClass('none');
+                $('.li-comment').eq(index).find('.comment-reply-details').addClass('none');
                 $('.comment-bottom .reply-btn').eq(index).text('展开回复');
                 return;
             }

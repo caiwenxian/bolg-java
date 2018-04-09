@@ -6,17 +6,22 @@ import exception.SerException;
 import model.dto.knowledge.ArticleCommentDTO;
 import model.po.common.PagePO;
 import model.po.knowledge.ArticleCommentPO;
+import model.po.knowledge.ArticlePO;
 import model.vo.knowledge.ArticleCommentVO;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.knowledge.IArticleCommentService;
+import service.knowledge.IKnowledgeService;
+import service.music.IArtistService;
 import service.user.IClientService;
 import utils.RandomUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 /**
  * 文章评论业务实现
@@ -33,6 +38,8 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     @Autowired
     ArticleCommentDaoImpl articleCommentDao;
     @Autowired
+    IKnowledgeService knowledgeService;
+    @Autowired
     IClientService clientService;
 
     @Override
@@ -41,6 +48,11 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
             po.setUserId(clientService.getCurrentUser().getUserId());
             po.setId(RandomUtil.getUid());
             articleCommentDao.add(po);
+
+            Callable callable = new CommentCallable(po.getArticleId());
+            FutureTask futureTask = new FutureTask(callable);
+            Thread thread = new Thread(futureTask);
+            thread.start();
         } catch (SerException e) {
             e.printStackTrace();
 //            throw new SerException(e.getCode(), e.getMessage());
@@ -63,22 +75,37 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
     private List<ArticleCommentVO> convertComment(List<ArticleCommentVO> pos) throws InvocationTargetException, IllegalAccessException {
         List<ArticleCommentVO> vos = new ArrayList<ArticleCommentVO>();
         int len = pos.size();
-        for (int i = 0; i < len; i ++) {
+        for (int i = 0; i < len; i++) {
             if (pos.get(i).getParentId() != null) {
                 continue;
             }
             List<ArticleCommentVO> childs = new ArrayList<ArticleCommentVO>();
-            for (int j = 0; j < len; j ++) {
+            for (int j = 0; j < len; j++) {
                 if (pos.get(i).getId().equals(pos.get(j).getParentId())) {
                     childs.add(pos.get(j));
                     pos.remove(pos.get(j));
-                    len --;
-                    j --;
+                    len--;
+                    j--;
                 }
             }
             pos.get(i).setChilds(childs.size() > 0 ? childs : null);
             vos.add(pos.get(i));
         }
         return vos;
+    }
+
+    public class CommentCallable implements Callable {
+        private String articleId;
+
+        public CommentCallable(String articleId) {
+            this.articleId = articleId;
+        }
+
+        @Override
+        public Object call() throws Exception {
+
+            knowledgeService.updateArticleCommentAmount(articleId);
+            return null;
+        }
     }
 }

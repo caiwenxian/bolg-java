@@ -52,4 +52,13 @@ public interface IKnowledgeService {
      */
     void updateArticleBrowseAmount(String article) throws SerException;
 
+    /**
+     * 更新文章评论数
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    void updateArticleCommentAmount(String article) throws SerException;
+
 }

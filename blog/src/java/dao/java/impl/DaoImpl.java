@@ -352,9 +352,9 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
                 len ++;
             }
         }
-        if (len < prams.size()) {
-            sql = sql.substring(0, sql.length() - 1);
-        }
+//        if (len < prams.size()) {
+//            sql = sql.substring(0, sql.length() - 1);
+//        }
         sql += " where id='" + id + "';";
 
         return sqlSessionTemplateASS.update("updateLocal", sql);

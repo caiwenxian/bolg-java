@@ -120,4 +120,18 @@ public class KnowledgeServiceImpl implements IKnowledgeService {
 
         knowledgeDao.updateLocal(entity);
     }
+
+    @Override
+    public void updateArticleCommentAmount(String articleId) throws SerException {
+        ArticlePO po = knowledgeDao.getArticle(articleId);
+        if (null == po) {
+            throw new SerException("更新实体不存在");
+        }
+        ArticlePO entity = new ArticlePO();
+        entity.setId(articleId);
+        entity.setCommentAmount(po.getCommentAmount() == null ? 1 : po.getCommentAmount() + 1);
+        entity.setModifyTime(LocalDateTime.now());
+
+        knowledgeDao.updateLocal(entity);
+    }
 }

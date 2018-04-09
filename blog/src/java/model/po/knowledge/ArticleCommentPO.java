@@ -34,6 +34,13 @@ public class ArticleCommentPO extends BasePO {
      */
     private String comment;
 
+    /**
+     * 赞
+     */
+    private int approve;
+
+
+
     public ArticleCommentPO() {
     }
 
@@ -74,5 +81,13 @@ public class ArticleCommentPO extends BasePO {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public int getApprove() {
+        return approve;
+    }
+
+    public void setApprove(int approve) {
+        this.approve = approve;
     }
 }

@@ -1,5 +1,8 @@
 package model.vo.knowledge;
 
+import model.po.user.UserPO;
+import model.vo.BaseVO;
+
 import java.util.List;
 
 /**
@@ -8,12 +11,14 @@ import java.util.List;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
-public class ArticleCommentVO {
+public class ArticleCommentVO extends BaseVO {
+
+
 
     /**
      * 用户id
      */
-    private String userId;
+    private UserPO user;
 
     /**
      * 文章id
@@ -31,6 +36,11 @@ public class ArticleCommentVO {
     private String comment;
 
     /**
+     * 评论内容
+     */
+    private String approve;
+
+    /**
      * 子评论
      */
     List<ArticleCommentVO> childs;
@@ -38,20 +48,20 @@ public class ArticleCommentVO {
     public ArticleCommentVO() {
     }
 
-    public ArticleCommentVO(String userId, String articleId, String parentId, String comment, List<ArticleCommentVO> childs) {
-        this.userId = userId;
+    public ArticleCommentVO(UserPO user, String articleId, String parentId, String comment, List<ArticleCommentVO> childs) {
+        this.user = user;
         this.articleId = articleId;
         this.parentId = parentId;
         this.comment = comment;
         this.childs = childs;
     }
 
-    public String getUserId() {
-        return userId;
+    public UserPO getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(UserPO user) {
+        this.user = user;
     }
 
     public String getArticleId() {
@@ -84,5 +94,13 @@ public class ArticleCommentVO {
 
     public void setChilds(List<ArticleCommentVO> childs) {
         this.childs = childs;
+    }
+
+    public String getApprove() {
+        return approve;
+    }
+
+    public void setApprove(String approve) {
+        this.approve = approve;
     }
 }

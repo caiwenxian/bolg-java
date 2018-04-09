@@ -42,7 +42,8 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
             po.setId(RandomUtil.getUid());
             articleCommentDao.add(po);
         } catch (SerException e) {
-            throw new SerException(e.getCode(), e.getMessage());
+            e.printStackTrace();
+//            throw new SerException(e.getCode(), e.getMessage());
         }
 
     }
@@ -54,31 +55,29 @@ public class ArticleCommentServiceImpl implements IArticleCommentService {
         if (count < 1) {
             return new PagePO(0, null);
         }
-        List<ArticleCommentPO> pos = articleCommentDao.listArticleComment(dto);
+        List<ArticleCommentVO> pos = articleCommentDao.listArticleComment(dto);
         List<ArticleCommentVO> vos = convertComment(pos);
         return new PagePO<ArticleCommentVO>(count, vos);
     }
 
-    private List<ArticleCommentVO> convertComment(List<ArticleCommentPO> pos) throws InvocationTargetException, IllegalAccessException {
+    private List<ArticleCommentVO> convertComment(List<ArticleCommentVO> pos) throws InvocationTargetException, IllegalAccessException {
         List<ArticleCommentVO> vos = new ArrayList<ArticleCommentVO>();
-        for (ArticleCommentPO po : pos) {
-            ArticleCommentVO vo = new ArticleCommentVO();
-            BeanUtils.copyProperties(vo, po);
-
-            if (po.getParentId() == null) {
+        int len = pos.size();
+        for (int i = 0; i < len; i ++) {
+            if (pos.get(i).getParentId() != null) {
                 continue;
             }
             List<ArticleCommentVO> childs = new ArrayList<ArticleCommentVO>();
-            for (ArticleCommentPO po1 : pos) {
-                if (po1.getParentId().equals(po.getId())) {
-                    ArticleCommentVO vo1 = new ArticleCommentVO();
-                    BeanUtils.copyProperties(vo1, po1);
-                    childs.add(vo1);
-                    pos.remove(po1);
+            for (int j = 0; j < len; j ++) {
+                if (pos.get(i).getId().equals(pos.get(j).getParentId())) {
+                    childs.add(pos.get(j));
+                    pos.remove(pos.get(j));
+                    len --;
+                    j --;
                 }
             }
-            vo.setChilds(childs);
-            vos.add(vo);
+            pos.get(i).setChilds(childs.size() > 0 ? childs : null);
+            vos.add(pos.get(i));
         }
         return vos;
     }

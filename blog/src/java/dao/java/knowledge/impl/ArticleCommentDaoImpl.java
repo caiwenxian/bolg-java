@@ -4,6 +4,7 @@ import dao.java.impl.DaoImpl;
 import dao.java.knowledge.IArticleCommentDao;
 import model.dto.knowledge.ArticleCommentDTO;
 import model.po.knowledge.ArticleCommentPO;
+import model.vo.knowledge.ArticleCommentVO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,8 +26,8 @@ public class ArticleCommentDaoImpl extends DaoImpl<ArticleCommentPO, String> imp
     private SqlSessionTemplate sqlSessionTemplateASS;
 
     @Override
-    public List<ArticleCommentPO> listArticleComment(ArticleCommentDTO dto) {
-        return sqlSessionTemplateASS.selectList("listArticleComment", dto);
+    public List<ArticleCommentVO> listArticleComment(ArticleCommentDTO dto) {
+        return sqlSessionTemplateASS.selectList("listArticleCommentByPage", dto);
     }
 
     @Override

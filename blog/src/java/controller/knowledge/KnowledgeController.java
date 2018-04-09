@@ -9,6 +9,7 @@ import model.po.common.PagePO;
 import model.po.knowledge.ArticleCommentPO;
 import model.to.ArticleTO;
 import model.vo.knowledge.ArticleVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,14 +206,14 @@ public class KnowledgeController {
      */
     @GetMapping("/article/comment/{page}")
     @ResponseBody
-    public Result listArticleComment(@PathVariable Integer page) {
+    public Result listArticleComment(@PathVariable Integer page, ArticleCommentDTO dto) {
         try {
-            ArticleCommentDTO dto = new ArticleCommentDTO();
             dto.setPage(page);
             dto.setLimit(20);
             PagePO pagePO = articleCommentService.listArticleComment(dto);
             return ActResult.data(pagePO);
         } catch (Exception e) {
+            e.printStackTrace();
             return ActResult.success(e.getMessage());
         }
     }
@@ -231,6 +232,29 @@ public class KnowledgeController {
             articleCommentService.addComment(po);
             return ActResult.success();
         } catch (SerException e) {
+            e.printStackTrace();
+            return ActResult.error(e.getCode(), e.getMessage());
+        }
+    }
+
+    /**
+     * 添加文章评论回复
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @PostMapping("/article/comment/reply")
+    @ResponseBody
+    public Result addArticleCommentReply(ArticleCommentPO po) throws ActException{
+        try {
+            if (StringUtils.isBlank(po.getParentId())) {
+                return ActResult.error("评论失败");
+            }
+            articleCommentService.addComment(po);
+            return ActResult.success();
+        } catch (SerException e) {
+            e.printStackTrace();
             return ActResult.error(e.getCode(), e.getMessage());
         }
     }

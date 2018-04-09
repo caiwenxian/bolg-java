@@ -48,6 +48,9 @@ public class BaseDTO implements Serializable{
 
     public void setLimit(Integer limit) {
         this.limit = limit;
+
+        this.startRow = (this.page - 1) * this.limit;
+        this.endRow = this.page * this.limit;
     }
 
     public Integer getPage() {

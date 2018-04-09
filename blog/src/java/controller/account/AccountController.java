@@ -45,7 +45,7 @@ public class AccountController {
             }
             return ActResult.success("success");
         } catch (SerException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return ActResult.error(Result.CODE_NOT_LOGIN, Result.MSG_NOT_LOGIN);
         }
     }
@@ -67,7 +67,7 @@ public class AccountController {
             }
             return ActResult.data(client);
         } catch (SerException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return ActResult.error(Result.CODE_NOT_LOGIN, Result.MSG_NOT_LOGIN);
         }
     }

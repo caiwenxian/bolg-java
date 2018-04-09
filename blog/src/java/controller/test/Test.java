@@ -16,7 +16,12 @@ import utils.SpringContextUtil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
+import java.util.concurrent.RecursiveTask;
 
 /**
  * @Author: [caiwenxian]
@@ -26,7 +31,6 @@ import java.util.List;
  * @Copy: [com.bjike]
  */
 public class Test {
-
 
 
     void test() {
@@ -56,7 +60,7 @@ public class Test {
     }
 
 
-    static void page () {
+    static void page() {
         int pageIndex = 1;
         int pageSize = 10;
 
@@ -138,7 +142,7 @@ public class Test {
 
 
     static void threadTest() {
-        for (int i = 0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             Thread thread = new Thread();
             thread.start();
             System.out.println(thread.getName());
@@ -148,7 +152,7 @@ public class Test {
 
     public static void testTransaction() {
         ApplicationContext appCtx = SpringContextUtil.getApplicationContext();
-        ISongService songService = (ISongService)appCtx.getBean(ISongService.class);
+        ISongService songService = (ISongService) appCtx.getBean(ISongService.class);
         try {
             songService.update(new SongInfoPO("28196001", null, null, null, null, null, null));
         } catch (SerException e) {
@@ -162,7 +166,7 @@ public class Test {
         Cache cache = manager.getCache("HelloWorldCache");
         cache.put(new Element("key1", "value1"));
         Element element1 = cache.get("key1");
-        System.out.println("key:{}, value:{}" + element1.getObjectKey() +  element1.getObjectValue());
+        System.out.println("key:{}, value:{}" + element1.getObjectKey() + element1.getObjectValue());
 
 
         CacheUtil cacheUtil = new CacheUtil();
@@ -172,8 +176,76 @@ public class Test {
     }
 
 
+    @org.junit.Test
+    public void task() {
+        System.out.println(new Date());
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        CountTask task = new CountTask(1, 4);
+        Future result = forkJoinPool.submit(task);
+        try {
+            System.out.println("result:" + result.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        System.out.println(new Date());
+        int count = 0;
+        for (int i = 1; i <= 4; i++) {
+            count = i + count;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("count:" + count);
+        System.out.println(new Date());
+    }
 
+    /*分割任务*/
+    class CountTask extends RecursiveTask {
 
+        private static final int THRESHOLD = 2;//阈值
 
+        private int start;
+        private int end;
 
+        public CountTask(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        protected Integer compute() {
+            int sum = 0;
+            //如果任务足够小就计算任务
+            boolean canCompute = (end - start) <= THRESHOLD;
+            if (canCompute) {
+                for (int i = start; i <= end; i++) {
+                    sum += i;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                //如果任务大于阀值，就分裂成两个子任务计算
+                int middle = (start + end) / 2;
+                CountTask leftTask = new CountTask(start, middle);
+                CountTask rightTask = new CountTask(middle + 1, end);
+                //执行子任务
+//                leftTask.fork();
+//                rightTask.fork();
+                invokeAll(leftTask, rightTask);
+                //等待子任务执行完，并得到其结果
+                int leftResult = (Integer) leftTask.join();
+                int rightResult = (Integer) rightTask.join();
+                //合并子任务
+                sum = leftResult + rightResult;
+            }
+            return sum;
+        }
+    }
 }

@@ -179,6 +179,8 @@
                 /test/** = anon
                 <!--/** = authc-->
                 /knowledge/article/publish = authc
+                /knowledge/article/comment = authc
+                /knowledge/article/comment/reply = authc
             </value>
         </property>
     </bean>

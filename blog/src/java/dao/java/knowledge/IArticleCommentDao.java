@@ -2,6 +2,7 @@ package dao.java.knowledge;
 
 import model.dto.knowledge.ArticleCommentDTO;
 import model.po.knowledge.ArticleCommentPO;
+import model.vo.knowledge.ArticleCommentVO;
 
 import java.util.List;
 
@@ -29,5 +30,5 @@ public interface IArticleCommentDao {
      * @return class
      * @version v1
      */
-    List<ArticleCommentPO> listArticleComment(ArticleCommentDTO dto);
+    List<ArticleCommentVO> listArticleComment(ArticleCommentDTO dto);
 }

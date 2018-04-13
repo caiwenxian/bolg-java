@@ -102,6 +102,32 @@
 
 	<!--<mvc:annotation-driven/>-->
 
+	<!-- 日志切面类 -->
+	<bean id="logAspectBean" class="controller.security.aop.Aspect"/>
+	<!-- 第1步： AOP的配置 -->
+	<!--<aop:config>
+		&lt;!&ndash; 第2步：配置一个切面 &ndash;&gt;
+		<aop:aspect id="logAspect" ref="logAspectBean">
+			&lt;!&ndash; 第3步：定义切入点,指定切入点表达式 &ndash;&gt;
+			<aop:pointcut id="allMethod"
+						  expression="execution(* controller.*.*(..))"/>
+			&lt;!&ndash; 第4步：应用前置通知 &ndash;&gt;
+			<aop:before method="before" pointcut-ref="allMethod" />
+			&lt;!&ndash; 第4步：应用后置通知 &ndash;&gt;
+			<aop:after-returning method="afterReturn" pointcut-ref="allMethod"/>
+			&lt;!&ndash; 第4步：应用最终通知 &ndash;&gt;
+			<aop:after method="after" pointcut-ref="allMethod"/>
+			&lt;!&ndash; 第4步：应用抛出异常后通知 &ndash;&gt;
+			<aop:after-throwing method="afterThrowing" pointcut-ref="allMethod"/>
+			&lt;!&ndash; 第4步：应用环绕通知 &ndash;&gt;
+			&lt;!&ndash;
+            <aop:around method="doAround" pointcut-ref="allMethod" />
+             &ndash;&gt;
+		</aop:aspect>
+	</aop:config>-->
+	<!-- 启用spring对AspectJ注解的支持 -->
+	<aop:aspectj-autoproxy/>
+
 	<!-- 自定义拦截器 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -109,6 +135,8 @@
 			<bean class="controller.security.interceptor.MyInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
+
+
 
 
 </beans>

@@ -14,10 +14,16 @@ import service.music.ISongService;
 import utils.CacheUtil;
 import utils.SpringContextUtil;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
@@ -248,4 +254,162 @@ public class Test {
             return sum;
         }
     }
+
+    @org.junit.Test
+    public void test1(){
+        String str1 = "aaa";
+        String str2 = new String("aaa");
+        System.out.println("result1:" + str1 == str2);
+        System.out.println("result2:" + str1.equals(str2));
+    }
+
+    @org.junit.Test
+    public void test2() throws IOException {
+        FileWriter fileWriter = new FileWriter("test.txt", true);
+        fileWriter.write("hello");
+        fileWriter.close();
+
+        FileReader fileReader = new FileReader("test.txt");
+        /*char[] buf = new char[6];
+        int num = 0;
+        while ((num = fileReader.read(buf)) != -1) {
+            String str = new String(buf, 0, num);
+            System.out.println(str);
+        }*/
+        /*int str;
+        while ((str = fileReader.read()) != -1) {
+            System.out.println((char)str);
+        }*/
+
+
+        FileWriter fileWriter1 = new FileWriter("test1.txt" );
+        StringBuffer stringBuffer = new StringBuffer();
+        int str;
+        while ((str = fileReader.read()) != -1) {
+            stringBuffer.append((char)str);
+        }
+
+        fileWriter1.append(stringBuffer);
+        fileWriter1.close();
+
+    }
+
+    @org.junit.Test
+    public void reflect() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+        Proxy proxy = new Proxy();
+        Method method = proxy.getClass().getDeclaredMethod("run");
+        method.invoke(proxy);
+
+        Method method1 = Proxy.class.getDeclaredMethod("run");
+        method1.invoke(proxy);
+
+        Method[] method2 = Proxy.class.getDeclaredMethods();
+        for (Method method3 : method2) {
+            System.out.println(method3.getName());
+        }
+
+        Constructor[] method4 = Proxy.class.getConstructors();
+        System.out.println(method4[0].getName());
+//        Proxy object = (Proxy) method4[0].newInstance();
+//        object.run();
+
+        Class aClass = Class.forName(Proxy.class.getName());
+        Method method3 = aClass.getDeclaredMethod("run");
+        method3.invoke(new Proxy());
+
+
+        Singleton singleton1 = Singleton.getInstance();
+        Singleton singleton2 = Singleton.getInstance();
+        System.out.println(singleton1 == singleton2);
+
+        Singleton2 singleton3 = Singleton2.getInstance();
+        Singleton2 singleton4 = Singleton2.getInstance();
+        System.out.println(singleton3 == singleton4);
+
+        Proxy proxy1 = new Proxy();
+        Proxy proxy2 = new Proxy();
+        System.out.println(proxy1 == proxy2);
+
+
+    }
+
+    class Proxy{
+
+        public Proxy() {
+            System.out.println("this is proxy");
+        }
+
+        void run() {
+            System.out.println("this is run method");
+        }
+
+        void start() {
+            System.out.println("this is start method");
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return super.equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
+
+
+    }
+
+    public static class Singleton {
+        private static Singleton instance;
+
+        public Singleton() {
+        }
+
+        public static synchronized Singleton getInstance() {
+            if(instance == null) {
+                instance = new Singleton();
+            }
+            return instance;
+        }
+    }
+
+    public static class Singleton2 {
+        private static Singleton2 instance = new Singleton2();
+
+        public Singleton2() {
+        }
+
+        public static Singleton2 getInstance() {
+            return instance;
+        }
+    }
+
+    @org.junit.Test
+    public void test3() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.jdbc.Driver");
+        String url = "jdbc:mysql://127.0.0.1:3306/blog";
+        String name = "root";
+        String password = "root";
+        Connection connection = DriverManager.getConnection(url, name, password);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from t_article");
+        while (resultSet.next()) {
+            System.out.println(resultSet.getString("title"));
+        }
+    }
+
+    @org.junit.Test
+    public void test4() throws InterruptedException {
+        System.out.println("inter");
+        int i = 0;
+        while (i < 10) {
+            Thread.sleep(1000);
+            i ++;
+        }
+        System.out.println("inter2");
+    }
+
+
+
 }

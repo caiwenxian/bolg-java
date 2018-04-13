@@ -18,8 +18,8 @@ publish.vm = new Vue({
         publish: function () {
             publish.vm.articleContent = editor.txt.html();
             publish.vm.articleContentText = editor.txt.text();
-            publish.vm.articleContent = publish.vm.articleContent.replace("<pre><code>", "<pre class=layui-code>");
-            publish.vm.articleContent = publish.vm.articleContent.replace("</code></pre>", "</pre>");
+            publish.vm.articleContent = publish.vm.articleContent.replace(/<pre><code>/g, "<pre class=layui-code>");
+            publish.vm.articleContent = publish.vm.articleContent.replace(/<\/code><\/pre>/g, "</pre>");
             var url = '/knowledge/publish';
             var data = {
                 content: publish.vm.articleContent,
@@ -45,8 +45,8 @@ publish.vm = new Vue({
         saveDraft: function () {
             publish.vm.articleContent = editor.txt.html();
             publish.vm.articleContentText = editor.txt.text();
-            publish.vm.articleContent = publish.vm.articleContent.replace("<pre><code>", "<pre class='layui-code'>");
-            publish.vm.articleContent = publish.vm.articleContent.replace("</code></pre>", "</pre>");
+            publish.vm.articleContent = publish.vm.articleContent.replace(/<pre><code>/g, "<pre class=layui-code>");
+            publish.vm.articleContent = publish.vm.articleContent.replace(/<\/code><\/pre>/g, "</pre>");
 
             var url = '/knowledge/draft';
             var data = {
@@ -72,8 +72,8 @@ publish.vm = new Vue({
         preview: function () {
 
             publish.vm.articleContent = editor.txt.html();
-            publish.vm.articleContent = publish.vm.articleContent.replace("<pre><code>", "<pre class='layui-code'>");
-            publish.vm.articleContent = publish.vm.articleContent.replace("</code></pre>", "</pre>");
+            publish.vm.articleContent = publish.vm.articleContent.replace(/<pre><code>/g, "<pre class=layui-code>");
+            publish.vm.articleContent = publish.vm.articleContent.replace(/<\/code><\/pre>/g, "</pre>");
             console.log('publish.vm.articleContent:' + publish.vm.articleContent)
             // publish.vm.articleContent.replace("pre/>", "<pre class='layui-code'");
             layer.open({

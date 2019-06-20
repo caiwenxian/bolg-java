@@ -36,7 +36,7 @@ import java.util.Iterator;
  */
 
 @Service
-public class ReptileSongServiceImpl implements IReptileSongService{
+public class ReptileSongServiceImpl implements IReptileSongService {
 
     @Autowired
     ISongService songService;
@@ -107,7 +107,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
 
             //排行榜-歌曲关联
             topListService.addTopListDetails(new TopListDetailsPO(topListId, songId, num));
-            num ++;
+            num++;
         }
         System.out.println("爬取排行榜列表完成" + System.currentTimeMillis());
     }
@@ -119,7 +119,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
     }
 
     @Override
-    public void reptileHotSongs(ArtistHotSongDTO dto) throws SerException{
+    public void reptileHotSongs(ArtistHotSongDTO dto) throws SerException {
 
         if (dto.getIds().length == 0) {
             System.out.println("歌手ids集合为空");
@@ -165,7 +165,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
                 ArtistHotSongPO artistHotSongPO = new ArtistHotSongPO(songId, artistId, num);
                 artistHotSongService.addArtistHotSong(artistHotSongPO);
 
-                num ++;
+                num++;
             }
             num = 1;
 
@@ -195,7 +195,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             songInfoPO.setNum(num);
             songInfoPO.setOrigin(Origin.WANG_YI.getName());
             songService.addSong(songInfoPO);
-            num ++;
+            num++;
         }
         System.out.println("爬取歌曲完成");
     }
@@ -233,17 +233,19 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             songService.addSongList(po);
 
             songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
-            num ++;
+            num++;
 
             reptileSongListDetails(po.getSongListId());
         }
         System.out.println("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
     }
+
     /**
      * 爬取歌单详情
+     *
      * @param songListId
      */
-    private void reptileSongListDetails(String songListId) throws SerException{
+    private void reptileSongListDetails(String songListId) throws SerException {
         if (StringUtils.isBlank(songListId)) {
             return;
         }
@@ -262,14 +264,13 @@ public class ReptileSongServiceImpl implements IReptileSongService{
         songService.updateSongList(songListId, trackUpdateTime);
 
 
-
         //保存歌曲
         JSONArray songs = object.getJSONArray("tracks");
         int num = 1;
         for (Object song1 : songs) {
             JSONObject song = (JSONObject) song1;
             //保存歌手
-            JSONObject artist =  (JSONObject)song.getJSONArray("artists").get(0);  //歌手信息
+            JSONObject artist = (JSONObject) song.getJSONArray("artists").get(0);  //歌手信息
             ArtistPO artistPO = new ArtistPO();
             String artistId = artist.getString("id");
             artistPO.setArtistId(artistId);
@@ -286,7 +287,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
 
             //保存歌单-歌曲关联
             songService.addSongListDetails(new SongListDetailsPO(songListId, songId, num));
-            num ++;
+            num++;
         }
 
     }
@@ -306,7 +307,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
         if (!"200".equals(jsonObject.getString("code"))) {
             return;
         }
-        JSONObject object = (JSONObject)jsonObject.get("result");
+        JSONObject object = (JSONObject) jsonObject.get("result");
         JSONArray songs = object.getJSONArray("playlists");
         int num = 1;
         for (Object song1 : songs) {
@@ -319,7 +320,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             songService.addSongList(po);
 
             songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
-            num ++;
+            num++;
 
             reptileSongListDetails(po.getSongListId());
         }
@@ -360,7 +361,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
             songService.addSongList(po);
 
             songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
-            num ++;
+            num++;
 
 //            reptileSongListDetails(po.getSongListId());
             //开启多线程处理
@@ -393,7 +394,7 @@ public class ReptileSongServiceImpl implements IReptileSongService{
                         reptileSongs(String.valueOf(params[0]));
                         break;
                     case 2:  //歌手热门歌曲
-                        reptileHotSongs((ArtistHotSongDTO)params[0]);
+                        reptileHotSongs((ArtistHotSongDTO) params[0]);
                         break;
                     case 3:  //歌单详情
                         reptileSongListDetails(String.valueOf(params[0]));
@@ -409,13 +410,12 @@ public class ReptileSongServiceImpl implements IReptileSongService{
         }
     }
 
-    void reptileMp3 () {
+    void reptileMp3() {
 
     }
 
     /**
      * 异步爬取mp3url
-     *
      */
     class ReptilepMp3 implements Runnable {
 

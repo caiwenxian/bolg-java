@@ -1,0 +1,53 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd" >
+
+    <description>rabbitmq 连接服务配置</description>
+    <!-- 连接配置 -->
+    <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <property name="username" value="root"></property>
+        <property name="password" value="3344"></property>
+        <property name="virtualHost" value="/"></property>
+        <property name="addresses" value="127.0.0.1:5672"></property>
+        <property name="publisherConfirms" value="true"></property>
+    </bean>
+
+    <!--template声明-->
+    <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
+        <constructor-arg name="connectionFactory" ref="connectionFactory"/>
+        <property name="confirmCallback" ref="producer"/>
+    </bean>
+
+    <bean id="queue" class="org.springframework.amqp.core.Queue">
+        <constructor-arg name="name" value="spring-boot-queue"/>
+        <constructor-arg name="durable" value="true"/>
+    </bean>
+
+    <bean id="exchange" class="org.springframework.amqp.core.DirectExchange">
+        <constructor-arg name="name" value="spring-boot-exchange"/>
+    </bean>
+
+    <bean id="binding" class="service.mq.rabbitmq.MyBinding" init-method="createBinding">
+        <constructor-arg index="0" ref="queue"/>
+        <constructor-arg index="1" ref="exchange"/>
+        <constructor-arg index="2" value="spring-boot-routingKey"/>
+    </bean>
+
+    <bean id="queueListener" class="service.mq.rabbitmq.QueueListener"></bean>
+    <bean id="producer" class="service.mq.rabbitmq.RabbitProducer"></bean>
+
+    <bean id="messageContainer" class="org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer">
+        <property name="queues" ref="queue"/>
+        <property name="exposeListenerChannel" value="true"/>
+        <property name="maxConcurrentConsumers" value="10"/>
+        <property name="concurrentConsumers" value="2"/>
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="acknowledgeMode" value="MANUAL"/>
+        <property name="messageListener" ref="queueListener"/>
+
+    </bean>
+</beans>

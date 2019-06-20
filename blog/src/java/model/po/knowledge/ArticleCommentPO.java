@@ -40,7 +40,6 @@ public class ArticleCommentPO extends BasePO {
     private int approve;
 
 
-
     public ArticleCommentPO() {
     }
 

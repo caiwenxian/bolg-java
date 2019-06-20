@@ -47,7 +47,7 @@ public class SongController {
      */
     @GetMapping("/search/{name}/{page}")
     @ResponseBody
-    public Result search(@PathVariable String name,@PathVariable Integer page) {
+    public Result search(@PathVariable String name, @PathVariable Integer page) {
         try {
 //            List<SongInfoPO> list = songService.listSongByName(name);
             page = page == null ? 1 : page;

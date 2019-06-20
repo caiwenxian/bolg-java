@@ -8,13 +8,13 @@ import java.lang.annotation.Target;
 
 /**
  * ��Service�����������־
- * @author AnLuTong
  *
+ * @author AnLuTong
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Log {
-	String action() default "null";
-	
+    String action() default "null";
+
 }

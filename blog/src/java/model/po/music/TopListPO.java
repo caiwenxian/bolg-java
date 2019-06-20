@@ -6,13 +6,14 @@ import java.time.LocalDateTime;
 
 /**
  * 排行榜
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-01-27 10:12]
  * @Description: [ ]
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class TopListPO extends BasePO{
+public class TopListPO extends BasePO {
 
     /**
      * 排行榜名称

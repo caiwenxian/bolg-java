@@ -15,7 +15,7 @@
        http://www.springframework.org/schema/context/spring-context.xsd">
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     <!-- 引入属性文件 -->
-    <context:property-placeholder location="classpath*:*onfig.properties" />
+    <context:property-placeholder location="classpath*:*onfig.properties"/>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>
@@ -89,7 +89,7 @@
 
     <!-- 获取 sqlSessionFactory-->
     <!--<bean class="com.lifeshs.utils.SqlSessionFactoryUtils">-->
-        <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
+    <!--<property name="sqlSessionFactory" ref="sqlSessionFactory"/>-->
     <!--</bean>-->
 
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" order="1"/>

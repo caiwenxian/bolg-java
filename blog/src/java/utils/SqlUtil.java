@@ -17,16 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * Sql���ɹ�����
+ *
+ * @param <T> Ҫ����Sql��ʵ����
  * @author ��ʤ��
  * @time 2016��5��3������3:39:51
  * @email 719348277@qq.com
- * @param <T> Ҫ����Sql��ʵ����
  */
 public class SqlUtil<T extends Po> {
-
 
 
     /**
@@ -233,34 +232,40 @@ public class SqlUtil<T extends Po> {
 
     public List<Pram> getPramList(T po) {
         List<Pram> list = new ArrayList<Pram>();
-        Class<? extends Po> thisClass = po.getClass();
-        Field[] fields = thisClass.getDeclaredFields();
+//            Class<? extends Po> thisClass = po;
+        Class<?> clazz = po.getClass();
+//            Field[] fields = thisClass.getDeclaredFields();
+//            Field[] fields1 = po.getSuperclass().getDeclaredFields();
         try {
-            for (Field f : fields) {
-                if (!f.getName().equalsIgnoreCase("ID") && !f.isAnnotationPresent(TempField.class)) {
-                    String fName = f.getName();
-
-                    //�ж��Ƿ���boolean����
-                    String getf = "get";
-                    String fieldType = f.getGenericType().toString();
-                    if (fieldType.indexOf("boolean") != -1 || fieldType.indexOf("Boolean") != -1) {
-                        getf = "is";
-                    }
-                    if (f.isAnnotationPresent(FieldName.class)) {
-                        String fieldName = f.getAnnotation(FieldName.class).name();
-                        Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
-                        Object getValue = get.invoke(po);
-                        Pram pram = new Pram(fieldName, getValue);
-                        list.add(pram);
-                    } else {
-                        String fieldName = toTableString(fName);
-                        Method get = thisClass.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
-                        Object getValue = get.invoke(po);
-                        Pram pram = new Pram(fieldName, getValue);
-                        list.add(pram);
+            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                Field[] fields = clazz.getDeclaredFields();
+                Object o = po.getClass().newInstance();
+                for (Field f : fields) {
+                    if (!f.isAnnotationPresent(TempField.class)) {
+                        String fName = f.getName();
+                        //�ж��Ƿ���boolean����
+                        String getf = "get";
+                        String fieldType = f.getGenericType().toString();
+                        if (fieldType.indexOf("boolean") != -1 || fieldType.indexOf("Boolean") != -1) {
+                            getf = "is";
+                        }
+                        if (f.isAnnotationPresent(FieldName.class)) {
+                            String fieldName = f.getAnnotation(FieldName.class).name();
+                            Method get = clazz.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
+                            Object getValue = get.invoke(po);
+                            Pram pram = new Pram(fieldName, getValue);
+                            list.add(pram);
+                        } else {
+                            String fieldName = toTableString(fName);
+                            Method get = clazz.getMethod(getf + fName.substring(0, 1).toUpperCase() + fName.substring(1));
+                            Object getValue = get.invoke(po);
+                            Pram pram = new Pram(fieldName, getValue);
+                            list.add(pram);
+                        }
                     }
                 }
             }
+
         } catch (NoSuchMethodException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -274,6 +279,9 @@ public class SqlUtil<T extends Po> {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InstantiationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -575,6 +583,7 @@ public class SqlUtil<T extends Po> {
     /**
      * 将某个�?��?�过反射强制赋给实体�?
      * 修改：父类也赋值
+     *
      * @param po
      * @param fileName
      * @param fileValue
@@ -613,9 +622,7 @@ public class SqlUtil<T extends Po> {
                         Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
                         method.invoke(po, val);
                         return true;
-                    }
-
-                    else {
+                    } else {
                         Method method = thisClass.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), field.getType());
                         method.invoke(po, fileValue);
                         return true;

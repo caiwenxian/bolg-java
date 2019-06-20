@@ -10,7 +10,6 @@ import utils.MD5Utils;
 
 
 /**
- *
  * author: wenxian.cai
  * date: 2017/9/25 11:12
  */
@@ -20,10 +19,10 @@ public class CustomCredentials extends SimpleCredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token,
-        AuthenticationInfo info) {
+                                      AuthenticationInfo info) {
         UserToken userToken = (UserToken) token;
         String pwd = MD5Utils.encryptPassword(String.valueOf(
-                    userToken.getPassword()));
+                userToken.getPassword()));
         boolean matches = equals(pwd, getCredentials(info));
 
         return matches;

@@ -256,7 +256,7 @@ public class Test {
     }
 
     @org.junit.Test
-    public void test1(){
+    public void test1() {
         String str1 = "aaa";
         String str2 = new String("aaa");
         System.out.println("result1:" + str1 == str2);
@@ -282,11 +282,11 @@ public class Test {
         }*/
 
 
-        FileWriter fileWriter1 = new FileWriter("test1.txt" );
+        FileWriter fileWriter1 = new FileWriter("test1.txt");
         StringBuffer stringBuffer = new StringBuffer();
         int str;
         while ((str = fileReader.read()) != -1) {
-            stringBuffer.append((char)str);
+            stringBuffer.append((char) str);
         }
 
         fileWriter1.append(stringBuffer);
@@ -333,7 +333,7 @@ public class Test {
 
     }
 
-    class Proxy{
+    class Proxy {
 
         public Proxy() {
             System.out.println("this is proxy");
@@ -367,7 +367,7 @@ public class Test {
         }
 
         public static synchronized Singleton getInstance() {
-            if(instance == null) {
+            if (instance == null) {
                 instance = new Singleton();
             }
             return instance;
@@ -405,11 +405,10 @@ public class Test {
         int i = 0;
         while (i < 10) {
             Thread.sleep(1000);
-            i ++;
+            i++;
         }
         System.out.println("inter2");
     }
-
 
 
 }

@@ -4,13 +4,14 @@ import model.po.common.BasePO;
 
 /**
  * 推荐的歌单
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-02-08 11:01]
  * @Description: [ ]
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class RecommendSongListPO extends BasePO{
+public class RecommendSongListPO extends BasePO {
 
     /**
      * 歌单id
@@ -27,7 +28,8 @@ public class RecommendSongListPO extends BasePO{
      */
     private String trackUpdateTime;
 
-    public RecommendSongListPO(){}
+    public RecommendSongListPO() {
+    }
 
     public RecommendSongListPO(String songListId, int num, String trackUpdateTime) {
         this.songListId = songListId;

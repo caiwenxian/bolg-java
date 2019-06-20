@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 
 
-public interface IUserDao{
+public interface IUserDao {
 
     /**
      * 添加用户

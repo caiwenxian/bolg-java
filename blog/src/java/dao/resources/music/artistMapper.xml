@@ -4,17 +4,18 @@
 
     <insert id="addArtist" parameterType="model.po.music.ArtistPO">
         INSERT INTO t_artist (id, name, artistId, origin, createTime, modifyTime)VALUES
-         (#{id}, #{name}, #{artistId}, #{origin}, NOW(), NOW())
+        (#{id}, #{name}, #{artistId}, #{origin}, NOW(), NOW())
     </insert>
 
     <select id="getArtistByArtistId" parameterType="java.lang.String" resultType="model.po.music.ArtistPO">
         SELECT id, artistId, name FROM t_artist WHERE artistId = #{artistId}
     </select>
 
-    <select id="addHotArtist" parameterType="List" >
+    <select id="addHotArtist" parameterType="List">
         INSERT INTO t_hotartist (id, artistId, num, createTime, modifyTime)VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id, jdbcType=VARCHAR}, #{item.artistId,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER}, NOW(), NOW())
+            (#{item.id, jdbcType=VARCHAR}, #{item.artistId,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER}, NOW(),
+            NOW())
         </foreach>
     </select>
 

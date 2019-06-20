@@ -62,13 +62,13 @@ public interface Formatter {
     /*class SqlUtil<T extends Po> {
 
 
-        *//**
-         * ��ȡʵ�����ĳ���ֶ�
-         *
-         * @param t
-         * @param fieldName
-         * @return
-         *//*
+     *//**
+     * ��ȡʵ�����ĳ���ֶ�
+     *
+     * @param t
+     * @param fieldName
+     * @return
+     *//*
         public Field getField(Class<?> t, String fieldName) {
             Field[] fields = t.getDeclaredFields();
             for (Field field : fields) {
@@ -80,11 +80,11 @@ public interface Formatter {
         }
 
         *//**
-         * ��ȡ��ѯsql���ֶ��б�
-         *
-         * @param po
-         * @return
-         *//*
+     * ��ȡ��ѯsql���ֶ��б�
+     *
+     * @param po
+     * @return
+     *//*
         public List<Pram> getPramListOfSelect(Po po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<? extends Po> thisClass = po.getClass();
@@ -130,11 +130,11 @@ public interface Formatter {
         }
 
         *//**
-         * ��ȡʵ�����Ӧ�ı���
-         *
-         * @param po
-         * @return
-         *//*
+     * ��ȡʵ�����Ӧ�ı���
+     *
+     * @param po
+     * @return
+     *//*
         public String getTableName(Po po) {
             Class<? extends Po> c = po.getClass();
             if (c.isAnnotationPresent(TableName.class)) {
@@ -201,11 +201,11 @@ public interface Formatter {
         }
 
         *//**
-         * ͨ��Class��ȡ���ɶ�ӦSql�ֶ�
-         *
-         * @param po
-         * @return
-         *//*
+     * ͨ��Class��ȡ���ɶ�ӦSql�ֶ�
+     *
+     * @param po
+     * @return
+     *//*
         public List<Pram> getPramList(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<? extends Po> thisClass = po;
@@ -310,12 +310,12 @@ public interface Formatter {
 
 
         *//**
-         * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
-         * 修改：获取本身属性和父类属性
-         *
-         * @param po
-         * @return
-         *//*
+     * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
+     * 修改：获取本身属性和父类属性
+     *
+     * @param po
+     * @return
+     *//*
         public List<Pram> getPramListOfSelect(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
 //            Class<? extends Po> thisClass = po;
@@ -375,11 +375,11 @@ public interface Formatter {
         }
 
         *//**
-         * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
-         *
-         * @param po
-         * @return
-         *//*
+     * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
+     *
+     * @param po
+     * @return
+     *//*
         public List<Pram> getPramListByBean(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<?> thisClass = po;
@@ -436,11 +436,11 @@ public interface Formatter {
         }
 
         *//**
-         * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
-         *
-         * @param po
-         * @return
-         *//*
+     * ͨ��Class��ȡ���ɶ�ӦSql��ѯ���ֶ�
+     *
+     * @param po
+     * @return
+     *//*
         public List<Pram> getPramListByBeanOfSelect(Class<T> po) {
             List<Pram> list = new ArrayList<Pram>();
             Class<?> thisClass = po;
@@ -494,11 +494,11 @@ public interface Formatter {
         }
 
         *//**
-         * ��ȡSql�ֶ���
-         *
-         * @param po
-         * @return
-         *//*
+     * ��ȡSql�ֶ���
+     *
+     * @param po
+     * @return
+     *//*
         public String getTableName(Class<T> po) {
             if (po.isAnnotationPresent(TableName.class)) {
                 return po.getAnnotation(TableName.class).name();
@@ -514,11 +514,11 @@ public interface Formatter {
         }
 
         *//**
-         * ��ȡSql�ֶ���
-         *
-         * @param po
-         * @return
-         *//*
+     * ��ȡSql�ֶ���
+     *
+     * @param po
+     * @return
+     *//*
         public String getTableNameByBean(Class<T> po) {
             if (po.isAnnotationPresent(TableName.class)) {
                 return po.getAnnotation(TableName.class).name();
@@ -532,12 +532,12 @@ public interface Formatter {
         }
 
         *//**
-         * 获取实体类中的某个�??
-         *
-         * @param po
-         * @param fileName
-         * @return
-         *//*
+     * 获取实体类中的某个�??
+     *
+     * @param po
+     * @param fileName
+     * @return
+     *//*
         public static <T> Serializable getFileValue(Class<T> po, String fileName) {
             try {
                 Method method = po.getMethod("get" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1));
@@ -567,12 +567,12 @@ public interface Formatter {
         }
 
         *//**
-         * 取字段名
-         *
-         * @param po
-         * @param fileName
-         * @return
-         *//*
+     * 取字段名
+     *
+     * @param po
+     * @param fileName
+     * @return
+     *//*
         public Serializable getFileValue(Po po, String fileName) {
             try {
                 Class<? extends Po> cla = po.getClass();
@@ -601,13 +601,13 @@ public interface Formatter {
 
 
         *//**
-         * 将某个�?��?�过反射强制赋给实体�?
-         * 修改：父类也赋值
-         * @param po
-         * @param fileName
-         * @param fileValue
-         * @return
-         *//*
+     * 将某个�?��?�过反射强制赋给实体�?
+     * 修改：父类也赋值
+     * @param po
+     * @param fileName
+     * @param fileValue
+     * @return
+     *//*
         public static boolean setFileValue(Po po, String fileName, Serializable fileValue) {
             Class<? extends Po> thisClass = po.getClass();
             Class<?> clazz = po.getClass();
@@ -679,10 +679,10 @@ public interface Formatter {
                             } else if (fileValue instanceof Timestamp) {
                                 method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), LocalDateTime.class);
                                 *//**
-                                 * @author caiwenxian
-                                 * @date 18-3-5 下午3:23
-                                 * @see 由于数据库存储类型为Timestamp，故转化为localDateTime类型
-                                 *//*
+     * @author caiwenxian
+     * @date 18-3-5 下午3:23
+     * @see 由于数据库存储类型为Timestamp，故转化为localDateTime类型
+     *//*
                                 fileValue = Timestamp.valueOf(String.valueOf(fileValue));
                                 fileValue = ((Timestamp) fileValue).toLocalDateTime();
                             }
@@ -730,12 +730,12 @@ public interface Formatter {
 
 
         *//**
-         * �շ��ʶת�»��߱�ʶ
-         * 修改：不进行转化
-         *
-         * @param text
-         * @return
-         *//*
+     * �շ��ʶת�»��߱�ʶ
+     * 修改：不进行转化
+     *
+     * @param text
+     * @return
+     *//*
         public static String toTableString(String text) {
             String tName = text.substring(0, 1).toLowerCase();
             for (int i = 1; i < text.length(); i++) {

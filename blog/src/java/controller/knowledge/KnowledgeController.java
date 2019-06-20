@@ -152,8 +152,8 @@ public class KnowledgeController {
             PagePO pagePO = knowledgeService.ListArticle(dto);
             return ActResult.data(pagePO);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new SerException("code");
-//            e.printStackTrace();
         }
 //        return ActResult.success("success");
     }
@@ -227,7 +227,7 @@ public class KnowledgeController {
      */
     @PostMapping("/article/comment")
     @ResponseBody
-    public Result addArticleComment(ArticleCommentPO po) throws ActException{
+    public Result addArticleComment(ArticleCommentPO po) throws ActException {
         try {
             articleCommentService.addComment(po);
             return ActResult.success();
@@ -246,7 +246,7 @@ public class KnowledgeController {
      */
     @PostMapping("/article/comment/reply")
     @ResponseBody
-    public Result addArticleCommentReply(ArticleCommentPO po) throws ActException{
+    public Result addArticleCommentReply(ArticleCommentPO po) throws ActException {
         try {
             if (StringUtils.isBlank(po.getParentId())) {
                 return ActResult.error("评论失败");

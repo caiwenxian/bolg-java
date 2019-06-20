@@ -1,140 +1,142 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:aop="http://www.springframework.org/schema/aop"
-	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
-	<!--<import resource="classpath:security.xml" />-->
-	<!-- 引入cache -->
-	<!--<import resource="classpath:cache.xml" />-->
-	<!--<aop:aspectj-autoproxy proxy-target-class="true" />-->
+       http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+    <!--<import resource="classpath:security.xml" />-->
+    <!-- 引入cache -->
+    <!--<import resource="classpath:cache.xml" />-->
+    <!--<aop:aspectj-autoproxy proxy-target-class="true" />-->
 
-	<!--配置开启shiro注解拦截-->
-	<!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-		<property name="securityManager" ref="securityManager"/>
-	</bean>-->
+    <!--配置开启shiro注解拦截-->
+    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>-->
 
-	<!-- validated 校验配置start -->
-	<!--<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" >
-		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
-	</bean>
-	<mvc:annotation-driven validator="validator" />-->
-
-
-	<!-- ApplicationContext -->
-	<bean class="utils.SpringContextUtil" lazy-init="false"></bean>
-
-	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="contentType" value="text/html" />
-		<property name="prefix" value="/view/" />
-		<property name="suffix" value=".jsp" />
-		<property name="order" value="0"/>
-	</bean>
-
-	<mvc:resources mapping="/static/**" location="/static/" />
-	<mvc:annotation-driven>
-		<mvc:message-converters register-defaults="true">
-			<!--避免IE执行AJAX时,返回JSON出现下载文件 -->
-			<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-				<property name="supportedMediaTypes">
-					<list>
-						<value>application/json;charset=UTF-8</value>
-					</list>
-				</property>
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
-
-	<context:component-scan base-package="controller" />
-	<context:component-scan base-package="utils.*" />
-	<!--<context:component-scan base-package="controller.security" />-->
-	<!--<context:component-scan base-package="com.lifeshs" />-->
+    <!-- validated 校验配置start -->
+    <!--<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" >
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+    </bean>
+    <mvc:annotation-driven validator="validator" />-->
 
 
-	<bean id="NFDFlightDataTimerTask" class="utils.timeTask.NFDFlightDataTimerTask">
-		<!-- 3*1024*1024即是3*1MB -->
+    <!-- ApplicationContext -->
+    <bean class="utils.SpringContextUtil" lazy-init="false"></bean>
+
+    <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="contentType" value="text/html"/>
+        <property name="prefix" value="/view/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="order" value="0"/>
     </bean>
 
-	<!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		&lt;!&ndash; 3*1024*1024即是3*1MB &ndash;&gt;
+    <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!--避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean id="fastJsonHttpMessageConverter"
+                  class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <context:component-scan base-package="controller"/>
+    <context:component-scan base-package="utils.*"/>
+    <!--<context:component-scan base-package="controller.security" />-->
+    <!--<context:component-scan base-package="com.lifeshs" />-->
+
+
+    <bean id="NFDFlightDataTimerTask" class="utils.timeTask.NFDFlightDataTimerTask">
+        <!-- 3*1024*1024即是3*1MB -->
+    </bean>
+
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        &lt;!&ndash; 3*1024*1024即是3*1MB &ndash;&gt;
         <property name="maxUploadSize" value="5242880"/>
     </bean>-->
 
-	<!-- 全局异常处理 -->
-	<!--<bean id="systemExceptionHandler" class="com.lifeshs.support.plantform.handler.SystemExceptionHandler" />-->
-	<!--配置异常对象处理器  该类要实现HandlerExceptionResolver接口  -->
-	<bean id="exceptionResolver" class="exception.ExceptionResolver"/>
+    <!-- 全局异常处理 -->
+    <!--<bean id="systemExceptionHandler" class="com.lifeshs.support.plantform.handler.SystemExceptionHandler" />-->
+    <!--配置异常对象处理器  该类要实现HandlerExceptionResolver接口  -->
+    <bean id="exceptionResolver" class="exception.ExceptionResolver"/>
 
-	<!--test-->
-	<!--<beans>-->
-	<!--<bean id="testController" class="com.lifeshs.controller.ly.TestController">-->
-	<!--<property name="testLiyueService" ref="testLiyueService">-->
-	<!--</property>-->
-	<!--</bean>-->
-	<!--<bean id="testLiyueService" class="com.lifeshs.service.terminal.app.impl.TestLiyueServiceImpl">-->
+    <!--test-->
+    <!--<beans>-->
+    <!--<bean id="testController" class="com.lifeshs.controller.ly.TestController">-->
+    <!--<property name="testLiyueService" ref="testLiyueService">-->
+    <!--</property>-->
+    <!--</bean>-->
+    <!--<bean id="testLiyueService" class="com.lifeshs.service.terminal.app.impl.TestLiyueServiceImpl">-->
 
-	<!--</bean>-->
-	<!--</beans>-->
+    <!--</bean>-->
+    <!--</beans>-->
 
-	<!--缓存服务注入-->
-	<bean id="ehCacheManager"
-		  class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:spring-ehcache.xml" />
-		<property name="shared" value="true" />
-	</bean>
+    <!--缓存服务注入-->
+    <bean id="ehCacheManager"
+          class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:spring-ehcache.xml"/>
+        <property name="shared" value="true"/>
+    </bean>
 
-	<bean id="cacheManager2" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-		<property name="cacheManager" ref="ehCacheManager" />
-	</bean>
-	<bean id="cacheUtil" class="utils.CacheUtil">
-		<property name="manager" ref="cacheManager2"/>
-	</bean>
+    <bean id="cacheManager2" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+    <bean id="cacheUtil" class="utils.CacheUtil">
+        <property name="manager" ref="cacheManager2"/>
+    </bean>
 
-	<!--<mvc:annotation-driven/>-->
+    <!--<mvc:annotation-driven/>-->
 
-	<!-- 日志切面类 -->
-	<bean id="logAspectBean" class="controller.security.aop.Aspect"/>
-	<!-- 第1步： AOP的配置 -->
-	<!--<aop:config>
-		&lt;!&ndash; 第2步：配置一个切面 &ndash;&gt;
-		<aop:aspect id="logAspect" ref="logAspectBean">
-			&lt;!&ndash; 第3步：定义切入点,指定切入点表达式 &ndash;&gt;
-			<aop:pointcut id="allMethod"
-						  expression="execution(* controller.*.*(..))"/>
-			&lt;!&ndash; 第4步：应用前置通知 &ndash;&gt;
-			<aop:before method="before" pointcut-ref="allMethod" />
-			&lt;!&ndash; 第4步：应用后置通知 &ndash;&gt;
-			<aop:after-returning method="afterReturn" pointcut-ref="allMethod"/>
-			&lt;!&ndash; 第4步：应用最终通知 &ndash;&gt;
-			<aop:after method="after" pointcut-ref="allMethod"/>
-			&lt;!&ndash; 第4步：应用抛出异常后通知 &ndash;&gt;
-			<aop:after-throwing method="afterThrowing" pointcut-ref="allMethod"/>
-			&lt;!&ndash; 第4步：应用环绕通知 &ndash;&gt;
-			&lt;!&ndash;
+    <!-- 日志切面类 -->
+    <bean id="logAspectBean" class="controller.security.aop.Aspect"/>
+    <!-- 第1步： AOP的配置 -->
+    <!--<aop:config>
+        &lt;!&ndash; 第2步：配置一个切面 &ndash;&gt;
+        <aop:aspect id="logAspect" ref="logAspectBean">
+            &lt;!&ndash; 第3步：定义切入点,指定切入点表达式 &ndash;&gt;
+            <aop:pointcut id="allMethod"
+                          expression="execution(* controller.*.*(..))"/>
+            &lt;!&ndash; 第4步：应用前置通知 &ndash;&gt;
+            <aop:before method="before" pointcut-ref="allMethod" />
+            &lt;!&ndash; 第4步：应用后置通知 &ndash;&gt;
+            <aop:after-returning method="afterReturn" pointcut-ref="allMethod"/>
+            &lt;!&ndash; 第4步：应用最终通知 &ndash;&gt;
+            <aop:after method="after" pointcut-ref="allMethod"/>
+            &lt;!&ndash; 第4步：应用抛出异常后通知 &ndash;&gt;
+            <aop:after-throwing method="afterThrowing" pointcut-ref="allMethod"/>
+            &lt;!&ndash; 第4步：应用环绕通知 &ndash;&gt;
+            &lt;!&ndash;
             <aop:around method="doAround" pointcut-ref="allMethod" />
              &ndash;&gt;
-		</aop:aspect>
-	</aop:config>-->
-	<!-- 启用spring对AspectJ注解的支持 -->
-	<aop:aspectj-autoproxy/>
+        </aop:aspect>
+    </aop:config>-->
+    <!-- 启用spring对AspectJ注解的支持 -->
+    <aop:aspectj-autoproxy/>
 
-	<!-- 自定义拦截器 -->
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**"/>
-			<bean class="controller.security.interceptor.MyInterceptor"></bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
+    <!-- 自定义拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="controller.security.interceptor.MyInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 
 

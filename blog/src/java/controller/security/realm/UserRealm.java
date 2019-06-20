@@ -21,7 +21,7 @@ public class UserRealm extends AuthorizingRealm {
         super.setCacheManager(cacheManager);
     }
 
-//    @Autowired
+    //    @Autowired
 //    CustomerUserService userService;
     @Autowired
     IUserService userService;

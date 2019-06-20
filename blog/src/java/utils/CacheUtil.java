@@ -32,7 +32,7 @@ public class CacheUtil {
         cache.put(key, value);
     }
 
-    public <TARGET>TARGET get(Object cacheType, String key, Class<TARGET> target) {
+    public <TARGET> TARGET get(Object cacheType, String key, Class<TARGET> target) {
         Cache cache = manager.getCache(String.valueOf(cacheType));
 //        Element element = cache.get(key);
 //        return element.getValue();

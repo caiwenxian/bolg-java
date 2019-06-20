@@ -77,12 +77,12 @@ public class TestController {
     }
 
     @GetMapping("/v1/home")
-    public ModelAndView home () {
+    public ModelAndView home() {
         return new ModelAndView("home/home");
     }
 
     @GetMapping("v1/transaction")
-    public String test1 () {
+    public String test1() {
         try {
             songService.update(new SongInfoPO("28196001", null, null, null, "212", null, null));
             return "success";
@@ -99,7 +99,7 @@ public class TestController {
 
     @GetMapping("v1/login")
     @ResponseBody
-    public String login (HttpServletRequest request, HttpServletResponse response) throws ActException {
+    public String login(HttpServletRequest request, HttpServletResponse response) throws ActException {
         UserToken token = new UserToken("zhangsan", "000000", true, null, null);
         Subject subject = SecurityUtils.getSubject();
 
@@ -122,7 +122,7 @@ public class TestController {
 
     @GetMapping("/v1/header")
     @ResponseBody
-    public ModelAndView header () {
+    public ModelAndView header() {
         return new ModelAndView("common/header");
     }
 

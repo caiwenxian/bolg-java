@@ -20,18 +20,20 @@
         <!--LEFT JOIN t_user u ON ac.userId = u.id-->
         <!--LEFT JOIN t_article a ON a.id = ac.articleId-->
         <!--<where>-->
-            <!--<if test="articleId != null">-->
-                <!--articleId = #{articleId}-->
-            <!--</if>-->
+        <!--<if test="articleId != null">-->
+        <!--articleId = #{articleId}-->
+        <!--</if>-->
         <!--</where>-->
         <!--ORDER BY a.createTime DESC limit #{startRow}, #{endRow}-->
 
-        SELECT ac.comment as ac_comment, ac.id as ac_id, ac.parentId as ac_parentId, ac.articleId as ac_articleId, ac.createTime, ac.modifyTime,
+        SELECT ac.comment as ac_comment, ac.id as ac_id, ac.parentId as ac_parentId, ac.articleId as ac_articleId,
+        ac.createTime, ac.modifyTime,
         u.name as u_name, ac.userId as u_id, a.id as a_id, ac.approve as ac_approve
         FROM t_article_comment ac
         LEFT JOIN t_user u ON ac.userId = u.id
         LEFT JOIN t_article a ON a.id = ac.articleId
-        where ac.parentId in (SELECT * from (SELECT id FROM t_article_comment WHERE parentId is null AND articleId = #{articleId}
+        where ac.parentId in (SELECT * from (SELECT id FROM t_article_comment WHERE parentId is null AND articleId =
+        #{articleId}
         ORDER BY createTime DESC limit #{startRow}, #{endRow})m) OR
         ac.id in (SELECT * from (SELECT id FROM t_article_comment WHERE parentId is null and articleId = #{articleId}
         ORDER BY createTime DESC limit #{startRow}, #{endRow})m)
@@ -42,7 +44,6 @@
         INSERT INTO t_article (id, userId, articleId, parentId, comment, createTime, modifyTime)
         VALUES (#{id}, #{userId}, #{articleId}, #{parentId}, #{comment}, NOW(), NOW())
     </insert>
-
 
 
     <resultMap id="article" type="model.po.knowledge.ArticleCommentPO">

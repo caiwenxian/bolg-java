@@ -105,8 +105,8 @@ details.vm = new Vue({
         },
         /** 回复动作 */
         popReply: function (index, commentId) {
-            if(this.comment.hasReply) {
-               return;
+            if (this.comment.hasReply) {
+                return;
             }
             this.comment.hasReply = true;
             this.comment.id = commentId;
@@ -121,7 +121,7 @@ details.vm = new Vue({
                 '                                  v-model="comment.comment"></textarea>\n' +
                 '                        </div>\n' +
                 '                        <button class="layui-btn" lay-submit lay-filter="formDemo" style="margin-left: 80px;"\n' +
-                '                                onclick="details.vm.commitCommentReply('+ index +')">提交评论\n' +
+                '                                onclick="details.vm.commitCommentReply(' + index + ')">提交评论\n' +
                 '                        </button>';
             $('.comment-reply').eq(index).append(str);
         },

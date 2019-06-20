@@ -23,11 +23,11 @@ public class KnowledgeDaoImpl extends DaoImpl<ArticlePO, String> implements IKno
     @Resource(name = "sqlSessionTemplate")
     private SqlSessionTemplate sqlSessionTemplateASS;
 
-    public int countArticle(ArticleDTO dto){
+    public int countArticle(ArticleDTO dto) {
         return sqlSessionTemplateASS.selectOne("countArticle", dto);
     }
 
-    public List<ArticlePO> listArticle(ArticleDTO dto){
+    public List<ArticlePO> listArticle(ArticleDTO dto) {
         List list = sqlSessionTemplateASS.selectList("listArticleByPage", dto);
         return list;
     }

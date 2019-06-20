@@ -13,7 +13,8 @@
     </select>
 
     <select id="listArticleByPage" resultMap="article">
-        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount, a.commentAmount,  u.id as userId, u.name as userName
+        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount,
+        a.commentAmount, u.id as userId, u.name as userName
         FROM t_article a LEFT JOIN t_user u ON a.userId = u.id
         <where>
             <if test="title != null">
@@ -26,11 +27,12 @@
 
     <insert id="addArticle" parameterType="model.po.knowledge.ArticlePO">
         INSERT INTO t_article (id, title, content, type, status, contentText, userId, createTime, modifyTime)
-         VALUES (#{id}, #{title}, #{content}, #{type}, #{status}, #{contentText}, #{userId}, NOW(), NOW())
+        VALUES (#{id}, #{title}, #{content}, #{type}, #{status}, #{contentText}, #{userId}, NOW(), NOW())
     </insert>
 
     <select id="getArticle" resultMap="article">
-        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount, a.commentAmount, u.id as userId, u.name as userName
+        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount,
+        a.commentAmount, u.id as userId, u.name as userName
         FROM t_article a LEFT JOIN t_user u ON a.userId = u.id
         WHERE a.id = #{id}
     </select>

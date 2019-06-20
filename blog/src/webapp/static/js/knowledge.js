@@ -51,7 +51,7 @@ article.vm = new Vue({
         }
     },
     watch: {
-        articlePage: function() {
+        articlePage: function () {
             this.listArticle();
         }
     },

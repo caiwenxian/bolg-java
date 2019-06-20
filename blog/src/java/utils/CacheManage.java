@@ -3,6 +3,7 @@ package utils;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -21,7 +22,7 @@ public class CacheManage<K, V> implements Cache<K, V> {
 
     public Cache<K, V> getCache() {
         try {
-            if(null == cache){
+            if (null == cache) {
                 cache = cacheManager.getCache("shirocache");
             }
         } catch (Exception e) {
@@ -29,46 +30,58 @@ public class CacheManage<K, V> implements Cache<K, V> {
         }
         return cache;
     }
+
     @Override
     public void clear() throws CacheException {
         getCache().clear();
     }
+
     @Override
     public V get(K key) throws CacheException {
         return getCache().get(key);
     }
+
     @Override
     public Set<K> keys() {
 
         return getCache().keys();
     }
+
     @Override
     public V put(K key, V value) throws CacheException {
         return getCache().put(key, value);
     }
+
     @Override
     public V remove(K key) throws CacheException {
         return getCache().remove(key);
     }
+
     @Override
     public int size() {
         return getCache().size();
     }
+
     @Override
     public Collection<V> values() {
         return getCache().values();
     }
+
     public EhCacheManager getCacheManager() {
         return cacheManager;
     }
+
     public void setCacheManager(EhCacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
+
     public void setCache(Cache<K, V> cache) {
         this.cache = cache;
     }
+
     /**
      * 获取所有Session
+     *
      * @throws Exception
      */
     public Collection<Session> AllSession() throws Exception {
@@ -78,8 +91,8 @@ public class CacheManage<K, V> implements Cache<K, V> {
             cache = getCache();
             Collection<V> values = cache.values();
             for (V v : values) {
-                if(null != v && v instanceof Session){
-                    sessions.add((Session)v);
+                if (null != v && v instanceof Session) {
+                    sessions.add((Session) v);
                 }
             }
         } catch (Exception e) {

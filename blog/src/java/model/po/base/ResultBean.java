@@ -2,51 +2,51 @@ package model.po.base;
 
 public class ResultBean {
 
-	private int code;
-	
-	private String message;
-	
-	private Object responseBody;
-	
-	private boolean result;
+    private int code;
 
-	public int getCode() {
-		return code;
-	}
+    private String message;
 
-	public void setCode(int code) {
-		this.code = code;
-	}
+    private Object responseBody;
 
-	public String getMessage() {
-		return message;
-	}
+    private boolean result;
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public int getCode() {
+        return code;
+    }
 
-	public Object getResponseBody() {
-		return responseBody;
-	}
+    public void setCode(int code) {
+        this.code = code;
+    }
 
-	public void setResponseBody(Object responseBody) {
-		this.responseBody = responseBody;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public boolean isResult() {
-		return result;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public void setResult(boolean result) {
-		this.result = result;
-	}
-	
-	public String toString(){
-		String str = "ResultBean:";
-		str += "code = " + code + ",";
-		str += "message = " + message == null ? "null" : message + ",";
-		str += "result = " + result;
-		return str;
-	}
+    public Object getResponseBody() {
+        return responseBody;
+    }
+
+    public void setResponseBody(Object responseBody) {
+        this.responseBody = responseBody;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
+    public String toString() {
+        String str = "ResultBean:";
+        str += "code = " + code + ",";
+        str += "message = " + message == null ? "null" : message + ",";
+        str += "result = " + result;
+        return str;
+    }
 }

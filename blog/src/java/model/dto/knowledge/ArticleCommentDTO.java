@@ -10,7 +10,9 @@ import model.dto.common.BaseDTO;
  */
 public class ArticleCommentDTO extends BaseDTO {
 
-    /** 文章id */
+    /**
+     * 文章id
+     */
     private String articleId;
 
     public ArticleCommentDTO() {

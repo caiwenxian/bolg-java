@@ -69,7 +69,7 @@ public class KnowledgeServiceImpl implements IKnowledgeService {
     }
 
     @Override
-    public ArticleVO getArticle(String id) throws SerException, Exception{
+    public ArticleVO getArticle(String id) throws SerException, Exception {
         ArticlePO po = knowledgeDao.getArticle(id);
         if (po == null) {
             return null;

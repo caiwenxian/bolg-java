@@ -10,7 +10,7 @@ import model.po.common.BasePO;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class ArtistPO extends BasePO{
+public class ArtistPO extends BasePO {
 
     /**
      * 歌手id

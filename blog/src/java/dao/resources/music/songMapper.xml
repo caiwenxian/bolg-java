@@ -4,7 +4,7 @@
 
     <insert id="add" parameterType="model.po.music.SongInfoPO">
         INSERT INTO t_song (id, name, songId, artistId, lyricId, mp3Url, origin, num, createTime, modifyTime)VALUES
-         (#{id}, #{name}, #{songId}, #{artistId}, #{lyricId}, #{mp3Url}, #{origin}, #{num}, NOW(), NOW())
+        (#{id}, #{name}, #{songId}, #{artistId}, #{lyricId}, #{mp3Url}, #{origin}, #{num}, NOW(), NOW())
     </insert>
 
     <update id="update" parameterType="model.po.music.SongInfoPO">
@@ -13,22 +13,22 @@
 
     <select id="getBySongId" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
         SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
-         FROM t_song WHERE songId = #{songId}
+        FROM t_song WHERE songId = #{songId}
     </select>
 
     <select id="listSongByName" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
         SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
-         FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC
+        FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC
     </select>
 
     <select id="listSongByNameByPage" resultType="model.po.music.SongInfoPO">
         SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
-         FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC LIMIT #{startRow}, #{endRow}
+        FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC LIMIT #{startRow}, #{endRow}
     </select>
 
     <select id="countSongByName" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(1)
-         FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%")
+        FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%")
     </select>
 
     <select id="listTopList" parameterType="List" resultType="model.po.music.SongInfoPO">
@@ -40,20 +40,21 @@
         </foreach>
     </select>
 
-    <select id="countTopList"  resultType="java.lang.Integer">
+    <select id="countTopList" resultType="java.lang.Integer">
         SELECT count(1)
         FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
         WHERE td.topListId = #{id}
     </select>
 
-    <select id="listTopListByPage"  resultType="model.po.music.SongInfoPO">
+    <select id="listTopListByPage" resultType="model.po.music.SongInfoPO">
         SELECT s.id, s.name, s.songId, s.artistId, s.lyricId, s.mp3Url, s.origin, s.createTime, s.modifyTime
         FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
         WHERE td.topListId = #{id} ORDER BY td.num limit #{startRow}, #{endRow}
     </select>
 
     <insert id="addSongList" parameterType="model.po.music.SongListPO">
-        INSERT INTO t_songlist (id, songListId, name, picUrl, playCount, origin, trackUpdateTime, createTime, modifyTime)VALUES
+        INSERT INTO t_songlist (id, songListId, name, picUrl, playCount, origin, trackUpdateTime, createTime,
+        modifyTime)VALUES
         (#{id}, #{songListId}, #{name}, #{picUrl}, #{playCount}, #{origin}, #{trackUpdateTime}, NOW(), NOW())
     </insert>
 

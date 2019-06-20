@@ -9,7 +9,7 @@ import model.dto.common.BaseDTO;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class MusicDTO extends BaseDTO{
+public class MusicDTO extends BaseDTO {
 
     /**
      * keyword

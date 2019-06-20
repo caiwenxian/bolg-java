@@ -1,4 +1,5 @@
 package utils;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Socket;
@@ -16,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
 /**
  * @Author: [caiwenxian]
  * @Date: [2018-01-17 16:39]
@@ -72,21 +74,21 @@ public class HttpClientHelper {
             }
             // 读取返回内容
             resultBuffer = new StringBuffer();
-            int contentLength = Integer.parseInt(con.getHeaderField("Content-Length"));
-            if (contentLength > 0) {
+//            int contentLength = Integer.parseInt(con.getHeaderField("Content-Length"));
+//            if (contentLength > 0) {
                 br = new BufferedReader(new InputStreamReader(con.getInputStream(), charset));
                 String temp;
                 while ((temp = br.readLine()) != null) {
                     resultBuffer.append(temp);
                 }
-            }
+//            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            if (requestNum/100 == 0) {
+            if (requestNum / 100 == 0) {
                 System.out.println("第" + requestNum + "次请求");
             }
-            requestNum ++;
+            requestNum++;
             if (osw != null) {
                 try {
                     osw.close();
@@ -304,10 +306,10 @@ public class HttpClientHelper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            if (requestNum/100 == 0) {
+            if (requestNum / 100 == 0) {
                 System.out.println("第" + requestNum + "次请求");
             }
-            requestNum ++;
+            requestNum++;
             if (br != null) {
                 try {
                     br.close();

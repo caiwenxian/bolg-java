@@ -4,8 +4,8 @@ package exception;
  * 查询异常
  *
  * @param
- * @return class
  * @version v1
+ * @return class
  */
 
 public class QueryException extends RuntimeException {

@@ -5,6 +5,11 @@
     <title>文章发布</title>
 </head>
 <script src="/static/js/common/header.js"></script>
+<style>
+    .body-main {
+        min-height: 600px;
+    }
+</style>
 <body>
 <div class="body-main " id="vue-content">
 
@@ -14,8 +19,8 @@
     <form class="layui-form" action="">
         <label class="layui-form-label">文章类型：</label>
         <div class="layui-form-item select-article-type">
-            <select name="type" <%--v-model="articleType"--%>  lay-filter = 'articleType'>
-                <option value="TECHNOLOGY" >技术</option>
+            <select name="type" <%--v-model="articleType"--%> lay-filter='articleType'>
+                <option value="TECHNOLOGY">技术</option>
                 <option value="LIFE">生活</option>
             </select>
         </div>
@@ -42,8 +47,9 @@
                    @click="saveDraft()">
         </div>
     </form>
-    <div id="preview" class="div-preview " >
-        <h2 v-text="articleTitle" style="text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 20px;"></h2>
+    <div id="preview" class="div-preview ">
+        <h2 v-text="articleTitle"
+            style="text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 20px;"></h2>
         <div v-html="articleContent"></div>
 
     </div>
@@ -67,7 +73,7 @@
 
         layui.code();
         var form = layui.form;
-        form.on('select(articleType)', function(data){
+        form.on('select(articleType)', function (data) {
             publish.vm.articleType = data.value;
         });
     });

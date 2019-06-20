@@ -12,7 +12,7 @@ import model.po.common.BasePO;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
-public class ArticleTO extends BasePO{
+public class ArticleTO extends BasePO {
 
     private String content;
 
@@ -24,7 +24,8 @@ public class ArticleTO extends BasePO{
 
     private String contentText;
 
-    public ArticleTO(){}
+    public ArticleTO() {
+    }
 
     public ArticleTO(String content) {
         this.content = content;

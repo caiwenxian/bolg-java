@@ -41,8 +41,8 @@ import java.util.List;
  */
 
 @Service
-public class TopListServiceImpl implements ITopListService{
-//
+public class TopListServiceImpl implements ITopListService {
+    //
 //    @Autowired
 //    IArtistService artistService;
 //    @Autowired

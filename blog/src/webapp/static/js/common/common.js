@@ -27,16 +27,15 @@ Date.prototype.Format = function (fmt) {
     return fmt;
 }
 
-$(function(){
+$(function () {
     //.ajaxError事件定位到document对象，文档内所有元素发生ajax请求异常，都将冒泡到document对象的ajaxError事件执行处理
     $(document).ajaxError(
-
         //所有ajax请求异常的统一处理函数，处理
-        function(event,xhr,options,exc ){
-            if(xhr.status == 'undefined'){
+        function (event, xhr, options, exc) {
+            if (xhr.status == 'undefined') {
                 return;
             }
-            switch(xhr.status){
+            switch (xhr.status) {
                 case 403:
                     // 未授权异常
                     alert("系统拒绝：您没有访问权限。");

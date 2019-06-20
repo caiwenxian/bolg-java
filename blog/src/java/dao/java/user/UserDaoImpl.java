@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @Version: [1.0.0]
  */
 @Repository
-public class UserDaoImpl extends DaoImpl<UserPO, String> implements IUserDao{
+public class UserDaoImpl extends DaoImpl<UserPO, String> implements IUserDao {
     @Resource(name = "sqlSessionTemplate")
     private SqlSessionTemplate sqlSessionTemplateASS;
 

@@ -2,7 +2,7 @@ package controller.test;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import model.po.music.SongInfoPO;
+import org.junit.Test;
 import utils.HttpClientHelper;
 
 /**
@@ -19,12 +19,12 @@ public class NetseaseTest {
 //        search();
 //        artist();
 //        hotArtists();
-        playlist();
+//        playlist();
     }
 
 
-//    @Test
-    static void search() {
+    @Test
+    public void search() {
         String url = "http://music.163.com/api/search/pc/?s=海阔天空&limit=10&type=1&offset=0";
         String result = HttpClientHelper.sendPost(url, null, "UTF-8");
         System.out.println("result:" + result);
@@ -33,10 +33,10 @@ public class NetseaseTest {
         JSONObject object = (JSONObject) jsonObject.get("result");
 //        JSONArray object = jsonObject.getJSONArray("result");
         JSONArray songs = object.getJSONArray("songs");
-        JSONObject song = (JSONObject)songs.get(1);
+        JSONObject song = (JSONObject) songs.get(1);
         JSONArray artists = song.getJSONArray("artists");
 
-        String artistId = String.valueOf(((JSONObject)artists.get(0)).get("id"));
+        String artistId = String.valueOf(((JSONObject) artists.get(0)).get("id"));
         String id = String.valueOf(song.get("id"));
         String name = String.valueOf(song.get("name"));
 //        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null, null);
@@ -44,7 +44,8 @@ public class NetseaseTest {
 
     }
 
-    static void artist() {
+    @Test
+    public void artist() {
         String url = "http://music.163.com/api/artist/6452?offset=0&limit=10";
         String result = HttpClientHelper.sendGet(url, null, "UTF8");
         System.out.println("result:" + result);
@@ -53,10 +54,10 @@ public class NetseaseTest {
         JSONObject object = (JSONObject) jsonObject.get("result");
 //        JSONArray object = jsonObject.getJSONArray("result");
         JSONArray songs = object.getJSONArray("songs");
-        JSONObject song = (JSONObject)songs.get(1);
+        JSONObject song = (JSONObject) songs.get(1);
         JSONArray artists = song.getJSONArray("artists");
 
-        String artistId = String.valueOf(((JSONObject)artists.get(0)).get("id"));
+        String artistId = String.valueOf(((JSONObject) artists.get(0)).get("id"));
         String id = String.valueOf(song.get("id"));
         String name = String.valueOf(song.get("name"));
 //        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);
@@ -73,10 +74,10 @@ public class NetseaseTest {
         JSONObject object = (JSONObject) jsonObject.get("result");
 //        JSONArray object = jsonObject.getJSONArray("result");
         JSONArray songs = object.getJSONArray("songs");
-        JSONObject song = (JSONObject)songs.get(1);
+        JSONObject song = (JSONObject) songs.get(1);
         JSONArray artists = song.getJSONArray("artists");
 
-        String artistId = String.valueOf(((JSONObject)artists.get(0)).get("id"));
+        String artistId = String.valueOf(((JSONObject) artists.get(0)).get("id"));
         String id = String.valueOf(song.get("id"));
         String name = String.valueOf(song.get("name"));
 //        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);
@@ -90,13 +91,12 @@ public class NetseaseTest {
         System.out.println("result:" + result);
 
         JSONObject jsonObject = JSONObject.parseObject(result);
-        JSONObject object = (JSONObject) jsonObject.get("result");
+        JSONArray object = jsonObject.getJSONArray("playlists");
 //        JSONArray object = jsonObject.getJSONArray("result");
-        JSONArray songs = object.getJSONArray("songs");
-        JSONObject song = (JSONObject)songs.get(1);
+        JSONObject song = (JSONObject) object.get(0);
         JSONArray artists = song.getJSONArray("artists");
 
-        String artistId = String.valueOf(((JSONObject)artists.get(0)).get("id"));
+        String artistId = String.valueOf(((JSONObject) artists.get(0)).get("id"));
         String id = String.valueOf(song.get("id"));
         String name = String.valueOf(song.get("name"));
 //        SongInfoPO songInfoPO = new SongInfoPO(id, name, artistId, null);

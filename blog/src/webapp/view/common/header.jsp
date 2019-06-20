@@ -51,9 +51,6 @@
             <li onclick="goRegister()" class="li-register none">注册</li>
             <li onclick="logout()" class="li-logout none">退出</li>
         </ul>
-        </ul>
-        </ul>
-        </ul>
     </div>
 </div>
 
@@ -94,7 +91,6 @@
                 return;
             }
             $('.li-logout').removeClass('none');
-
 
 
         })
@@ -154,6 +150,7 @@
         line-height: 60px;
         margin-right: 10px;
     }
+
     .ul-login img {
         display: inline-block;
         border: none;

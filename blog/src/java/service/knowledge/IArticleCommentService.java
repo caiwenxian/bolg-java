@@ -32,7 +32,7 @@ public interface IArticleCommentService {
      * @return class
      * @version v1
      */
-    PagePO<ArticleCommentVO> listArticleComment (ArticleCommentDTO dto) throws SerException, InvocationTargetException, IllegalAccessException;
+    PagePO<ArticleCommentVO> listArticleComment(ArticleCommentDTO dto) throws SerException, InvocationTargetException, IllegalAccessException;
 
 
 }

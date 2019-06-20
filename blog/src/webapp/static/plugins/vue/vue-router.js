@@ -7,23 +7,24 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :
             (global.VueRouter = factory());
-}(this, (function () { 'use strict';
+}(this, (function () {
+    'use strict';
 
     /*  */
 
-    function assert (condition, message) {
+    function assert(condition, message) {
         if (!condition) {
             throw new Error(("[vue-router] " + message))
         }
     }
 
-    function warn (condition, message) {
+    function warn(condition, message) {
         if ("development" !== 'production' && !condition) {
             typeof console !== 'undefined' && console.warn(("[vue-router] " + message));
         }
     }
 
-    function isError (err) {
+    function isError(err) {
         return Object.prototype.toString.call(err).indexOf('Error') > -1
     }
 
@@ -36,7 +37,7 @@
                 default: 'default'
             }
         },
-        render: function render (_, ref) {
+        render: function render(_, ref) {
             var props = ref.props;
             var children = ref.children;
             var parent = ref.parent;
@@ -106,7 +107,7 @@
         }
     };
 
-    function resolveProps (route, config) {
+    function resolveProps(route, config) {
         switch (typeof config) {
             case 'undefined':
                 return
@@ -116,8 +117,7 @@
                 return config(route)
             case 'boolean':
                 return config ? route.params : undefined
-            default:
-            {
+            default: {
                 warn(
                     false,
                     "props in \"" + (route.path) + "\" is a " + (typeof config) + ", " +
@@ -130,24 +130,28 @@
     /*  */
 
     var encodeReserveRE = /[!'()*]/g;
-    var encodeReserveReplacer = function (c) { return '%' + c.charCodeAt(0).toString(16); };
+    var encodeReserveReplacer = function (c) {
+        return '%' + c.charCodeAt(0).toString(16);
+    };
     var commaRE = /%2C/g;
 
 // fixed encodeURIComponent which is more conformant to RFC3986:
 // - escapes [!'()*]
 // - preserve commas
-    var encode = function (str) { return encodeURIComponent(str)
-        .replace(encodeReserveRE, encodeReserveReplacer)
-        .replace(commaRE, ','); };
+    var encode = function (str) {
+        return encodeURIComponent(str)
+            .replace(encodeReserveRE, encodeReserveReplacer)
+            .replace(commaRE, ',');
+    };
 
     var decode = decodeURIComponent;
 
-    function resolveQuery (
+    function resolveQuery(
         query,
         extraQuery,
         _parseQuery
     ) {
-        if ( extraQuery === void 0 ) extraQuery = {};
+        if (extraQuery === void 0) extraQuery = {};
 
         var parse = _parseQuery || parseQuery;
         var parsedQuery;
@@ -164,7 +168,7 @@
         return parsedQuery
     }
 
-    function parseQuery (query) {
+    function parseQuery(query) {
         var res = {};
 
         query = query.trim().replace(/^(\?|#|&)/, '');
@@ -192,35 +196,37 @@
         return res
     }
 
-    function stringifyQuery (obj) {
+    function stringifyQuery(obj) {
         var res = obj ? Object.keys(obj).map(function (key) {
-                var val = obj[key];
+            var val = obj[key];
 
-                if (val === undefined) {
-                    return ''
-                }
+            if (val === undefined) {
+                return ''
+            }
 
-                if (val === null) {
-                    return encode(key)
-                }
+            if (val === null) {
+                return encode(key)
+            }
 
-                if (Array.isArray(val)) {
-                    var result = [];
-                    val.forEach(function (val2) {
-                        if (val2 === undefined) {
-                            return
-                        }
-                        if (val2 === null) {
-                            result.push(encode(key));
-                        } else {
-                            result.push(encode(key) + '=' + encode(val2));
-                        }
-                    });
-                    return result.join('&')
-                }
+            if (Array.isArray(val)) {
+                var result = [];
+                val.forEach(function (val2) {
+                    if (val2 === undefined) {
+                        return
+                    }
+                    if (val2 === null) {
+                        result.push(encode(key));
+                    } else {
+                        result.push(encode(key) + '=' + encode(val2));
+                    }
+                });
+                return result.join('&')
+            }
 
-                return encode(key) + '=' + encode(val)
-            }).filter(function (x) { return x.length > 0; }).join('&') : null;
+            return encode(key) + '=' + encode(val)
+        }).filter(function (x) {
+            return x.length > 0;
+        }).join('&') : null;
         return res ? ("?" + res) : ''
     }
 
@@ -229,7 +235,7 @@
 
     var trailingSlashRE = /\/?$/;
 
-    function createRoute (
+    function createRoute(
         record,
         location,
         redirectedFrom,
@@ -257,7 +263,7 @@
         path: '/'
     });
 
-    function formatMatch (record) {
+    function formatMatch(record) {
         var res = [];
         while (record) {
             res.unshift(record);
@@ -266,19 +272,21 @@
         return res
     }
 
-    function getFullPath (
+    function getFullPath(
         ref,
         _stringifyQuery
     ) {
         var path = ref.path;
-        var query = ref.query; if ( query === void 0 ) query = {};
-        var hash = ref.hash; if ( hash === void 0 ) hash = '';
+        var query = ref.query;
+        if (query === void 0) query = {};
+        var hash = ref.hash;
+        if (hash === void 0) hash = '';
 
         var stringify = _stringifyQuery || stringifyQuery;
         return (path || '/') + stringify(query) + hash
     }
 
-    function isSameRoute (a, b) {
+    function isSameRoute(a, b) {
         if (b === START) {
             return a === b
         } else if (!b) {
@@ -301,9 +309,9 @@
         }
     }
 
-    function isObjectEqual (a, b) {
-        if ( a === void 0 ) a = {};
-        if ( b === void 0 ) b = {};
+    function isObjectEqual(a, b) {
+        if (a === void 0) a = {};
+        if (b === void 0) b = {};
 
         var aKeys = Object.keys(a);
         var bKeys = Object.keys(b);
@@ -321,7 +329,7 @@
         })
     }
 
-    function isIncludedRoute (current, target) {
+    function isIncludedRoute(current, target) {
         return (
             current.path.replace(trailingSlashRE, '/').indexOf(
                 target.path.replace(trailingSlashRE, '/')
@@ -331,7 +339,7 @@
         )
     }
 
-    function queryIncludes (current, target) {
+    function queryIncludes(current, target) {
         for (var key in target) {
             if (!(key in current)) {
                 return false
@@ -367,7 +375,7 @@
                 default: 'click'
             }
         },
-        render: function render (h) {
+        render: function render(h) {
             var this$1 = this;
 
             var router = this.$router;
@@ -412,9 +420,11 @@
                 }
             };
 
-            var on = { click: guardEvent };
+            var on = {click: guardEvent};
             if (Array.isArray(this.event)) {
-                this.event.forEach(function (e) { on[e] = handler; });
+                this.event.forEach(function (e) {
+                    on[e] = handler;
+                });
             } else {
                 on[this.event] = handler;
             }
@@ -425,7 +435,7 @@
 
             if (this.tag === 'a') {
                 data.on = on;
-                data.attrs = { href: href };
+                data.attrs = {href: href};
             } else {
                 // find the first <a> child and apply listener and href
                 var a = findAnchor(this.$slots.default);
@@ -447,17 +457,25 @@
         }
     };
 
-    function guardEvent (e) {
+    function guardEvent(e) {
         // don't redirect with control keys
-        if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) { return }
+        if (e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) {
+            return
+        }
         // don't redirect when preventDefault called
-        if (e.defaultPrevented) { return }
+        if (e.defaultPrevented) {
+            return
+        }
         // don't redirect on right click
-        if (e.button !== undefined && e.button !== 0) { return }
+        if (e.button !== undefined && e.button !== 0) {
+            return
+        }
         // don't redirect if `target="_blank"`
         if (e.currentTarget && e.currentTarget.getAttribute) {
             var target = e.currentTarget.getAttribute('target');
-            if (/\b_blank\b/i.test(target)) { return }
+            if (/\b_blank\b/i.test(target)) {
+                return
+            }
         }
         // this may be a Weex event which doesn't have this method
         if (e.preventDefault) {
@@ -466,7 +484,7 @@
         return true
     }
 
-    function findAnchor (children) {
+    function findAnchor(children) {
         if (children) {
             var child;
             for (var i = 0; i < children.length; i++) {
@@ -483,13 +501,17 @@
 
     var _Vue;
 
-    function install (Vue) {
-        if (install.installed) { return }
+    function install(Vue) {
+        if (install.installed) {
+            return
+        }
         install.installed = true;
 
         _Vue = Vue;
 
-        var isDef = function (v) { return v !== undefined; };
+        var isDef = function (v) {
+            return v !== undefined;
+        };
 
         var registerInstance = function (vm, callVal) {
             var i = vm.$options._parentVnode;
@@ -499,7 +521,7 @@
         };
 
         Vue.mixin({
-            beforeCreate: function beforeCreate () {
+            beforeCreate: function beforeCreate() {
                 if (isDef(this.$options.router)) {
                     this._routerRoot = this;
                     this._router = this.$options.router;
@@ -510,17 +532,21 @@
                 }
                 registerInstance(this, this);
             },
-            destroyed: function destroyed () {
+            destroyed: function destroyed() {
                 registerInstance(this);
             }
         });
 
         Object.defineProperty(Vue.prototype, '$router', {
-            get: function get () { return this._routerRoot._router }
+            get: function get() {
+                return this._routerRoot._router
+            }
         });
 
         Object.defineProperty(Vue.prototype, '$route', {
-            get: function get () { return this._routerRoot._route }
+            get: function get() {
+                return this._routerRoot._route
+            }
         });
 
         Vue.component('router-view', View);
@@ -537,7 +563,7 @@
 
     /*  */
 
-    function resolvePath (
+    function resolvePath(
         relative,
         base,
         append
@@ -579,7 +605,7 @@
         return stack.join('/')
     }
 
-    function parsePath (path) {
+    function parsePath(path) {
         var hash = '';
         var query = '';
 
@@ -602,13 +628,13 @@
         }
     }
 
-    function cleanPath (path) {
+    function cleanPath(path) {
         return path.replace(/\/\//g, '/')
     }
 
     var index$1 = Array.isArray || function (arr) {
-            return Object.prototype.toString.call(arr) == '[object Array]';
-        };
+        return Object.prototype.toString.call(arr) == '[object Array]';
+    };
 
     /**
      * Expose `pathToRegexp`.
@@ -644,7 +670,7 @@
      * @param  {Object=} options
      * @return {!Array}
      */
-    function parse (str, options) {
+    function parse(str, options) {
         var tokens = [];
         var key = 0;
         var index = 0;
@@ -717,7 +743,7 @@
      * @param  {Object=}            options
      * @return {!function(Object=, Object=)}
      */
-    function compile (str, options) {
+    function compile(str, options) {
         return tokensToFunction(parse(str, options))
     }
 
@@ -727,7 +753,7 @@
      * @param  {string}
      * @return {string}
      */
-    function encodeURIComponentPretty (str) {
+    function encodeURIComponentPretty(str) {
         return encodeURI(str).replace(/[\/?#]/g, function (c) {
             return '%' + c.charCodeAt(0).toString(16).toUpperCase()
         })
@@ -739,7 +765,7 @@
      * @param  {string}
      * @return {string}
      */
-    function encodeAsterisk (str) {
+    function encodeAsterisk(str) {
         return encodeURI(str).replace(/[?#]/g, function (c) {
             return '%' + c.charCodeAt(0).toString(16).toUpperCase()
         })
@@ -748,7 +774,7 @@
     /**
      * Expose a method for transforming tokens into the path function.
      */
-    function tokensToFunction (tokens) {
+    function tokensToFunction(tokens) {
         // Compile all the tokens into regexps.
         var matches = new Array(tokens.length);
 
@@ -835,7 +861,7 @@
      * @param  {string} str
      * @return {string}
      */
-    function escapeString (str) {
+    function escapeString(str) {
         return str.replace(/([.+*?=^!:${}()[\]|\/\\])/g, '\\$1')
     }
 
@@ -845,7 +871,7 @@
      * @param  {string} group
      * @return {string}
      */
-    function escapeGroup (group) {
+    function escapeGroup(group) {
         return group.replace(/([=!:$\/()])/g, '\\$1')
     }
 
@@ -856,7 +882,7 @@
      * @param  {Array}   keys
      * @return {!RegExp}
      */
-    function attachKeys (re, keys) {
+    function attachKeys(re, keys) {
         re.keys = keys;
         return re
     }
@@ -867,7 +893,7 @@
      * @param  {Object} options
      * @return {string}
      */
-    function flags (options) {
+    function flags(options) {
         return options.sensitive ? '' : 'i'
     }
 
@@ -878,7 +904,7 @@
      * @param  {!Array}  keys
      * @return {!RegExp}
      */
-    function regexpToRegexp (path, keys) {
+    function regexpToRegexp(path, keys) {
         // Use a negative lookahead to match only capturing groups.
         var groups = path.source.match(/\((?!\?)/g);
 
@@ -908,7 +934,7 @@
      * @param  {!Object} options
      * @return {!RegExp}
      */
-    function arrayToRegexp (path, keys, options) {
+    function arrayToRegexp(path, keys, options) {
         var parts = [];
 
         for (var i = 0; i < path.length; i++) {
@@ -928,7 +954,7 @@
      * @param  {!Object} options
      * @return {!RegExp}
      */
-    function stringToRegexp (path, keys, options) {
+    function stringToRegexp(path, keys, options) {
         return tokensToRegExp(parse(path, options), keys, options)
     }
 
@@ -940,7 +966,7 @@
      * @param  {Object=}         options
      * @return {!RegExp}
      */
-    function tokensToRegExp (tokens, keys, options) {
+    function tokensToRegExp(tokens, keys, options) {
         if (!index$1(keys)) {
             options = /** @type {!Object} */ (keys || options);
             keys = [];
@@ -1016,7 +1042,7 @@
      * @param  {Object=}               options
      * @return {!RegExp}
      */
-    function pathToRegexp (path, keys, options) {
+    function pathToRegexp(path, keys, options) {
         if (!index$1(keys)) {
             options = /** @type {!Object} */ (keys || options);
             keys = [];
@@ -1044,7 +1070,7 @@
 
     var regexpCompileCache = Object.create(null);
 
-    function fillParams (
+    function fillParams(
         path,
         params,
         routeMsg
@@ -1053,7 +1079,7 @@
             var filler =
                 regexpCompileCache[path] ||
                 (regexpCompileCache[path] = index.compile(path));
-            return filler(params || {}, { pretty: true })
+            return filler(params || {}, {pretty: true})
         } catch (e) {
             {
                 warn(false, ("missing param for " + routeMsg + ": " + (e.message)));
@@ -1064,7 +1090,7 @@
 
     /*  */
 
-    function createRouteMap (
+    function createRouteMap(
         routes,
         oldPathList,
         oldPathMap,
@@ -1095,7 +1121,7 @@
         }
     }
 
-    function addRouteRecord (
+    function addRouteRecord(
         pathList,
         pathMap,
         nameMap,
@@ -1124,7 +1150,7 @@
         var record = {
             path: normalizedPath,
             regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
-            components: route.components || { default: route.component },
+            components: route.components || {default: route.component},
             instances: {},
             name: name,
             parent: parent,
@@ -1136,7 +1162,7 @@
                 ? {}
                 : route.components
                     ? route.props
-                    : { default: route.props }
+                    : {default: route.props}
         };
 
         if (route.children) {
@@ -1144,7 +1170,9 @@
             // If users navigate to this route by name, the default child will
             // not be rendered (GH Issue #629)
             {
-                if (route.name && !route.redirect && route.children.some(function (child) { return /^\/?$/.test(child.path); })) {
+                if (route.name && !route.redirect && route.children.some(function (child) {
+                    return /^\/?$/.test(child.path);
+                })) {
                     warn(
                         false,
                         "Named Route '" + (route.name) + "' has a default child route. " +
@@ -1202,7 +1230,7 @@
         }
     }
 
-    function compileRouteRegex (path, pathToRegexpOptions) {
+    function compileRouteRegex(path, pathToRegexpOptions) {
         var regex = index(path, [], pathToRegexpOptions);
         {
             var keys = {};
@@ -1214,23 +1242,27 @@
         return regex
     }
 
-    function normalizePath (path, parent) {
+    function normalizePath(path, parent) {
         path = path.replace(/\/$/, '');
-        if (path[0] === '/') { return path }
-        if (parent == null) { return path }
+        if (path[0] === '/') {
+            return path
+        }
+        if (parent == null) {
+            return path
+        }
         return cleanPath(((parent.path) + "/" + path))
     }
 
     /*  */
 
 
-    function normalizeLocation (
+    function normalizeLocation(
         raw,
         current,
         append,
         router
     ) {
-        var next = typeof raw === 'string' ? { path: raw } : raw;
+        var next = typeof raw === 'string' ? {path: raw} : raw;
         // named target
         if (next.name || next._normalized) {
             return next
@@ -1278,7 +1310,7 @@
         }
     }
 
-    function assign (a, b) {
+    function assign(a, b) {
         for (var key in b) {
             a[key] = b[key];
         }
@@ -1288,7 +1320,7 @@
     /*  */
 
 
-    function createMatcher (
+    function createMatcher(
         routes,
         router
     ) {
@@ -1297,11 +1329,11 @@
         var pathMap = ref.pathMap;
         var nameMap = ref.nameMap;
 
-        function addRoutes (routes) {
+        function addRoutes(routes) {
             createRouteMap(routes, pathList, pathMap, nameMap);
         }
 
-        function match (
+        function match(
             raw,
             currentRoute,
             redirectedFrom
@@ -1314,10 +1346,16 @@
                 {
                     warn(record, ("Route with name '" + name + "' does not exist"));
                 }
-                if (!record) { return _createRoute(null, location) }
+                if (!record) {
+                    return _createRoute(null, location)
+                }
                 var paramNames = record.regex.keys
-                    .filter(function (key) { return !key.optional; })
-                    .map(function (key) { return key.name; });
+                    .filter(function (key) {
+                        return !key.optional;
+                    })
+                    .map(function (key) {
+                        return key.name;
+                    });
 
                 if (typeof location.params !== 'object') {
                     location.params = {};
@@ -1349,7 +1387,7 @@
             return _createRoute(null, location)
         }
 
-        function redirect (
+        function redirect(
             record,
             location
         ) {
@@ -1359,7 +1397,7 @@
                 : originalRedirect;
 
             if (typeof redirect === 'string') {
-                redirect = { path: redirect };
+                redirect = {path: redirect};
             }
 
             if (!redirect || typeof redirect !== 'object') {
@@ -1414,7 +1452,7 @@
             }
         }
 
-        function alias (
+        function alias(
             record,
             location,
             matchAs
@@ -1433,7 +1471,7 @@
             return _createRoute(null, location)
         }
 
-        function _createRoute (
+        function _createRoute(
             record,
             location,
             redirectedFrom
@@ -1453,7 +1491,7 @@
         }
     }
 
-    function matchRoute (
+    function matchRoute(
         regex,
         path,
         params
@@ -1477,7 +1515,7 @@
         return true
     }
 
-    function resolveRecordPath (path, record) {
+    function resolveRecordPath(path, record) {
         return resolvePath(path, record.parent ? record.parent.path : '/', true)
     }
 
@@ -1486,7 +1524,7 @@
 
     var positionStore = Object.create(null);
 
-    function setupScroll () {
+    function setupScroll() {
         window.addEventListener('popstate', function (e) {
             saveScrollPosition();
             if (e.state && e.state.key) {
@@ -1495,7 +1533,7 @@
         });
     }
 
-    function handleScroll (
+    function handleScroll(
         router,
         to,
         from,
@@ -1541,7 +1579,7 @@
         });
     }
 
-    function saveScrollPosition () {
+    function saveScrollPosition() {
         var key = getStateKey();
         if (key) {
             positionStore[key] = {
@@ -1551,14 +1589,14 @@
         }
     }
 
-    function getScrollPosition () {
+    function getScrollPosition() {
         var key = getStateKey();
         if (key) {
             return positionStore[key]
         }
     }
 
-    function getElementPosition (el, offset) {
+    function getElementPosition(el, offset) {
         var docEl = document.documentElement;
         var docRect = docEl.getBoundingClientRect();
         var elRect = el.getBoundingClientRect();
@@ -1568,44 +1606,44 @@
         }
     }
 
-    function isValidPosition (obj) {
+    function isValidPosition(obj) {
         return isNumber(obj.x) || isNumber(obj.y)
     }
 
-    function normalizePosition (obj) {
+    function normalizePosition(obj) {
         return {
             x: isNumber(obj.x) ? obj.x : window.pageXOffset,
             y: isNumber(obj.y) ? obj.y : window.pageYOffset
         }
     }
 
-    function normalizeOffset (obj) {
+    function normalizeOffset(obj) {
         return {
             x: isNumber(obj.x) ? obj.x : 0,
             y: isNumber(obj.y) ? obj.y : 0
         }
     }
 
-    function isNumber (v) {
+    function isNumber(v) {
         return typeof v === 'number'
     }
 
     /*  */
 
     var supportsPushState = inBrowser && (function () {
-            var ua = window.navigator.userAgent;
+        var ua = window.navigator.userAgent;
 
-            if (
-                (ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) &&
-                ua.indexOf('Mobile Safari') !== -1 &&
-                ua.indexOf('Chrome') === -1 &&
-                ua.indexOf('Windows Phone') === -1
-            ) {
-                return false
-            }
+        if (
+            (ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) &&
+            ua.indexOf('Mobile Safari') !== -1 &&
+            ua.indexOf('Chrome') === -1 &&
+            ua.indexOf('Windows Phone') === -1
+        ) {
+            return false
+        }
 
-            return window.history && 'pushState' in window.history
-        })();
+        return window.history && 'pushState' in window.history
+    })();
 
 // use User Timing api (if present) for more accurate key precision
     var Time = inBrowser && window.performance && window.performance.now
@@ -1614,42 +1652,42 @@
 
     var _key = genKey();
 
-    function genKey () {
+    function genKey() {
         return Time.now().toFixed(3)
     }
 
-    function getStateKey () {
+    function getStateKey() {
         return _key
     }
 
-    function setStateKey (key) {
+    function setStateKey(key) {
         _key = key;
     }
 
-    function pushState (url, replace) {
+    function pushState(url, replace) {
         saveScrollPosition();
         // try...catch the pushState call to get around Safari
         // DOM Exception 18 where it limits to 100 pushState calls
         var history = window.history;
         try {
             if (replace) {
-                history.replaceState({ key: _key }, '', url);
+                history.replaceState({key: _key}, '', url);
             } else {
                 _key = genKey();
-                history.pushState({ key: _key }, '', url);
+                history.pushState({key: _key}, '', url);
             }
         } catch (e) {
             window.location[replace ? 'replace' : 'assign'](url);
         }
     }
 
-    function replaceState (url) {
+    function replaceState(url) {
         pushState(url, true);
     }
 
     /*  */
 
-    function runQueue (queue, fn, cb) {
+    function runQueue(queue, fn, cb) {
         var step = function (index) {
             if (index >= queue.length) {
                 cb();
@@ -1668,7 +1706,7 @@
 
     /*  */
 
-    function resolveAsyncComponents (matched) {
+    function resolveAsyncComponents(matched) {
         return function (to, from, next) {
             var hasAsync = false;
             var pending = 0;
@@ -1730,24 +1768,28 @@
                 }
             });
 
-            if (!hasAsync) { next(); }
+            if (!hasAsync) {
+                next();
+            }
         }
     }
 
-    function flatMapComponents (
+    function flatMapComponents(
         matched,
         fn
     ) {
         return flatten(matched.map(function (m) {
-            return Object.keys(m.components).map(function (key) { return fn(
-                m.components[key],
-                m.instances[key],
-                m, key
-            ); })
+            return Object.keys(m.components).map(function (key) {
+                return fn(
+                    m.components[key],
+                    m.instances[key],
+                    m, key
+                );
+            })
         }))
     }
 
-    function flatten (arr) {
+    function flatten(arr) {
         return Array.prototype.concat.apply([], arr)
     }
 
@@ -1755,13 +1797,15 @@
 // so the resolve/reject functions may get called an extra time
 // if the user uses an arrow function shorthand that happens to
 // return that Promise.
-    function once (fn) {
+    function once(fn) {
         var called = false;
         return function () {
             var args = [], len = arguments.length;
-            while ( len-- ) args[ len ] = arguments[ len ];
+            while (len--) args[len] = arguments[len];
 
-            if (called) { return }
+            if (called) {
+                return
+            }
             called = true;
             return fn.apply(this, args)
         }
@@ -1769,7 +1813,7 @@
 
     /*  */
 
-    var History = function History (router, base) {
+    var History = function History(router, base) {
         this.router = router;
         this.base = normalizeBase(base);
         // start with a route object that stands for "nowhere"
@@ -1781,11 +1825,11 @@
         this.errorCbs = [];
     };
 
-    History.prototype.listen = function listen (cb) {
+    History.prototype.listen = function listen(cb) {
         this.cb = cb;
     };
 
-    History.prototype.onReady = function onReady (cb, errorCb) {
+    History.prototype.onReady = function onReady(cb, errorCb) {
         if (this.ready) {
             cb();
         } else {
@@ -1796,11 +1840,11 @@
         }
     };
 
-    History.prototype.onError = function onError (errorCb) {
+    History.prototype.onError = function onError(errorCb) {
         this.errorCbs.push(errorCb);
     };
 
-    History.prototype.transitionTo = function transitionTo (location, onComplete, onAbort) {
+    History.prototype.transitionTo = function transitionTo(location, onComplete, onAbort) {
         var this$1 = this;
 
         var route = this.router.match(location, this.current);
@@ -1812,7 +1856,9 @@
             // fire ready cbs once
             if (!this$1.ready) {
                 this$1.ready = true;
-                this$1.readyCbs.forEach(function (cb) { cb(route); });
+                this$1.readyCbs.forEach(function (cb) {
+                    cb(route);
+                });
             }
         }, function (err) {
             if (onAbort) {
@@ -1820,19 +1866,23 @@
             }
             if (err && !this$1.ready) {
                 this$1.ready = true;
-                this$1.readyErrorCbs.forEach(function (cb) { cb(err); });
+                this$1.readyErrorCbs.forEach(function (cb) {
+                    cb(err);
+                });
             }
         });
     };
 
-    History.prototype.confirmTransition = function confirmTransition (route, onComplete, onAbort) {
+    History.prototype.confirmTransition = function confirmTransition(route, onComplete, onAbort) {
         var this$1 = this;
 
         var current = this.current;
         var abort = function (err) {
             if (isError(err)) {
                 if (this$1.errorCbs.length) {
-                    this$1.errorCbs.forEach(function (cb) { cb(err); });
+                    this$1.errorCbs.forEach(function (cb) {
+                        cb(err);
+                    });
                 } else {
                     warn(false, 'uncaught error during route navigation:');
                     console.error(err);
@@ -1862,7 +1912,9 @@
             // in-component update hooks
             extractUpdateHooks(updated),
             // in-config enter guards
-            activated.map(function (m) { return m.beforeEnter; }),
+            activated.map(function (m) {
+                return m.beforeEnter;
+            }),
             // async components
             resolveAsyncComponents(activated)
         );
@@ -1904,7 +1956,9 @@
 
         runQueue(queue, iterator, function () {
             var postEnterCbs = [];
-            var isValid = function () { return this$1.current === route; };
+            var isValid = function () {
+                return this$1.current === route;
+            };
             // wait until async components are resolved before
             // extracting in-component enter guards
             var enterGuards = extractEnterGuards(activated, postEnterCbs, isValid);
@@ -1917,14 +1971,16 @@
                 onComplete(route);
                 if (this$1.router.app) {
                     this$1.router.app.$nextTick(function () {
-                        postEnterCbs.forEach(function (cb) { cb(); });
+                        postEnterCbs.forEach(function (cb) {
+                            cb();
+                        });
                     });
                 }
             });
         });
     };
 
-    History.prototype.updateRoute = function updateRoute (route) {
+    History.prototype.updateRoute = function updateRoute(route) {
         var prev = this.current;
         this.current = route;
         this.cb && this.cb(route);
@@ -1933,7 +1989,7 @@
         });
     };
 
-    function normalizeBase (base) {
+    function normalizeBase(base) {
         if (!base) {
             if (inBrowser) {
                 // respect <base> tag
@@ -1953,7 +2009,7 @@
         return base.replace(/\/$/, '')
     }
 
-    function resolveQueue (
+    function resolveQueue(
         current,
         next
     ) {
@@ -1971,7 +2027,7 @@
         }
     }
 
-    function extractGuards (
+    function extractGuards(
         records,
         name,
         bind,
@@ -1981,14 +2037,16 @@
             var guard = extractGuard(def, name);
             if (guard) {
                 return Array.isArray(guard)
-                    ? guard.map(function (guard) { return bind(guard, instance, match, key); })
+                    ? guard.map(function (guard) {
+                        return bind(guard, instance, match, key);
+                    })
                     : bind(guard, instance, match, key)
             }
         });
         return flatten(reverse ? guards.reverse() : guards)
     }
 
-    function extractGuard (
+    function extractGuard(
         def,
         key
     ) {
@@ -1999,23 +2057,23 @@
         return def.options[key]
     }
 
-    function extractLeaveGuards (deactivated) {
+    function extractLeaveGuards(deactivated) {
         return extractGuards(deactivated, 'beforeRouteLeave', bindGuard, true)
     }
 
-    function extractUpdateHooks (updated) {
+    function extractUpdateHooks(updated) {
         return extractGuards(updated, 'beforeRouteUpdate', bindGuard)
     }
 
-    function bindGuard (guard, instance) {
+    function bindGuard(guard, instance) {
         if (instance) {
-            return function boundRouteGuard () {
+            return function boundRouteGuard() {
                 return guard.apply(instance, arguments)
             }
         }
     }
 
-    function extractEnterGuards (
+    function extractEnterGuards(
         activated,
         cbs,
         isValid
@@ -2025,14 +2083,14 @@
         })
     }
 
-    function bindEnterGuard (
+    function bindEnterGuard(
         guard,
         match,
         key,
         cbs,
         isValid
     ) {
-        return function routeEnterGuard (to, from, next) {
+        return function routeEnterGuard(to, from, next) {
             return guard(to, from, function (cb) {
                 next(cb);
                 if (typeof cb === 'function') {
@@ -2049,7 +2107,7 @@
         }
     }
 
-    function poll (
+    function poll(
         cb, // somehow flow cannot infer this is a function
         instances,
         key,
@@ -2068,7 +2126,7 @@
 
 
     var HTML5History = (function (History$$1) {
-        function HTML5History (router, base) {
+        function HTML5History(router, base) {
             var this$1 = this;
 
             History$$1.call(this, router, base);
@@ -2089,15 +2147,15 @@
             });
         }
 
-        if ( History$$1 ) HTML5History.__proto__ = History$$1;
-        HTML5History.prototype = Object.create( History$$1 && History$$1.prototype );
+        if (History$$1) HTML5History.__proto__ = History$$1;
+        HTML5History.prototype = Object.create(History$$1 && History$$1.prototype);
         HTML5History.prototype.constructor = HTML5History;
 
-        HTML5History.prototype.go = function go (n) {
+        HTML5History.prototype.go = function go(n) {
             window.history.go(n);
         };
 
-        HTML5History.prototype.push = function push (location, onComplete, onAbort) {
+        HTML5History.prototype.push = function push(location, onComplete, onAbort) {
             var this$1 = this;
 
             var ref = this;
@@ -2109,7 +2167,7 @@
             }, onAbort);
         };
 
-        HTML5History.prototype.replace = function replace (location, onComplete, onAbort) {
+        HTML5History.prototype.replace = function replace(location, onComplete, onAbort) {
             var this$1 = this;
 
             var ref = this;
@@ -2121,21 +2179,21 @@
             }, onAbort);
         };
 
-        HTML5History.prototype.ensureURL = function ensureURL (push) {
+        HTML5History.prototype.ensureURL = function ensureURL(push) {
             if (getLocation(this.base) !== this.current.fullPath) {
                 var current = cleanPath(this.base + this.current.fullPath);
                 push ? pushState(current) : replaceState(current);
             }
         };
 
-        HTML5History.prototype.getCurrentLocation = function getCurrentLocation () {
+        HTML5History.prototype.getCurrentLocation = function getCurrentLocation() {
             return getLocation(this.base)
         };
 
         return HTML5History;
     }(History));
 
-    function getLocation (base) {
+    function getLocation(base) {
         var path = window.location.pathname;
         if (base && path.indexOf(base) === 0) {
             path = path.slice(base.length);
@@ -2147,7 +2205,7 @@
 
 
     var HashHistory = (function (History$$1) {
-        function HashHistory (router, base, fallback) {
+        function HashHistory(router, base, fallback) {
             History$$1.call(this, router, base);
             // check history fallback deeplinking
             if (fallback && checkFallback(this.base)) {
@@ -2156,13 +2214,13 @@
             ensureSlash();
         }
 
-        if ( History$$1 ) HashHistory.__proto__ = History$$1;
-        HashHistory.prototype = Object.create( History$$1 && History$$1.prototype );
+        if (History$$1) HashHistory.__proto__ = History$$1;
+        HashHistory.prototype = Object.create(History$$1 && History$$1.prototype);
         HashHistory.prototype.constructor = HashHistory;
 
         // this is delayed until the app mounts
         // to avoid the hashchange listener being fired too early
-        HashHistory.prototype.setupListeners = function setupListeners () {
+        HashHistory.prototype.setupListeners = function setupListeners() {
             var this$1 = this;
 
             window.addEventListener('hashchange', function () {
@@ -2175,39 +2233,39 @@
             });
         };
 
-        HashHistory.prototype.push = function push (location, onComplete, onAbort) {
+        HashHistory.prototype.push = function push(location, onComplete, onAbort) {
             this.transitionTo(location, function (route) {
                 pushHash(route.fullPath);
                 onComplete && onComplete(route);
             }, onAbort);
         };
 
-        HashHistory.prototype.replace = function replace (location, onComplete, onAbort) {
+        HashHistory.prototype.replace = function replace(location, onComplete, onAbort) {
             this.transitionTo(location, function (route) {
                 replaceHash(route.fullPath);
                 onComplete && onComplete(route);
             }, onAbort);
         };
 
-        HashHistory.prototype.go = function go (n) {
+        HashHistory.prototype.go = function go(n) {
             window.history.go(n);
         };
 
-        HashHistory.prototype.ensureURL = function ensureURL (push) {
+        HashHistory.prototype.ensureURL = function ensureURL(push) {
             var current = this.current.fullPath;
             if (getHash() !== current) {
                 push ? pushHash(current) : replaceHash(current);
             }
         };
 
-        HashHistory.prototype.getCurrentLocation = function getCurrentLocation () {
+        HashHistory.prototype.getCurrentLocation = function getCurrentLocation() {
             return getHash()
         };
 
         return HashHistory;
     }(History));
 
-    function checkFallback (base) {
+    function checkFallback(base) {
         var location = getLocation(base);
         if (!/^\/#/.test(location)) {
             window.location.replace(
@@ -2217,7 +2275,7 @@
         }
     }
 
-    function ensureSlash () {
+    function ensureSlash() {
         var path = getHash();
         if (path.charAt(0) === '/') {
             return true
@@ -2226,7 +2284,7 @@
         return false
     }
 
-    function getHash () {
+    function getHash() {
         // We can't use window.location.hash here because it's not
         // consistent across browsers - Firefox will pre-decode it!
         var href = window.location.href;
@@ -2234,11 +2292,11 @@
         return index === -1 ? '' : href.slice(index + 1)
     }
 
-    function pushHash (path) {
+    function pushHash(path) {
         window.location.hash = path;
     }
 
-    function replaceHash (path) {
+    function replaceHash(path) {
         var href = window.location.href;
         var i = href.indexOf('#');
         var base = i >= 0 ? href.slice(0, i) : href;
@@ -2249,17 +2307,17 @@
 
 
     var AbstractHistory = (function (History$$1) {
-        function AbstractHistory (router, base) {
+        function AbstractHistory(router, base) {
             History$$1.call(this, router, base);
             this.stack = [];
             this.index = -1;
         }
 
-        if ( History$$1 ) AbstractHistory.__proto__ = History$$1;
-        AbstractHistory.prototype = Object.create( History$$1 && History$$1.prototype );
+        if (History$$1) AbstractHistory.__proto__ = History$$1;
+        AbstractHistory.prototype = Object.create(History$$1 && History$$1.prototype);
         AbstractHistory.prototype.constructor = AbstractHistory;
 
-        AbstractHistory.prototype.push = function push (location, onComplete, onAbort) {
+        AbstractHistory.prototype.push = function push(location, onComplete, onAbort) {
             var this$1 = this;
 
             this.transitionTo(location, function (route) {
@@ -2269,7 +2327,7 @@
             }, onAbort);
         };
 
-        AbstractHistory.prototype.replace = function replace (location, onComplete, onAbort) {
+        AbstractHistory.prototype.replace = function replace(location, onComplete, onAbort) {
             var this$1 = this;
 
             this.transitionTo(location, function (route) {
@@ -2278,7 +2336,7 @@
             }, onAbort);
         };
 
-        AbstractHistory.prototype.go = function go (n) {
+        AbstractHistory.prototype.go = function go(n) {
             var this$1 = this;
 
             var targetIndex = this.index + n;
@@ -2292,12 +2350,12 @@
             });
         };
 
-        AbstractHistory.prototype.getCurrentLocation = function getCurrentLocation () {
+        AbstractHistory.prototype.getCurrentLocation = function getCurrentLocation() {
             var current = this.stack[this.stack.length - 1];
             return current ? current.fullPath : '/'
         };
 
-        AbstractHistory.prototype.ensureURL = function ensureURL () {
+        AbstractHistory.prototype.ensureURL = function ensureURL() {
             // noop
         };
 
@@ -2306,8 +2364,8 @@
 
     /*  */
 
-    var VueRouter = function VueRouter (options) {
-        if ( options === void 0 ) options = {};
+    var VueRouter = function VueRouter(options) {
+        if (options === void 0) options = {};
 
         this.app = null;
         this.apps = [];
@@ -2337,16 +2395,15 @@
             case 'abstract':
                 this.history = new AbstractHistory(this, options.base);
                 break
-            default:
-            {
+            default: {
                 assert(false, ("invalid mode: " + mode));
             }
         }
     };
 
-    var prototypeAccessors = { currentRoute: {} };
+    var prototypeAccessors = {currentRoute: {}};
 
-    VueRouter.prototype.match = function match (
+    VueRouter.prototype.match = function match(
         raw,
         current,
         redirectedFrom
@@ -2358,7 +2415,7 @@
         return this.history && this.history.current
     };
 
-    VueRouter.prototype.init = function init (app /* Vue component instance */) {
+    VueRouter.prototype.init = function init(app /* Vue component instance */) {
         var this$1 = this;
 
         "development" !== 'production' && assert(
@@ -2398,47 +2455,47 @@
         });
     };
 
-    VueRouter.prototype.beforeEach = function beforeEach (fn) {
+    VueRouter.prototype.beforeEach = function beforeEach(fn) {
         return registerHook(this.beforeHooks, fn)
     };
 
-    VueRouter.prototype.beforeResolve = function beforeResolve (fn) {
+    VueRouter.prototype.beforeResolve = function beforeResolve(fn) {
         return registerHook(this.resolveHooks, fn)
     };
 
-    VueRouter.prototype.afterEach = function afterEach (fn) {
+    VueRouter.prototype.afterEach = function afterEach(fn) {
         return registerHook(this.afterHooks, fn)
     };
 
-    VueRouter.prototype.onReady = function onReady (cb, errorCb) {
+    VueRouter.prototype.onReady = function onReady(cb, errorCb) {
         this.history.onReady(cb, errorCb);
     };
 
-    VueRouter.prototype.onError = function onError (errorCb) {
+    VueRouter.prototype.onError = function onError(errorCb) {
         this.history.onError(errorCb);
     };
 
-    VueRouter.prototype.push = function push (location, onComplete, onAbort) {
+    VueRouter.prototype.push = function push(location, onComplete, onAbort) {
         this.history.push(location, onComplete, onAbort);
     };
 
-    VueRouter.prototype.replace = function replace (location, onComplete, onAbort) {
+    VueRouter.prototype.replace = function replace(location, onComplete, onAbort) {
         this.history.replace(location, onComplete, onAbort);
     };
 
-    VueRouter.prototype.go = function go (n) {
+    VueRouter.prototype.go = function go(n) {
         this.history.go(n);
     };
 
-    VueRouter.prototype.back = function back () {
+    VueRouter.prototype.back = function back() {
         this.go(-1);
     };
 
-    VueRouter.prototype.forward = function forward () {
+    VueRouter.prototype.forward = function forward() {
         this.go(1);
     };
 
-    VueRouter.prototype.getMatchedComponents = function getMatchedComponents (to) {
+    VueRouter.prototype.getMatchedComponents = function getMatchedComponents(to) {
         var route = to
             ? to.matched
                 ? to
@@ -2454,7 +2511,7 @@
         }))
     };
 
-    VueRouter.prototype.resolve = function resolve (
+    VueRouter.prototype.resolve = function resolve(
         to,
         current,
         append
@@ -2479,24 +2536,26 @@
         }
     };
 
-    VueRouter.prototype.addRoutes = function addRoutes (routes) {
+    VueRouter.prototype.addRoutes = function addRoutes(routes) {
         this.matcher.addRoutes(routes);
         if (this.history.current !== START) {
             this.history.transitionTo(this.history.getCurrentLocation());
         }
     };
 
-    Object.defineProperties( VueRouter.prototype, prototypeAccessors );
+    Object.defineProperties(VueRouter.prototype, prototypeAccessors);
 
-    function registerHook (list, fn) {
+    function registerHook(list, fn) {
         list.push(fn);
         return function () {
             var i = list.indexOf(fn);
-            if (i > -1) { list.splice(i, 1); }
+            if (i > -1) {
+                list.splice(i, 1);
+            }
         }
     }
 
-    function createHref (base, fullPath, mode) {
+    function createHref(base, fullPath, mode) {
         var path = mode === 'hash' ? '#' + fullPath : fullPath;
         return base ? cleanPath(base + '/' + path) : path
     }

@@ -48,7 +48,7 @@ document.writeln("        </ul>");
 document.writeln("        <ul class=\'ul-login\'>");
 document.writeln("            <img src=\'/static/images/login.png\' alt=\'\' onclick=\'<!--goLogin()-->\' class=\'img-photo\'>");
 document.writeln("            <li onclick=\'goLogin()\' class=\'li-login none\'>登录</li>");
-document.writeln("            <li onclick=\'goRegister()\' class=\'li-register none\'>注册</li>");
+// document.writeln("            <li onclick=\'goRegister()\' class=\'li-register none\'>注册</li>");
 document.writeln("            <li onclick=\'logout()\' class=\'li-logout none\'>退出</li>");
 document.writeln("        </ul>");
 document.writeln("        </ul>");

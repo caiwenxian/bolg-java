@@ -3,6 +3,7 @@
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.springframework.org/schema/beans"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/tx
@@ -10,8 +11,9 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
     <import resource="classpath:spring-mybatis.xml"/>
+    <import resource="classpath:application-activemq.xml"/>
     <!-- <import resource="classpath:spring/lifedf-component.xml"/> -->
     <!-- <aop:aspectj-autoproxy /> -->
     <!--通知spring使用cglib而不是jdk的来生成代理方法,使AOP可以拦截到Controller层 <context:component-scan 
@@ -19,13 +21,12 @@
     <!--<aop:aspectj-autoproxy proxy-target-class="true" />-->
 
     <!-- 引入属性文件 -->
-    <context:property-placeholder location="classpath*:*onfig.properties" />
+    <context:property-placeholder location="classpath*:*onfig.properties"/>
 
     <!-- 自动扫描(自动注入) -->
-    <context:component-scan base-package="service.*" />
-    <context:component-scan base-package="dao.*" />
-    <context:component-scan base-package="utils.*" />
-
+    <context:component-scan base-package="service.*"/>
+    <context:component-scan base-package="dao.*"/>
+    <context:component-scan base-package="utils.*"/>
 
 
     <!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" order="1"/>
@@ -75,20 +76,25 @@
 
 
     <!-- 配置druid监控spring jdbc -->
-   <!-- <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
-    </bean>
+    <!-- <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+     </bean>
 
-    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:spring-ehcache.xml"/>
-    </bean>
+     <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+         <property name="configLocation" value="classpath:spring-ehcache.xml"/>
+     </bean>
 
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-        <property name="cacheManager" ref="ehcache"/>
-    </bean>
+     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+         <property name="cacheManager" ref="ehcache"/>
+     </bean>
 
-    &lt;!&ndash; 启用缓存注解开关 &ndash;&gt;
-    <cache:annotation-driven cache-manager="cacheManager"/>-->
+     &lt;!&ndash; 启用缓存注解开关 &ndash;&gt;
+     <cache:annotation-driven cache-manager="cacheManager"/>-->
 
-
+    <import resource="rabbitMQ-config.xml"/>
+    <!--创建消息队列模板-->
+    <rabbit:template id="rabbitTemplate" connection-factory="connectionFactory"
+                     exchange="spittle.fanout" message-converter="jsonMessageConverter">
+    </rabbit:template>
+    <bean id="jsonMessageConverter" class="org.springframework.amqp.support.converter.JsonMessageConverter"></bean>
 
 </beans>

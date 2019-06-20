@@ -11,7 +11,7 @@ import java.util.List;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class BaseDTO implements Serializable{
+public class BaseDTO implements Serializable {
 
     private static final long serialVersionUID = -3558525794931360478L;
 

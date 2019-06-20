@@ -9,7 +9,7 @@ import model.po.common.BasePO;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class SongListDetailsPO extends BasePO{
+public class SongListDetailsPO extends BasePO {
 
     /**
      * 歌单id
@@ -27,7 +27,8 @@ public class SongListDetailsPO extends BasePO{
     private Integer num;
 
 
-    public SongListDetailsPO(){}
+    public SongListDetailsPO() {
+    }
 
     public SongListDetailsPO(String songListId, String songId, Integer num) {
         this.songListId = songListId;

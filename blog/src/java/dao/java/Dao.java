@@ -9,16 +9,18 @@ import java.util.Map;
 
 /**
  * 公共数据库操作层
+ *
+ * @param <T>  实体PO类型
+ * @param <PK> PO主键类型
  * @author 郭胜凯
  * @time 2016年5月3日下午2:55:13
  * @email 719348277@qq.com
- * @param <T> 实体PO类型
- * @param <PK> PO主键类型
  */
 public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 添加不为空的记录（只将不为空字段入库，效率高）
+     *
      * @param po
      * @return 受改变的记录数
      */
@@ -26,6 +28,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 记录添加（所有字段入库，效率中）
+     *
      * @param po
      * @return
      */
@@ -33,6 +36,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 通过主键获取某个记录
+     *
      * @param id 主键
      * @return PO
      */
@@ -40,6 +44,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 通过主键获取某个字段的值
+     *
      * @param id
      * @param fileName
      * @return
@@ -48,6 +53,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 条件获取一条记录
+     *
      * @param where
      * @return PO
      */
@@ -55,6 +61,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 条件获取某个记录字段
+     *
      * @param where
      * @param fileName
      * @return
@@ -63,6 +70,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 条件查询列表
+     *
      * @param where 条件表达式
      * @return PO列表
      */
@@ -70,7 +78,8 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 查询某个字段列表
-     * @param where 条件表达式
+     *
+     * @param where    条件表达式
      * @param fileName 要查询的字段
      * @return
      */
@@ -78,6 +87,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 查询某些字段
+     *
      * @param where 条件表达式
      * @param files 要查询的字段集
      * @return 查询的PO字段列表
@@ -86,6 +96,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 更新不为null的PO字段
+     *
      * @param po
      * @return 受影响的行数
      */
@@ -93,6 +104,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 更新PO的所有字段
+     *
      * @param po
      * @return 受影响的行数
      */
@@ -100,6 +112,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 条件更新不为null的字段
+     *
      * @param po
      * @param where
      * @return 受影响的行数
@@ -108,6 +121,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 条件更新所有字段
+     *
      * @param po
      * @param where
      * @return 受影响的行数
@@ -116,6 +130,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 删除某个记录
+     *
      * @param id 主键
      * @return 受影响的行数
      */
@@ -123,6 +138,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 条件删除某个记录
+     *
      * @param where 条件表达式
      * @return 受影响的行数
      */
@@ -130,6 +146,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 自定义sql查询
+     *
      * @param sql 用于执行查询的Sql
      * @return 结果集合
      */
@@ -137,6 +154,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 执行自定义sql
+     *
      * @param sql 用于执行的Sql
      * @return 受影响的行数
      */
@@ -144,6 +162,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 获取指定条件的记录数
+     *
      * @param where 条件表达式
      * @return 查询到的记录数
      */
@@ -151,12 +170,14 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 获取对应表中的记录数
+     *
      * @return 表中的条数
      */
     public long size();
 
     /**
      * 是否存在字段相同的记录（ID以及不为空的字段除外）
+     *
      * @param po 参照实体
      * @return
      */
@@ -164,6 +185,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 是否存在指定条件的记录
+     *
      * @param where 条件表达式
      * @return
      */
@@ -171,14 +193,16 @@ public interface Dao<T extends Po, PK extends Serializable> {
 
     /**
      * 内查询
+     *
      * @param fileName 用于内查询的字段
-     * @param values 字段的值
+     * @param values   字段的值
      * @return 查询到的结果集
      */
     public List<T> in(String fileName, Serializable[] values);
 
     /**
      * 获得下一个序列的值
+     *
      * @return
      */
     public long nextId();

@@ -163,12 +163,16 @@ public class SongServiceImpl implements ISongService {
 
     @Override
     public void addSongList(SongListPO po) throws SerException {
-        SongListPO old = songDao.getSongListBySongListId(po.getSongListId());
-        if (old != null) {
-            return;
+        try {
+            SongListPO old = songDao.getSongListBySongListId(po.getSongListId());
+            if (old != null) {
+                return;
+            }
+            po.setId(RandomUtil.getUid());
+            songDao.addSongList(po);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        po.setId(RandomUtil.getUid());
-        songDao.addSongList(po);
     }
 
     @Override

@@ -124,7 +124,7 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
         pramList.add(new Pram("id", RandomUtil.getUid()));
         for (int i = 0; i < pramList.size(); i++) {
             if ("createTime".equals(pramList.get(i).getFile()) || "modifyTime".equals(pramList.get(i).getFile())) {
-                    pramList.get(i).setValue(LocalDateTime.now());
+                pramList.get(i).setValue(LocalDateTime.now());
             }
             prams += pramList.get(i).getFile();
             if (pramList.get(i).getValue() == null) {
@@ -339,7 +339,7 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
                 Object value = prams.get(i).getValue();
                 if (value instanceof byte[]) {
                     sql += "'" + new String((byte[]) value) + "'";
-                } else if (value instanceof String) {
+                } else if (value instanceof String || value instanceof LocalDateTime) {
                     sql += "'" + value + "'";
                 } else {
                     sql += value;
@@ -349,7 +349,7 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
                 if (i < prams.size() - 1) {
                     sql += ",";
                 }
-                len ++;
+                len++;
             }
         }
 //        if (len < prams.size()) {

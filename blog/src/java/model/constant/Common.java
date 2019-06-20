@@ -2,6 +2,7 @@ package model.constant;
 
 /**
  * 通用常量
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-02-07 11:44]
  * @Description: [ ]
@@ -19,9 +20,6 @@ public class Common {
      * 分页limit
      */
     public final static int PAGE_LIMIT = 20;
-
-
-
 
 
 }

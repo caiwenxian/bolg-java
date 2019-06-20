@@ -12,7 +12,7 @@ import model.po.common.BasePO;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
-public class ArticleVO extends BasePO{
+public class ArticleVO extends BasePO {
 
     private String content;
 
@@ -30,7 +30,8 @@ public class ArticleVO extends BasePO{
 
     private Integer commentAmount;
 
-    public ArticleVO(){}
+    public ArticleVO() {
+    }
 
     public ArticleVO(String content) {
         this.content = content;

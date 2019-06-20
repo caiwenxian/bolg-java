@@ -45,7 +45,7 @@
 
     <!-- Web 项目 Spring 加载 Log4j 的监听 -->
     <listener>
-    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
     <!-- ehcache持久化监听tomcat关闭 -->
     <!--<listener>

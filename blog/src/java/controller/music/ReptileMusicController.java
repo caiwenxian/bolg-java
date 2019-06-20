@@ -23,6 +23,7 @@ import service.music.reptile.IReptileSongService;
 
 /**
  * 爬取业务
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-01-31 17:03]
  * @Description: [ ]
@@ -68,7 +69,7 @@ public class ReptileMusicController {
      */
     @GetMapping("/top-song/{name}")
     @ResponseBody
-    public Result reptileTopByTopType (@PathVariable String name) {
+    public Result reptileTopByTopType(@PathVariable String name) {
 
         TopListDTO topListDTO = new TopListDTO();
         TopListType topListType = TopListType.topListType(name);
@@ -94,7 +95,7 @@ public class ReptileMusicController {
      */
     @GetMapping("/tops-song")
     @ResponseBody
-    public Result reptileTopByTopType (String[] names) {
+    public Result reptileTopByTopType(String[] names) {
 
         try {
             for (String name : names) {
@@ -119,7 +120,7 @@ public class ReptileMusicController {
      */
     @GetMapping("/hot-artist")
     @ResponseBody
-    public Result reptileTopByTopType () {
+    public Result reptileTopByTopType() {
 
         try {
             reptileArtistService.reptileHotArtist(100);
@@ -139,7 +140,7 @@ public class ReptileMusicController {
      */
     @GetMapping("/artist/{name}")
     @ResponseBody
-    public Result reptileArtist (@PathVariable String name) {
+    public Result reptileArtist(@PathVariable String name) {
 
         try {
             reptileArtistService.reptileArtist(name);
@@ -159,12 +160,13 @@ public class ReptileMusicController {
      */
     @GetMapping("/songlist-recommend/{offset}/{limit}")
     @ResponseBody
-    public Result reptileRecommendSongList (@PathVariable Integer offset, @PathVariable Integer limit) {
+    public Result reptileRecommendSongList(@PathVariable Integer offset, @PathVariable Integer limit) {
 
         try {
             reptileSongService.reptileRecommendSongList(offset, limit);
             return ActResult.success("success");
         } catch (SerException e) {
+            e.printStackTrace();
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());
         }
 
@@ -179,7 +181,7 @@ public class ReptileMusicController {
      */
     @GetMapping("/search/songlist/{keyword}")
     @ResponseBody
-    public Result reptileSongList (@PathVariable String keyword) {
+    public Result reptileSongList(@PathVariable String keyword) {
 
         try {
             MusicDTO musicDTO = new MusicDTO(keyword);
@@ -195,13 +197,13 @@ public class ReptileMusicController {
      * 按列表获取歌单
      *
      * @param order "hot"/"new"
-     * @param type 类型 例: "华语"、"韩语"
+     * @param type  类型 例: "华语"、"韩语"
      * @return class
      * @version v1
      */
     @GetMapping("/songlist/{order}/{type}")
     @ResponseBody
-    public Result reptileSongListByType (@PathVariable String order, @PathVariable String type) {
+    public Result reptileSongListByType(@PathVariable String order, @PathVariable String type) {
         try {
             SongListDTO dto = new SongListDTO();
             dto.setOrder(order);

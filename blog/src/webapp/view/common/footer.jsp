@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="footer">
-    <p>Design By CWX  @ 2017</p>
+    <p>Design By CWX @ 2017</p>
     <p>Address: 华软丝木棉</p>
 </div>
 

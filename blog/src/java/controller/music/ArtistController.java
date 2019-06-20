@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * 歌手业务
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-01-29 17:17]
  * @Description: [ ]
@@ -73,9 +74,6 @@ public class ArtistController {
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());
         }
     }
-
-
-
 
 
 }

@@ -19,13 +19,13 @@ import service.task.IReptileMusicTaskService;
  */
 
 @Service
-public class ReptileMusicTaskServiceImpl implements IReptileMusicTaskService{
+public class ReptileMusicTaskServiceImpl implements IReptileMusicTaskService {
 
     @Autowired
     IReptileSongService reptileSongService;
 
 
-    public void reptileAllTopList() throws SerException{
+    public void reptileAllTopList() throws SerException {
         try {
             for (TopListType t : TopListType.values()) {
                 TopListDTO dto = new TopListDTO(t);

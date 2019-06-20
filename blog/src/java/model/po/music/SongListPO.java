@@ -4,13 +4,14 @@ import model.po.common.BasePO;
 
 /**
  * 歌单
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-02-08 10:35]
  * @Description: [ ]
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class SongListPO extends BasePO{
+public class SongListPO extends BasePO {
 
     /**
      * 歌单id
@@ -43,8 +44,8 @@ public class SongListPO extends BasePO{
     private String trackUpdateTime;
 
 
-
-    public SongListPO(){}
+    public SongListPO() {
+    }
 
     public SongListPO(String songListId, String name, String picUrl, Integer playCount, String origin, String trackUpdateTime) {
         this.songListId = songListId;

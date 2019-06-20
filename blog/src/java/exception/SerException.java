@@ -5,8 +5,8 @@ package exception;
  * 服务层异常
  *
  * @param
- * @return class
  * @version v1
+ * @return class
  */
 public class SerException extends Exception {
 

@@ -83,7 +83,8 @@
                         </ul>
                         <div style="padding-top: 15px;">
                             <span style="position: relative; margin-left: 90.5%; padding: 2px;
-                             border: 1px solid #e6e1e1; background-color: #f3f2f1; cursor: pointer" @click="popReply(index, c.id)">回复层主</span>
+                             border: 1px solid #e6e1e1; background-color: #f3f2f1; cursor: pointer"
+                                  @click="popReply(index, c.id)">回复层主</span>
                         </div>
                     </div>
                     <%--回复框--%>

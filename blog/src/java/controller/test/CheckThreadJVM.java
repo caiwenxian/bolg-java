@@ -7,7 +7,6 @@ import java.util.List;
  * 查看JVM中的线程 获取线程名和子线程组
  *
  * @author XIEHEJUN
- *
  */
 public class CheckThreadJVM {
 

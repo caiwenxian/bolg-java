@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PassThruFilter extends PassThruAuthenticationFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request,
-        ServletResponse response) throws Exception {
+                                     ServletResponse response) throws Exception {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 

@@ -10,7 +10,7 @@ import model.enums.music.TopListType;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class TopListDTO extends BaseDTO{
+public class TopListDTO extends BaseDTO {
 
     /**
      * 排行榜类型

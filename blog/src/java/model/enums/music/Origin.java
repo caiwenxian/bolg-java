@@ -2,13 +2,14 @@ package model.enums.music;
 
 /**
  * 来源
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-01-27 11:05]
  * @Description: [ ]
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public enum  Origin {
+public enum Origin {
 
     WANG_YI("网易", 1),
 

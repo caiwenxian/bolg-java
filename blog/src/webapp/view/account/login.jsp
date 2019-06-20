@@ -20,13 +20,13 @@
             <h2>用户名</h2>
             <label>
                 <input type="text" id="username" class="txt_input txt_input2 username"
-                       <%--onfocus="if (value =='请输入用户名'){value =''}" onblur="if (value ==''){value='请输入用户名'}"--%>
+                <%--onfocus="if (value =='请输入用户名'){value =''}" onblur="if (value ==''){value='请输入用户名'}"--%>
                        placeholder="请输入用户名">
             </label>
             <h2>密码</h2>
             <label>
                 <input type="password" name="textfield2" id="userpwd" class="txt_input password"
-                       <%--onfocus="if (value =='******'){value =''}" onblur="if (value ==''){value='******'}"--%>
+                <%--onfocus="if (value =='******'){value =''}" onblur="if (value ==''){value='******'}"--%>
                        placeholder="******">
             </label>
 

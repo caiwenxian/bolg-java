@@ -29,7 +29,7 @@ public class MyInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Max-Age", "0");
         response.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With,userId,token");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("XDomainRequestAllowed","1");
+        response.setHeader("XDomainRequestAllowed", "1");
 //        response.setHeader("Access-Control-Allow-Credentials", "true");
 
         if (request.getServletPath() != null && request.getServletPath().indexOf("static") < 1) {

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @Description: [ ]
  * @Version: [1.0.0]
  */
-public class Client implements Serializable{
+public class Client implements Serializable {
 
     /**
      * 账户

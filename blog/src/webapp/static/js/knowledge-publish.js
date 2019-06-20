@@ -1,5 +1,3 @@
-
-
 var publish = {};
 
 publish.init = function () {
@@ -85,7 +83,7 @@ publish.vm = new Vue({
                 content: $('#preview'),
                 success: function () {
 
-                    layui.use('code', function(){
+                    layui.use('code', function () {
 
                         layui.code(); //
                     });

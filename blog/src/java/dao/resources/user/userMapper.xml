@@ -3,7 +3,8 @@
 <mapper namespace="dao.java.user.IUserDao">
 
     <insert id="addUser" parameterType="model.po.user.UserPO">
-        INSERT INTO t_user (id, name, password, type, createTime, modifyTime)VALUES (#{id}, #{name}, #{password}, #{type}, NOW(), NOW())
+        INSERT INTO t_user (id, name, password, type, createTime, modifyTime)VALUES (#{id}, #{name}, #{password},
+        #{type}, NOW(), NOW())
     </insert>
 
     <select id="getUserByName" parameterType="java.lang.String" resultType="model.po.user.UserPO">
@@ -13,7 +14,6 @@
     <select id="getUserInfoByName" parameterType="java.lang.String" resultType="model.po.user.UserPO">
         SELECT id, name, type FROM t_user WHERE name = #{name}
     </select>
-
 
 
 </mapper>

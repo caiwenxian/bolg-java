@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * 歌手业务操作
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-01-19 09:20]
  * @Description: [ ]

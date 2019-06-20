@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 public class ArtistHotSongServiceImpl implements IArtistHotSongService {
 
-//    @Autowired
+    //    @Autowired
 //    ISongService songService;
 //    @Autowired
 //    IArtistService artistService;
@@ -35,7 +35,6 @@ public class ArtistHotSongServiceImpl implements IArtistHotSongService {
     IReptileArtistService reptileArtistService;
     @Autowired
     IReptileSongService reptileSongService;
-
 
 
     @Override
@@ -52,8 +51,8 @@ public class ArtistHotSongServiceImpl implements IArtistHotSongService {
     public List<SongInfoPO> listHotSongByArtistId(String artistId) throws SerException {
         List<SongInfoPO> list = artistHotSongDao.listHotSongByArtistId(artistId);
         if (list.size() == 0) { //本地无数据，爬取官网
-            String ids[] = new String[] {artistId};
-            reptileSongService.asynReptile(2, new Object[] {new ArtistHotSongDTO(ids)});
+            String ids[] = new String[]{artistId};
+            reptileSongService.asynReptile(2, new Object[]{new ArtistHotSongDTO(ids)});
             try {
                 Thread.currentThread().sleep(3000);
                 list = artistHotSongDao.listHotSongByArtistId(artistId);

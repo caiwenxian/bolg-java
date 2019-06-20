@@ -31,7 +31,7 @@ http.get = function (url, data, callback) {
                 layui.use('layer', function () {
                     layer.open({
                         title: '信息'
-                        ,content: result.responseText
+                        , content: result.responseText
                     });
                 })
 
@@ -66,7 +66,7 @@ http.post = function (url, data, callback) {
                 layui.use('layer', function () {
                     layer.open({
                         title: '信息'
-                        ,content: result.responseText
+                        , content: result.responseText
                     });
                 })
 
@@ -83,10 +83,10 @@ http.put = function (url, data, callback) {
         data: data,
         async: false,
         success: function (result) {
-           /* if (result.code === 401) {
-                notLoginMsg();
-                return;
-            }*/
+            /* if (result.code === 401) {
+                 notLoginMsg();
+                 return;
+             }*/
             if (typeof callback == 'function') {
                 callback(result);
             }
@@ -96,7 +96,7 @@ http.put = function (url, data, callback) {
                 layui.use('layer', function () {
                     layer.open({
                         title: '信息'
-                        ,content: result.responseText
+                        , content: result.responseText
                     });
                 })
 
@@ -121,11 +121,11 @@ http.create_netease = function (path, method, data, callback, errorcallback) {
                     'User-Agent': randomUserAgent()
                 }
             },
-             function (res) {
+            function (res) {
                 res.setEncoding('utf8')
                 res.on('error', function (err) {
                         reject(err)
-                }
+                    }
                 )
                 res.on('data', function (chunk) {
                         ne_req += chunk;
@@ -141,7 +141,7 @@ http.create_netease = function (path, method, data, callback, errorcallback) {
             http_client.write(data)
         }
         http_client.end()
-})
+    })
 }
 
 function randomUserAgent() {

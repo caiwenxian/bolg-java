@@ -9,7 +9,7 @@ package model.enums.music;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public enum  SongListType {
+public enum SongListType {
 
     A1("全部", 101),
     A2("华语", 102),
@@ -41,7 +41,7 @@ public enum  SongListType {
     B20("另类/独立", 220),
     B21("New Age", 221),
     B22("古风", 222),
-    B23("后摇",223),
+    B23("后摇", 223),
     B24("Bossa Nova", 224),
 
     C1("清晨", 301),
@@ -49,7 +49,7 @@ public enum  SongListType {
     C3("学习", 303),
     C4("工作", 304),
     C5("午休", 305),
-    C6("下午茶",306),
+    C6("下午茶", 306),
     C7("地铁", 307),
     C8("驾车", 308),
     C9("运动", 309),

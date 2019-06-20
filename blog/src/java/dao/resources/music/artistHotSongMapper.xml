@@ -4,7 +4,7 @@
 
     <insert id="addArtistHotSong" parameterType="model.po.music.ArtistHotSongPO">
         INSERT INTO t_artist_hotsong (id, songId, artistId, num, createTime, modifyTime)VALUES
-         (#{id}, #{songId}, #{artistId}, #{num}, NOW(), NOW())
+        (#{id}, #{songId}, #{artistId}, #{num}, NOW(), NOW())
     </insert>
 
     <select id="getBySongIdAndArtistId" resultType="model.po.music.ArtistHotSongPO">
@@ -20,6 +20,7 @@
     </select>
 
     <sql id="song">
-　　　　 id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
-　　 </sql>
+        　　　　 id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+        　　
+    </sql>
 </mapper>

@@ -15,7 +15,7 @@
 </body>
 </html>
 <script>
-        common.changeNav(4);
-    </script>
+    common.changeNav(4);
+</script>
 
 

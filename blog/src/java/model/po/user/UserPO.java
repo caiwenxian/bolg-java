@@ -12,7 +12,7 @@ import model.po.common.BasePO;
  * @Copy: [com.bjike]
  */
 
-@TableName(name="t_user")
+@TableName(name = "t_user")
 public class UserPO extends BasePO {
 
     /**

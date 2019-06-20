@@ -13,7 +13,8 @@
             <legend>最新文章</legend>
         </fieldset>
         <div class="div-article-list" v-for="article in article.list">
-            <div><a href="javascript:void(0)"><p class="p-article-title" @click="goDetails(article.id)">{{article.title}}</p></a></div>
+            <div><a href="javascript:void(0)"><p class="p-article-title" @click="goDetails(article.id)">
+                {{article.title}}</p></a></div>
             <div class="div-article-content" v-text="article.contentText"></div>
             <div class="div-article-bottom">
                 <label>{{article.userName}}</label>
@@ -42,10 +43,10 @@
 
         laypage.render({
             elem: 'page'
-            ,count: article.vm.article.totalSize
-            ,theme: '#1E9FFF'
-            ,jump: function(obj, first){
-                if(!first){
+            , count: article.vm.article.totalSize
+            , theme: '#1E9FFF'
+            , jump: function (obj, first) {
+                if (!first) {
                     article.vm.article.page = obj.curr;
 
                 }
@@ -74,6 +75,7 @@
         transition: all .6s;
         border-bottom: 1px solid #ccc;
     }
+
     .p-article-title {
         padding: 5px;
         overflow: hidden;
@@ -82,6 +84,7 @@
         font-size: 18px;
         line-height: 26px;
     }
+
     .div-article-content {
         padding: 5px 10px;
         margin-right: 10px;
@@ -97,13 +100,16 @@
         padding: 10px;
         line-height: 1.5rem;
     }
+
     .div-article-bottom {
         color: #14b0e6;
         padding: 5px;
     }
+
     .div-article-bottom label {
         margin-left: 10px;
     }
+
     .div-article-bottom-right {
         /*position: absolute;*/
         right: 5px;

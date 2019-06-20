@@ -5,13 +5,14 @@ import model.enums.music.SongListType;
 
 /**
  * 歌单dto
+ *
  * @Author: [caiwenxian]
  * @Date: [2018-02-09 15:09]
  * @Description: [ ]
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class SongListDTO extends BaseDTO{
+public class SongListDTO extends BaseDTO {
 
     /**
      * "new":最新

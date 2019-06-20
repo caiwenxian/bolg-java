@@ -39,13 +39,13 @@ public enum TopListType {
     private int code;
 
 
-    TopListType(String name, String id, int code){
+    TopListType(String name, String id, int code) {
         this.name = name;
         this.id = id;
         this.code = code;
     }
 
-    public static TopListType topListType(String name){
+    public static TopListType topListType(String name) {
         for (TopListType top : TopListType.values()) {
             if (name.equals(top.getName())) {
                 return top;

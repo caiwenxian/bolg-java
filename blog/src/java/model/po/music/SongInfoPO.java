@@ -9,7 +9,7 @@ import model.po.common.BasePO;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class SongInfoPO extends BasePO{
+public class SongInfoPO extends BasePO {
 
     /**
      * 歌曲id
@@ -45,7 +45,6 @@ public class SongInfoPO extends BasePO{
      * 序号
      */
     private Integer num;
-
 
 
     public SongInfoPO() {

@@ -9,7 +9,7 @@ import java.util.List;
  * @Version: [1.0.0]
  * @Copy: [com.bjike]
  */
-public class PaginationPO implements Page{
+public class PaginationPO implements Page {
 
     int startRow = 0;
 

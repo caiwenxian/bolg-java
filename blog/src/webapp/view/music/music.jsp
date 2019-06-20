@@ -16,10 +16,10 @@
                 <table class="layui-table layui-table-template" lay-size="sm" lay-skin="line">
                     <thead>
                     <tr style="height: 31px;">
-                        <th >播放</th>
+                        <th>播放</th>
                         <th style="width: 70%;">歌名</th>
-                        <th >大小</th>
-                        <th >收藏</th>
+                        <th>大小</th>
+                        <th>收藏</th>
                     </tr>
                     </thead>
                     <tbody>

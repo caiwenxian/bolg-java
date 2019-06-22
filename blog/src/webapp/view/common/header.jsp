@@ -37,7 +37,7 @@
             <li class='layui-nav-item'><a href='/life'><i class='layui-icon'>&#xe6b2;</i>生活点滴</a></li>
             <li class='layui-nav-item'><a href='/music'><i class='layui-icon'>&#xe6fc;</i>音乐分享</a></li>
             <li class='layui-nav-item'>
-                <a href='javascript:;'><i class='layui-icon'></i>关于本站</a>
+                <a href="javascript:"><i class='layui-icon'></i>关于本站</a>
                 <dl class='layui-nav-child'> <!-- 二级菜单 -->
                     <dd><a href='/about/about-author'>关于作者</a></dd>
                     <dd><a href='/about/about-blog'>关于blog</a></dd>
@@ -57,18 +57,18 @@
 <script>
     var goLogin = function () {
         window.location.href = '/login';
-    }
+    };
 
     var goRegister = function () {
         window.location.href = '/register';
-    }
+    };
 
     var logout = function () {
         var url = '/login/logout';
         var data = {
             name: null,
             password: null
-        }
+        };
         http.post(url, data, function (result) {
 
             if (result.code !== 0) {
@@ -78,7 +78,7 @@
             layer.msg("退出登录成功");
             checkStatus();
         });
-    }
+    };
 
     var checkStatus = function () {
         var url = '/account/checkStatus';
@@ -97,7 +97,7 @@
 
         /*$('.img-photo').hover(function () {
         })*/
-    }
+    };
 
     $(function () {
         checkStatus();

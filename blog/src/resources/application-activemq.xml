@@ -43,7 +43,7 @@
     <bean id="queueListener" class="service.mq.QueueListener"/>
     <bean id="topicListener" class="service.mq.TopicListener"/>
 
-    <bean id="queueContainer"
+   <!-- <bean id="queueContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">
         <property name="connectionFactory" ref="cachingConnectionFactory"/>
         <property name="destination" ref="queueDestination"/>
@@ -54,5 +54,5 @@
         <property name="connectionFactory" ref="cachingConnectionFactory"/>
         <property name="destination" ref="topicDestination"/>
         <property name="messageListener" ref="topicListener"/>
-    </bean>
+    </bean>-->
 </beans>

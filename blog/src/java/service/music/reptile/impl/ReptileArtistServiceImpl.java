@@ -9,6 +9,7 @@ import model.po.music.ArtistPO;
 import model.po.music.HotArtistPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
 import service.music.IArtistService;
 import service.music.reptile.IReptileArtistService;
 import utils.HttpClientHelper;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 
 @Service
-public class ReptileArtistServiceImpl implements IReptileArtistService {
+public class ReptileArtistServiceImpl extends BaseServiceImpl implements IReptileArtistService {
 
     @Autowired
     IArtistService artistService;
@@ -52,7 +53,7 @@ public class ReptileArtistServiceImpl implements IReptileArtistService {
             artistPO.setOrigin(Origin.WANG_YI.getName());
             artistService.addArtist(artistPO);
         }
-        System.out.println("爬取歌手完成");
+        logger.info("爬取歌手完成");
     }
 
     @Override
@@ -87,7 +88,7 @@ public class ReptileArtistServiceImpl implements IReptileArtistService {
             num++;
         }
         artistService.addHotArtist(pos);
-        System.out.println("爬取热门歌手列表完成");
+        logger.info("爬取热门歌手列表完成");
     }
 
     @Override

@@ -5,6 +5,7 @@ import model.dto.music.TopListDTO;
 import model.enums.music.TopListType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
 import service.music.reptile.IReptileSongService;
 import service.task.IReptileMusicTaskService;
 
@@ -19,20 +20,20 @@ import service.task.IReptileMusicTaskService;
  */
 
 @Service
-public class ReptileMusicTaskServiceImpl implements IReptileMusicTaskService {
+public class ReptileMusicTaskServiceImpl extends BaseServiceImpl implements IReptileMusicTaskService {
 
     @Autowired
     IReptileSongService reptileSongService;
 
 
-    public void reptileAllTopList() throws SerException {
+    public void reptileAllTopList() {
         try {
             for (TopListType t : TopListType.values()) {
                 TopListDTO dto = new TopListDTO(t);
                 reptileSongService.reptileSongs(dto);
             }
         } catch (SerException e) {
-            System.out.println("更新排行榜出错：" + e.getMessage());
+            logger.info("更新排行榜出错：" + e.getMessage());
         }
 
     }

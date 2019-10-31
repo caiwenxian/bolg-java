@@ -1,5 +1,6 @@
 package controller.home;
 
+import controller.common.BaseController;
 import exception.SerException;
 import model.bo.user.Client;
 import org.apache.shiro.SecurityUtils;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/index")
-public class indexController {
+public class indexController extends BaseController  {
 
     final static Logger logger = Logger.getLogger(indexController.class.getName());
 

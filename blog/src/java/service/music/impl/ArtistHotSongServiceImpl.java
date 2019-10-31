@@ -7,6 +7,7 @@ import model.po.music.ArtistHotSongPO;
 import model.po.music.SongInfoPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
 import service.music.IArtistHotSongService;
 import service.music.reptile.IReptileArtistService;
 import service.music.reptile.IReptileSongService;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 
 @Service
-public class ArtistHotSongServiceImpl implements IArtistHotSongService {
+public class ArtistHotSongServiceImpl extends BaseServiceImpl implements IArtistHotSongService {
 
     //    @Autowired
 //    ISongService songService;

@@ -1,5 +1,6 @@
 package controller.music;
 
+import controller.common.BaseController;
 import dao.java.music.IArtistHotSongDao;
 import exception.ErrorCode;
 import exception.SerException;
@@ -32,7 +33,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/artist")
-public class ArtistController {
+public class ArtistController extends BaseController {
 
     @Autowired
     IArtistService artistService;

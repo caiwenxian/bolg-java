@@ -1,5 +1,7 @@
 package service.mq;
 
+import service.common.impl.BaseServiceImpl;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -12,7 +14,7 @@ import javax.jms.TextMessage;
  * @date 2019年01月18日 9:38
  *
  */
-public class QueueListener implements MessageListener {
+public class QueueListener  extends BaseServiceImpl implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
@@ -21,7 +23,7 @@ public class QueueListener implements MessageListener {
             try {
                 TextMessage textMessage = (TextMessage) message;
                 String messageStr = textMessage.getText();
-                System.out.println("队列监听器收到的文本消息：" + messageStr);
+                logger.info("队列监听器收到的文本消息：" + messageStr);
             } catch (JMSException e){
 
             }

@@ -1,5 +1,6 @@
 package service.music.reptile;
 
+import com.alibaba.fastjson.JSONObject;
 import exception.SerException;
 import model.dto.music.ArtistHotSongDTO;
 import model.dto.music.MusicDTO;
@@ -88,5 +89,14 @@ public interface IReptileSongService {
      * @version v1
      */
     void reptileSongListByType(SongListDTO dto) throws SerException;
+
+     /**
+       * Description: 爬取歌曲，并保存歌曲和歌单的关系
+       * @author: caiwx
+       * @date: 2019/10/30 10:47
+       * @param:
+       * @return:
+       */
+    void saveSongWithSongList(JSONObject jsonObject) throws SerException;
 
 }

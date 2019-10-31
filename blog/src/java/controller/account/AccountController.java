@@ -1,5 +1,6 @@
 package controller.account;
 
+import controller.common.BaseController;
 import exception.SerException;
 import model.bo.user.Client;
 import org.apache.shiro.subject.Subject;
@@ -23,7 +24,7 @@ import service.user.IClientService;
 
 @Controller
 @RequestMapping("/account")
-public class AccountController {
+public class AccountController extends BaseController {
 
     @Autowired
     IClientService clientService;

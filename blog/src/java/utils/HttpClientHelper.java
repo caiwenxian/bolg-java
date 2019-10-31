@@ -289,7 +289,7 @@ public class HttpClientHelper {
                 url = new URL(urlParam);
             }
             con = (HttpURLConnection) url.openConnection();
-            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            con.setRequestProperty("Content-Type", "application/json");
             con.setRequestProperty("Accept", "*/*");
             con.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4");
             con.setRequestProperty("Referer", "http://music.163.com");

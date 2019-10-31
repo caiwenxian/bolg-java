@@ -17,6 +17,7 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
 import service.music.IArtistService;
 import service.music.ISongService;
 import service.music.ITopListService;
@@ -41,7 +42,7 @@ import java.util.List;
  */
 
 @Service
-public class TopListServiceImpl implements ITopListService {
+public class TopListServiceImpl extends BaseServiceImpl implements ITopListService {
     //
 //    @Autowired
 //    IArtistService artistService;
@@ -68,7 +69,7 @@ public class TopListServiceImpl implements ITopListService {
     public void addTopListDetails(TopListDetailsPO po) {
         TopListDetailsPO old = topListDetailsDao.getByTopListIdAndSongId(po.getTopListId(), po.getSongId());
         if (null != old) {
-            System.out.println("排行榜-歌曲关联已存在");
+            logger.info("排行榜-歌曲关联已存在");
             return;
         }
         po.setId(RandomUtil.getUid());

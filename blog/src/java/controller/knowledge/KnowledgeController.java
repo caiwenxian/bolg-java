@@ -1,5 +1,6 @@
 package controller.knowledge;
 
+import controller.common.BaseController;
 import exception.ActException;
 import exception.SerException;
 import model.dto.knowledge.ArticleCommentDTO;
@@ -34,7 +35,7 @@ import java.util.logging.Logger;
  */
 @RequestMapping("/knowledge")
 @Controller
-public class KnowledgeController {
+public class KnowledgeController extends BaseController {
 
     final static Logger LOGGER = Logger.getLogger(KnowledgeController.class.getName());
 

@@ -1,5 +1,6 @@
 package controller.account;
 
+import controller.common.BaseController;
 import controller.security.token.UserToken;
 import exception.ActException;
 import exception.SerException;
@@ -38,7 +39,7 @@ import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/login")
-public class LoginController {
+public class LoginController extends BaseController {
 
     final Logger logger = Logger.getLogger(LoginController.class.getName());
     @Autowired

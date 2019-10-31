@@ -42,7 +42,7 @@ public class MyAdviceFilter extends AccessControlFilter {
                 for (Session session : sessions) {
                     Object object = session.getAttribute(token);
                     if (object != null) {
-                        System.out.println("token有效");
+//                        logger.info("token有效");
                         return true;
                     }
                 }

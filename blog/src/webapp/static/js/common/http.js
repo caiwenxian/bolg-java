@@ -1,5 +1,5 @@
 var http = {};
-http.URL = 'http://localhost:4396';
+http.URL = 'http://localhost:4398';
 
 var notLoginMsg = function () {
     layui.use('layer', function () {

@@ -13,13 +13,25 @@
         <property name="password" value="3344"></property>
         <property name="virtualHost" value="/"></property>
         <property name="addresses" value="127.0.0.1:5672"></property>
+        <!--设置 生产者 confirms-->
         <property name="publisherConfirms" value="true"></property>
+        <!--设置 生产者 Returns-->
+        <property name="publisherReturns" value="true"></property>
+    </bean>
+
+    <bean id="queueListener" class="service.mq.rabbitmq.QueueListener"></bean>
+    <bean id="producer" class="service.mq.rabbitmq.RabbitProducer">
+        <property name="rabbitTemplate" ref="rabbitTemplate"/>
     </bean>
 
     <!--template声明-->
     <bean id="rabbitTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
         <constructor-arg name="connectionFactory" ref="connectionFactory"/>
-        <property name="confirmCallback" ref="producer"/>
+        <property name="confirmCallback" value="true"/>
+        <!--必须设置为 true，不然当 发送到交换器成功，但是没有匹配的队列，不会触发 ReturnCallback 回调
+        而且 ReturnCallback 比 ConfirmCallback 先回调，意思就是 ReturnCallback 执行完了才会执行 ConfirmCallback-->
+        <property name="mandatory" value="true"/>
+        <property name="returnCallback" value="true"/>
     </bean>
 
     <bean id="queue" class="org.springframework.amqp.core.Queue">
@@ -37,16 +49,16 @@
         <constructor-arg index="2" value="spring-boot-routingKey"/>
     </bean>
 
-    <bean id="queueListener" class="service.mq.rabbitmq.QueueListener"></bean>
-    <bean id="producer" class="service.mq.rabbitmq.RabbitProducer"></bean>
-
     <bean id="messageContainer" class="org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer">
+        <!--指定队列-->
         <property name="queues" ref="queue"/>
         <property name="exposeListenerChannel" value="true"/>
-        <property name="maxConcurrentConsumers" value="10"/>
-        <property name="concurrentConsumers" value="2"/>
+        <property name="maxConcurrentConsumers" value="2"/>
+        <property name="concurrentConsumers" value="1"/>
         <property name="connectionFactory" ref="connectionFactory"/>
+        <!--设置消费者的 ack 模式为手动确认模式-->
         <property name="acknowledgeMode" value="MANUAL"/>
+        <!--指定消费者-->
         <property name="messageListener" ref="queueListener"/>
 
     </bean>

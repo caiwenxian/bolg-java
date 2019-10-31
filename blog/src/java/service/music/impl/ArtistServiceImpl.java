@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
 import service.music.IArtistService;
 import service.music.reptile.IReptileArtistService;
 import utils.HttpClientHelper;
@@ -26,7 +27,7 @@ import java.util.List;
  * @Copy: [com.bjike]
  */
 @Service
-public class ArtistServiceImpl implements IArtistService {
+public class ArtistServiceImpl extends BaseServiceImpl implements IArtistService {
 
     @Autowired
     IArtistDao artistDao;
@@ -40,7 +41,7 @@ public class ArtistServiceImpl implements IArtistService {
             }
             ArtistPO old = artistDao.getArtistByArtistId(po.getArtistId());
             if (old != null) {
-                System.out.println("歌手已存在");
+                logger.info("歌手已存在");
                 return;
             }
             po.setId(RandomUtil.getUid());

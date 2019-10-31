@@ -14,12 +14,16 @@ import model.po.music.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
+import service.mq.rabbitmq.MessagePO;
+import service.mq.rabbitmq.RabbitProducer;
 import service.music.IArtistHotSongService;
 import service.music.IArtistService;
 import service.music.ISongService;
 import service.music.ITopListService;
 import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
+import utils.RandomUtil;
 
 import javax.json.JsonObject;
 import java.time.LocalDateTime;
@@ -36,7 +40,7 @@ import java.util.Iterator;
  */
 
 @Service
-public class ReptileSongServiceImpl implements IReptileSongService {
+public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileSongService {
 
     @Autowired
     ISongService songService;
@@ -46,6 +50,8 @@ public class ReptileSongServiceImpl implements IReptileSongService {
     ITopListService topListService;
     @Autowired
     IArtistHotSongService artistHotSongService;
+    @Autowired
+    private RabbitProducer rabbiProducer;
 
     public void reptileSongs(TopListDTO dto) throws SerException {
 
@@ -70,12 +76,12 @@ public class ReptileSongServiceImpl implements IReptileSongService {
 
         TopListPO old = topListService.getByTopListId(topListId);
         if (old != null && trackUpdateTime.equals(old.getTrackUpdateTime())) {
-            System.out.println("官方排行榜暂未更新");
+            logger.info("官方排行榜暂未更新");
             return;
 //            throw new SerException("官方排行榜暂未更新");
         }
         if (old != null && !trackUpdateTime.equals(old.getTrackUpdateTime())) {
-            System.out.println("官方排行榜已更新");
+            logger.info("官方排行榜已更新");
             //删除旧排行榜歌曲
             topListService.deleteTopListDetails(old.getTopListId());
         }
@@ -109,7 +115,7 @@ public class ReptileSongServiceImpl implements IReptileSongService {
             topListService.addTopListDetails(new TopListDetailsPO(topListId, songId, num));
             num++;
         }
-        System.out.println("爬取排行榜列表完成" + System.currentTimeMillis());
+        logger.info("爬取排行榜列表完成" + System.currentTimeMillis());
     }
 
     @Override
@@ -122,7 +128,7 @@ public class ReptileSongServiceImpl implements IReptileSongService {
     public void reptileHotSongs(ArtistHotSongDTO dto) throws SerException {
 
         if (dto.getIds().length == 0) {
-            System.out.println("歌手ids集合为空");
+            logger.info("歌手ids集合为空");
             return;
         }
         for (String id : dto.getIds()) {
@@ -197,7 +203,7 @@ public class ReptileSongServiceImpl implements IReptileSongService {
             songService.addSong(songInfoPO);
             num++;
         }
-        System.out.println("爬取歌曲完成");
+        logger.info("爬取歌曲完成");
     }
 
     @Override
@@ -230,14 +236,17 @@ public class ReptileSongServiceImpl implements IReptileSongService {
             String picUrl = song.getString("picUrl");
             Integer playCount = song.getInteger("playCount");
             SongListPO po = new SongListPO(id, name, picUrl, playCount, Origin.WANG_YI.name(), null);
+            //新增歌单信息
             songService.addSongList(po);
 
+            //新增推荐歌单
             songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
             num++;
 
+            //爬取歌单详细信息
             reptileSongListDetails(po.getSongListId());
         }
-        System.out.println("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
+        logger.info("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
     }
 
     /**
@@ -249,26 +258,66 @@ public class ReptileSongServiceImpl implements IReptileSongService {
         if (StringUtils.isBlank(songListId)) {
             return;
         }
-        StringBuffer url = new StringBuffer();
-        url.append(NetseaseUrl.API);
-        url.append("/api/playlist/detail?id=" + songListId);
+        try {
+            StringBuffer url = new StringBuffer();
+            url.append(NetseaseUrl.API);
+            url.append("/api/playlist/detail?id=" + songListId);
 
-        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        if (!"200".equals(jsonObject.getString("code"))) {
-            return;
+            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            if (!"200".equals(jsonObject.getString("code"))) {
+                return;
+            }
+            JSONObject object = (JSONObject) jsonObject.get("result");
+            String trackUpdateTime = object.getString("trackUpdateTime");
+            //更新歌单trackUpdateTime
+            songService.updateSongList(songListId, trackUpdateTime);
+
+            //保存歌曲
+            JSONArray songs = object.getJSONArray("tracks");
+            int num = 1;
+            for (Object ob : songs) {
+                JSONObject song = (JSONObject) ob;
+                song.put("num", num);
+                song.put("songListId", songListId);
+                MessagePO messagePO = new MessagePO();
+                messagePO.setData(song);
+                messagePO.setType("1");
+                messagePO.setId(RandomUtil.getUid());
+                //发送到消息队列
+                rabbiProducer.sendMessage(messagePO);
+
+                num++;
+
+                /*JSONObject song = (JSONObject) song1;
+                //保存歌手
+                JSONObject artist = (JSONObject) song.getJSONArray("artists").get(0);  //歌手信息
+                ArtistPO artistPO = new ArtistPO();
+                String artistId = artist.getString("id");
+                artistPO.setArtistId(artistId);
+                artistPO.setName(artist.getString("name"));
+                artistPO.setOrigin(Origin.WANG_YI.getName());
+                artistService.addArtist(artistPO);
+
+
+                String songId = song.getString("id");
+                String name = song.getString("name");
+
+                SongInfoPO songInfoPO = new SongInfoPO(songId, name, artistId, null, null, Origin.WANG_YI.name(), num);
+                songService.addSong(songInfoPO);
+
+                //保存歌单-歌曲关联
+                songService.addSongListDetails(new SongListDetailsPO(songListId, songId, num));
+                num++;*/
+            }
+        } catch (Exception e) {
+            logger.error("爬取歌单详情出错", e);
         }
-        JSONObject object = (JSONObject) jsonObject.get("result");
-        String trackUpdateTime = object.getString("trackUpdateTime");
-        //更新歌单trackUpdateTime
-        songService.updateSongList(songListId, trackUpdateTime);
+    }
 
 
-        //保存歌曲
-        JSONArray songs = object.getJSONArray("tracks");
-        int num = 1;
-        for (Object song1 : songs) {
-            JSONObject song = (JSONObject) song1;
+    public void saveSongWithSongList(JSONObject song) throws SerException {
+        try {
             //保存歌手
             JSONObject artist = (JSONObject) song.getJSONArray("artists").get(0);  //歌手信息
             ArtistPO artistPO = new ArtistPO();
@@ -281,13 +330,16 @@ public class ReptileSongServiceImpl implements IReptileSongService {
 
             String songId = song.getString("id");
             String name = song.getString("name");
+            int num = Integer.valueOf(song.getString("num"));
+            String songListId = song.getString("songListId");
 
             SongInfoPO songInfoPO = new SongInfoPO(songId, name, artistId, null, null, Origin.WANG_YI.name(), num);
             songService.addSong(songInfoPO);
 
             //保存歌单-歌曲关联
             songService.addSongListDetails(new SongListDetailsPO(songListId, songId, num));
-            num++;
+        } catch (SerException e) {
+            logger.error(e.getMessage(), e);
         }
 
     }
@@ -324,7 +376,7 @@ public class ReptileSongServiceImpl implements IReptileSongService {
 
             reptileSongListDetails(po.getSongListId());
         }
-        System.out.println("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
+        logger.info("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
     }
 
     @Override
@@ -368,7 +420,7 @@ public class ReptileSongServiceImpl implements IReptileSongService {
             new Thread(new Reptilep(3, new Object[]{po.getSongListId()})).start();
 
         }
-        System.out.println("爬取歌单(按列别)完成:" + Calendar.getInstance().getTime());
+        logger.info("爬取歌单(按列别)完成:" + Calendar.getInstance().getTime());
     }
 
     /**
@@ -441,7 +493,7 @@ public class ReptileSongServiceImpl implements IReptileSongService {
             String size = song.getString("size");
             String type = song.getString("type");
 
-            System.out.println("爬取mp3url完成");
+            logger.info("爬取mp3url完成");
             try {
                 //添加歌曲mp3url
                 songService.addMp3Url(this.songId, map3Url);

@@ -1,5 +1,6 @@
 package controller.music;
 
+import controller.common.BaseController;
 import exception.ErrorCode;
 import exception.SerException;
 import model.dto.common.BaseDTO;
@@ -33,7 +34,7 @@ import static model.constant.Common.PAGE_LIMIT;
  */
 @Controller
 @RequestMapping("/song")
-public class SongController {
+public class SongController extends BaseController {
 
     @Autowired
     ISongService songService;

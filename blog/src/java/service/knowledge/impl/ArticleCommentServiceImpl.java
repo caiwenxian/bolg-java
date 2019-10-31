@@ -11,6 +11,7 @@ import model.vo.knowledge.ArticleCommentVO;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
 import service.knowledge.IArticleCommentService;
 import service.knowledge.IKnowledgeService;
 import service.music.IArtistService;
@@ -33,7 +34,7 @@ import java.util.concurrent.FutureTask;
  */
 
 @Service
-public class ArticleCommentServiceImpl implements IArticleCommentService {
+public class ArticleCommentServiceImpl extends BaseServiceImpl implements IArticleCommentService {
 
     @Autowired
     ArticleCommentDaoImpl articleCommentDao;

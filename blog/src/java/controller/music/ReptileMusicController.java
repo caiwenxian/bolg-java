@@ -1,5 +1,6 @@
 package controller.music;
 
+import controller.common.BaseController;
 import exception.ErrorCode;
 import exception.SerException;
 import model.dto.music.ArtistHotSongDTO;
@@ -33,7 +34,7 @@ import service.music.reptile.IReptileSongService;
 
 @Controller
 @RequestMapping("/reptilemusic")
-public class ReptileMusicController {
+public class ReptileMusicController extends BaseController {
 
     @Autowired
     IReptileSongService reptileSongService;

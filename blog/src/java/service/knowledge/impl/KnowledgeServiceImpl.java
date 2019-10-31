@@ -13,6 +13,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import service.common.impl.BaseServiceImpl;
 import service.knowledge.IKnowledgeService;
 import service.user.IClientService;
 import utils.RandomUtil;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 
 @Service
-public class KnowledgeServiceImpl implements IKnowledgeService {
+public class KnowledgeServiceImpl extends BaseServiceImpl implements IKnowledgeService {
 
     @Autowired
     KnowledgeDaoImpl knowledgeDao;

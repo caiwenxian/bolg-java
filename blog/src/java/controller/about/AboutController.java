@@ -1,5 +1,6 @@
 package controller.about;
 
+import controller.common.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/about")
-public class AboutController {
+public class AboutController extends BaseController {
 
     @GetMapping("/about-author")
     @ResponseBody

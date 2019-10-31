@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import service.cache.CacheService;
+import service.common.impl.BaseServiceImpl;
 
 import java.util.Collection;
 
@@ -17,7 +18,7 @@ import java.util.Collection;
  */
 
 @Service
-public class CacheServiceImpl implements CacheService {
+public class CacheServiceImpl extends BaseServiceImpl implements CacheService {
 
 
     /*@Cacheable(value="HelloWorldCache",key="#param")

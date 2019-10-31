@@ -3,6 +3,7 @@ package controller.security.aop;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import service.common.impl.BaseServiceImpl;
 
 /**
  * @Author: [caiwenxian]
@@ -11,7 +12,7 @@ import org.aspectj.lang.annotation.*;
  * @Version: [1.0.0]
  */
 @org.aspectj.lang.annotation.Aspect
-public class Aspect {
+public class Aspect  extends BaseServiceImpl {
     @SuppressWarnings("unused")
     //定义切入点，提供一个方法，这个方法的名字就是改切入点的id
     @Pointcut("execution(* controller..*.*(..))")
@@ -23,27 +24,27 @@ public class Aspect {
     public void before(JoinPoint call) {
         String className = call.getTarget().getClass().getName();
         String methodName = call.getSignature().getName();
-//        System.out.println("【注解-前置通知】:" + className + "类的"
+//        logger.info("【注解-前置通知】:" + className + "类的"
 //                + methodName + "方法开始了");
     }
 
     //访问命名切入点来应用后置通知
     @AfterReturning("allMethod()")
     public void afterReturn() {
-//        System.out.println("【注解-后置通知】:方法正常结束了");
+//        logger.info("【注解-后置通知】:方法正常结束了");
     }
 
     //应用最终通知
     @After("allMethod()")
     public void after() {
-//        System.out.println("【注解-最终通知】:不管方法有没有正常执行完成,"
+//        logger.info("【注解-最终通知】:不管方法有没有正常执行完成,"
 //                + "一定会返回的");
     }
 
     //应用异常抛出后通知
     @AfterThrowing("allMethod()")
     public void afterThrowing() {
-        System.out.println("【注解-异常抛出后通知】:方法执行时出异常了");
+        logger.info("【注解-异常抛出后通知】:方法执行时出异常了");
     }
 
     //应用周围通知

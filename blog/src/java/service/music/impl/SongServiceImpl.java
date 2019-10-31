@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import service.common.impl.BaseServiceImpl;
 import service.music.ISongService;
 import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
@@ -39,7 +40,7 @@ import java.util.UUID;
  * @Copy: [com.bjike]
  */
 @Service
-public class SongServiceImpl implements ISongService {
+public class SongServiceImpl extends BaseServiceImpl implements ISongService {
 
 
     @Autowired
@@ -53,7 +54,7 @@ public class SongServiceImpl implements ISongService {
             SongInfoPO old = songDao.getBySongId(po.getSongId());
             if (null != old) {
 //            throw new SerException(ErrorMessage.MUSIC_IS_EXIST);
-                System.out.println(ErrorMessage.MUSIC_IS_EXIST);
+                logger.info(ErrorMessage.MUSIC_IS_EXIST);
                 if (StringUtils.isNotBlank(old.getMp3Url())) {
                     return;
                 }
@@ -86,7 +87,7 @@ public class SongServiceImpl implements ISongService {
         SongInfoPO po = this.getBySongId(songId);
         if (null == po) {
 //            throw new SerException(ErrorMessage.NOT_FOUND);
-            System.out.println(ErrorMessage.MUSIC_NOT_EXIST);
+            logger.info(ErrorMessage.MUSIC_NOT_EXIST);
             return;
         }
         po.setMp3Url(mp3Url);

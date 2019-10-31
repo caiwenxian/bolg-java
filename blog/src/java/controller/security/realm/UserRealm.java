@@ -40,7 +40,7 @@ public class UserRealm extends AuthorizingRealm {
             Iterator<String> it = pers.iterator();
             while (it.hasNext()) {
                 String str = it.next();
-                System.out.println("str:" + str);
+                logger.info("str:" + str);
             }
             //  pers.removeAll(pers);
 

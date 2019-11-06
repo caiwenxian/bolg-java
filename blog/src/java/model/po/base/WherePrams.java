@@ -22,7 +22,11 @@ public class WherePrams {
     //	private WherePrams(String prams){
 //		pram = " where " + prams;
 //	}
-//	
+//
+    public WherePrams() {
+        this.pram = " where ";
+    }
+
     public WherePrams(String file, String where, Serializable value) {
 
         if (null == file && null == where && value == where) {

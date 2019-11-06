@@ -4,6 +4,7 @@ import exception.SerException;
 import model.po.common.Page;
 import model.po.common.PaginationPO;
 import model.po.music.SongInfoPO;
+import model.vo.mq.MessageVO;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -409,6 +410,16 @@ public class Test {
     }
 
 
-
+    @org.junit.Test
+    public void test8() {
+        MessageVO vo = new MessageVO();
+        String voMethodName = "setStatus";
+        try {
+            MessageVO.class.getMethod("setStatus", String.class).invoke(vo, new Object[] {3});
+            System.out.println(vo.getStatus());
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

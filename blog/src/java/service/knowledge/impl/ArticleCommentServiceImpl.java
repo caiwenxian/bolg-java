@@ -48,7 +48,7 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements IArtic
         try {
             po.setUserId(clientService.getCurrentUser().getUserId());
             po.setId(RandomUtil.getUid());
-            articleCommentDao.add(po);
+            articleCommentDao.add(po, true);
 
             Callable callable = new CommentCallable(po.getArticleId());
             FutureTask futureTask = new FutureTask(callable);

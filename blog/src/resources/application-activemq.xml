@@ -40,8 +40,8 @@
         <constructor-arg index="0" value="spring-topic"/>
     </bean>
 
-    <bean id="queueListener" class="service.mq.QueueListener"/>
-    <bean id="topicListener" class="service.mq.TopicListener"/>
+    <bean id="queueListener" class="service.mq.activemq.QueueListener"/>
+    <bean id="topicListener" class="service.mq.activemq.TopicListener"/>
 
    <!-- <bean id="queueContainer"
           class="org.springframework.jms.listener.DefaultMessageListenerContainer">

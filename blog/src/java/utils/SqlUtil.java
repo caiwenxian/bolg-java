@@ -126,7 +126,7 @@ public class SqlUtil<T extends Po> {
             for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
                 Field[] fields = clazz.getDeclaredFields();
                 for (Field f : fields) {
-                    if (!f.getName().equalsIgnoreCase("ID") && !f.isAnnotationPresent(TempField.class)) {
+                    if (/*!f.getName().equalsIgnoreCase("ID") && */!f.isAnnotationPresent(TempField.class)) {
                         String fName = f.getName();
 
                         //�ж��Ƿ���boolean����
@@ -671,6 +671,8 @@ public class SqlUtil<T extends Po> {
                              */
                             fileValue = Timestamp.valueOf(String.valueOf(fileValue));
                             fileValue = ((Timestamp) fileValue).toLocalDateTime();
+                        }else if (fileValue instanceof Object) {
+                            method = clazz.getMethod("set" + fileName.substring(0, 1).toUpperCase() + fileName.substring(1), Object.class);
                         }
 
 

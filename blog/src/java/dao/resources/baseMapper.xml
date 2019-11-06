@@ -57,6 +57,7 @@
     <update id="updateByPram">${value}</update>
 
 
+
     <!-- 根据ID删除 -->
     <delete id="deleteById">
         ${value}

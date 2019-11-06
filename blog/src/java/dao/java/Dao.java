@@ -32,7 +32,7 @@ public interface Dao<T extends Po, PK extends Serializable> {
      * @param po
      * @return
      */
-    public int add(T po);
+    public int add(T po, boolean withId);
 
     /**
      * 通过主键获取某个记录

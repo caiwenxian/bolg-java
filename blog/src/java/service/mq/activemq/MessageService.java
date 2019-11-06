@@ -1,4 +1,4 @@
-package service.mq;
+package service.mq.activemq;
 
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;

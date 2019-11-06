@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import service.common.impl.BaseServiceImpl;
-import service.mq.rabbitmq.MessagePO;
+import model.po.mq.MessagePO;
 import service.mq.rabbitmq.RabbitProducer;
 import service.music.IArtistHotSongService;
 import service.music.IArtistService;
@@ -23,12 +23,8 @@ import service.music.ISongService;
 import service.music.ITopListService;
 import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
-import utils.RandomUtil;
 
-import javax.json.JsonObject;
-import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -281,9 +277,8 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
                 song.put("num", num);
                 song.put("songListId", songListId);
                 MessagePO messagePO = new MessagePO();
-                messagePO.setData(song);
+                messagePO.setData(song.toString());
                 messagePO.setType("1");
-                messagePO.setId(RandomUtil.getUid());
                 //发送到消息队列
                 rabbiProducer.sendMessage(messagePO);
 

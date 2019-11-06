@@ -114,14 +114,17 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
     }
 
     @Override
-    public int add(T po) {
+    public int add(T po, boolean withId) {
         // TODO Auto-generated method stub
         String sql = "insert into " + tableName + " (";
         String prams = "";
         String values = "";
 
         List<Pram> pramList = SqlUtil.getPramListofStatic(po);
-        pramList.add(new Pram("id", RandomUtil.getUid()));
+//        SqlUtil.getFileValue(po, "id");
+        if (!withId) {
+            pramList.add(new Pram("id", RandomUtil.getUid()));
+        }
         for (int i = 0; i < pramList.size(); i++) {
             if ("createTime".equals(pramList.get(i).getFile()) || "modifyTime".equals(pramList.get(i).getFile())) {
                 pramList.get(i).setValue(LocalDateTime.now());
@@ -143,7 +146,7 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
         sql += prams + ") value (" + values + ");";
 
 //        SqlUtil.setFileValue(po, "id", RandomUtil.getUid());
-
+        logger.debug("sql:" + sql);
         return sqlSessionTemplateASS.insert("addEntity", sql);
     }
 
@@ -160,6 +163,7 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
             }
         }
         sql += " from " + tableName + " where id='" + id + "';";
+        logger.debug("sql:" + sql);
         Map<String, Object> resultMap = sqlSessionTemplateASS.selectOne(
                 "getById", sql);
 
@@ -381,7 +385,9 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
                     sql += "'" + new String((byte[]) value) + "'";
                 } else if (value instanceof String) {
                     sql += "'" + value + "'";
-                } else {
+                } else if(value instanceof LocalDateTime) {
+                    sql += "'" + value + "'";
+                }else {
                     sql += value;
                 }
 //              sql += prams.get(i).getFile() + "='" + prams.get(i).getValue() + "'";
@@ -396,8 +402,8 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
             }
         }
         sql += " where id='" + id + "';";
-
-        return sqlSessionTemplateASS.update("update", sql);
+        logger.debug("sql:" + sql);
+        return sqlSessionTemplateASS.update("updateEntity", sql);
     }
 
     @Override

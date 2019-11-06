@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.common.Result;
 import service.common.impl.ActResult;
-import service.mq.MessageService;
-
-import javax.jms.JMSException;
+import service.mq.activemq.MessageService;
 
 /**
  * mq控制器

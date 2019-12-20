@@ -30,7 +30,7 @@ public class ReptileMusicTaskServiceImpl extends BaseServiceImpl implements IRep
         try {
             for (TopListType t : TopListType.values()) {
                 TopListDTO dto = new TopListDTO(t);
-                reptileSongService.reptileSongs(dto);
+                reptileSongService.reptileTopSongs(dto);
             }
         } catch (SerException e) {
             logger.info("更新排行榜出错：" + e.getMessage());

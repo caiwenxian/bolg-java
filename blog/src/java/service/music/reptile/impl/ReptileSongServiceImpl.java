@@ -50,69 +50,143 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
     @Autowired
     private RabbitProducer rabbiProducer;
 
-    public void reptileSongs(TopListDTO dto) throws SerException {
+    public void reptileTopSongs(TopListDTO dto) throws SerException {
+        try {
+            StringBuffer url = new StringBuffer();
+            url.append(NetseaseUrl.API);
+            url.append("/api/playlist/detail?id=");
+            String url2 = TopListType.getId(dto.getTopListType().getCode());
+            url.append(url2);
+            url.append("&limit=" + dto.getLimit());
+            url.append("&order=new");
 
-        StringBuffer url = new StringBuffer();
-        url.append(NetseaseUrl.API);
-        url.append("/api/playlist/detail?id=");
-        String url2 = TopListType.getId(dto.getTopListType().getCode());
-        url.append(url2);
-        url.append("&limit=" + dto.getLimit());
-        url.append("&order=new");
+            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
 
-        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            JSONObject object = (JSONObject) jsonObject.get("result");
+            JSONArray songs = object.getJSONArray("tracks");
 
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        JSONObject object = (JSONObject) jsonObject.get("result");
-        JSONArray songs = object.getJSONArray("tracks");
+            //保存排行榜
+            String topListId = object.getString("id");
+            String topListName = object.getString("name");
+            String trackUpdateTime = object.getString("trackUpdateTime");
 
-        //保存排行榜
-        String topListId = object.getString("id");
-        String topListName = object.getString("name");
-        String trackUpdateTime = object.getString("trackUpdateTime");
-
-        TopListPO old = topListService.getByTopListId(topListId);
-        if (old != null && trackUpdateTime.equals(old.getTrackUpdateTime())) {
-            logger.info("官方排行榜暂未更新");
-            return;
+            TopListPO old = topListService.getByTopListId(topListId);
+            if (old != null && trackUpdateTime.equals(old.getTrackUpdateTime())) {
+                logger.info("官方排行榜暂未更新");
+                return;
 //            throw new SerException("官方排行榜暂未更新");
-        }
-        if (old != null && !trackUpdateTime.equals(old.getTrackUpdateTime())) {
-            logger.info("官方排行榜已更新");
-            //删除旧排行榜歌曲
-            topListService.deleteTopListDetails(old.getTopListId());
-        }
-        topListService.addTopList(new TopListPO(topListName, topListId, Origin.WANG_YI.name(), trackUpdateTime));
+            }
+            if (old != null && !trackUpdateTime.equals(old.getTrackUpdateTime())) {
+                logger.info("官方排行榜已更新");
+                //删除旧排行榜歌曲
+                topListService.deleteTopListDetails(old.getTopListId());
+            }
+            topListService.addTopList(new TopListPO(topListName, topListId, Origin.WANG_YI.name(), trackUpdateTime));
 
-        Iterator<Object> it = songs.iterator();
-        int num = 1;
-        while (it.hasNext()) {
-            JSONObject song = (JSONObject) it.next();
-            JSONArray artist = song.getJSONArray("artists");
-            //保存歌手
-            ArtistPO artistPO = new ArtistPO();
-            artistPO.setArtistId(artist.getJSONObject(0).getString("id"));
-            artistPO.setName(artist.getJSONObject(0).getString("name"));
-            artistPO.setOrigin(Origin.WANG_YI.getName());
-            artistService.addArtist(artistPO);
+            Iterator<Object> it = songs.iterator();
+            int num = 1;
+            while (it.hasNext()) {
+                JSONObject song = (JSONObject) it.next();
+                JSONArray artist = song.getJSONArray("artists");
+                //保存歌手
+                ArtistPO artistPO = new ArtistPO();
+                artistPO.setArtistId(artist.getJSONObject(0).getString("id"));
+                artistPO.setName(artist.getJSONObject(0).getString("name"));
+                artistPO.setOrigin(Origin.WANG_YI.getName());
+                artistService.addArtist(artistPO);
 
-            //保存歌曲
-            SongInfoPO po = new SongInfoPO();
-            String songId = song.getString("id");
-            po.setSongId(songId);
-            po.setName(song.getString("name"));
-            po.setArtistId(artistPO.getArtistId());
-            po.setOrigin(Origin.WANG_YI.getName());
-            songService.addSong(po);
+                //保存歌曲
+                SongInfoPO po = new SongInfoPO();
+                String songId = song.getString("id");
+                po.setSongId(songId);
+                po.setName(song.getString("name"));
+                po.setArtistId(artistPO.getArtistId());
+                po.setOrigin(Origin.WANG_YI.getName());
+                songService.addSong(po);
 
-            //爬取歌曲url
+                //爬取歌曲url
 //            songService.reptileMp3Url(po.getSongId());
 
-            //排行榜-歌曲关联
-            topListService.addTopListDetails(new TopListDetailsPO(topListId, songId, num));
-            num++;
+                //排行榜-歌曲关联
+                topListService.addTopListDetails(new TopListDetailsPO(topListId, songId, num));
+                num++;
+            }
+            logger.info("爬取排行榜列表完成" + System.currentTimeMillis());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SerException();
         }
-        logger.info("爬取排行榜列表完成" + System.currentTimeMillis());
+    }
+
+    public void reptileAllTopSongs() throws SerException {
+        try {
+            for (TopListType topListType : TopListType.values()) {
+                StringBuffer url = new StringBuffer();
+                url.append(NetseaseUrl.API);
+                url.append("/api/playlist/detail?id=");
+                String url2 = TopListType.getId(topListType.getCode());
+                url.append(url2);
+                url.append("&limit=100");
+                url.append("&order=new");
+
+                String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                JSONObject object = (JSONObject) jsonObject.get("result");
+                JSONArray songs = object.getJSONArray("tracks");
+
+                //保存排行榜
+                String topListId = object.getString("id");
+                String topListName = object.getString("name");
+                String trackUpdateTime = object.getString("trackUpdateTime");
+
+                TopListPO old = topListService.getByTopListId(topListId);
+                if (old != null && trackUpdateTime.equals(old.getTrackUpdateTime())) {
+                    logger.info(topListType.getName() + "：官方排行榜暂未更新");
+                    continue;
+                }
+                if (old != null && !trackUpdateTime.equals(old.getTrackUpdateTime())) {
+                    logger.info(topListType.getName() + "：官方排行榜已更新");
+                    //删除旧排行榜歌曲
+                    topListService.deleteTopListDetails(old.getTopListId());
+                }
+                topListService.addTopList(new TopListPO(topListName, topListId, Origin.WANG_YI.name(), trackUpdateTime));
+
+                Iterator<Object> it = songs.iterator();
+                int num = 1;
+                while (it.hasNext()) {
+                    JSONObject song = (JSONObject) it.next();
+                    JSONArray artist = song.getJSONArray("artists");
+                    //保存歌手
+                    ArtistPO artistPO = new ArtistPO();
+                    artistPO.setArtistId(artist.getJSONObject(0).getString("id"));
+                    artistPO.setName(artist.getJSONObject(0).getString("name"));
+                    artistPO.setOrigin(Origin.WANG_YI.getName());
+                    artistService.addArtist(artistPO);
+
+                    //保存歌曲
+                    SongInfoPO po = new SongInfoPO();
+                    String songId = song.getString("id");
+                    po.setSongId(songId);
+                    po.setName(song.getString("name"));
+                    po.setArtistId(artistPO.getArtistId());
+                    po.setOrigin(Origin.WANG_YI.getName());
+                    songService.addSong(po);
+
+                    //排行榜-歌曲关联
+                    topListService.addTopListDetails(new TopListDetailsPO(topListId, songId, num));
+                    num++;
+                }
+                //睡眠1s
+                Thread.sleep(1000);
+            }
+
+            logger.info("爬取排行榜列表完成" + System.currentTimeMillis());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SerException();
+        }
     }
 
     @Override

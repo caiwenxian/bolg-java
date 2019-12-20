@@ -24,7 +24,15 @@ public interface IReptileSongService {
      * @return class
      * @version v1
      */
-    void reptileSongs(TopListDTO dto) throws SerException;
+    void reptileTopSongs(TopListDTO dto) throws SerException;
+
+    /**
+     * 全部排行榜歌曲爬取
+     * @author caiwx
+     * @date 2019/12/20 15:43
+     * @return
+     */
+    void reptileAllTopSongs() throws SerException;
 
     /**
      * 爬取歌曲url

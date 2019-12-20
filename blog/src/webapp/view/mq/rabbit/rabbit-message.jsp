@@ -55,7 +55,7 @@
             </div>
         </form>
         <div>
-            <table class="layui-table layui-table-template" style="text-align: center;">
+            <table class="layui-table layui-table-template" >
                 <thead>
                 <tr style="height: 31px;">
                     <th>消息ID</th>

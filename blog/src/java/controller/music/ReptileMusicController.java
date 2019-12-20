@@ -84,9 +84,9 @@ public class ReptileMusicController extends BaseController {
      * @return class
      * @version v1
      */
-    @GetMapping("/top-song/{name}")
+    @GetMapping("/top-song")
     @ResponseBody
-    public Result reptileTopByTopType(@PathVariable String name) {
+    public Result reptileTopByTopType(String name) {
 
         TopListDTO topListDTO = new TopListDTO();
         TopListType topListType = TopListType.topListType(name);
@@ -95,7 +95,25 @@ public class ReptileMusicController extends BaseController {
         }
         topListDTO.setTopListType(topListType);
         try {
-            reptileSongService.reptileSongs(topListDTO);
+            reptileSongService.reptileTopSongs(topListDTO);
+            return ActResult.success("success");
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+
+    }
+
+    /**
+     * 获取所有排行榜
+     * @author caiwx
+     * @date 2019/12/20 15:41
+     * @return
+     */
+    @GetMapping("/top-song-all")
+    @ResponseBody
+    public Result reptileAllTop() {
+        try {
+            reptileSongService.reptileAllTopSongs();
             return ActResult.success("success");
         } catch (SerException e) {
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());
@@ -119,7 +137,7 @@ public class ReptileMusicController extends BaseController {
                 TopListDTO topListDTO = new TopListDTO();
                 TopListType topListType = TopListType.topListType(name);
                 topListDTO.setTopListType(topListType);
-                reptileSongService.reptileSongs(topListDTO);
+                reptileSongService.reptileTopSongs(topListDTO);
             }
             return ActResult.success("success");
         } catch (SerException e) {

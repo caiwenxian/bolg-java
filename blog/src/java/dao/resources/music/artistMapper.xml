@@ -8,7 +8,7 @@
     </insert>
 
     <select id="getArtistByArtistId" parameterType="java.lang.String" resultType="model.po.music.ArtistPO">
-        SELECT id, artistId, name FROM t_artist WHERE artistId = #{artistId}
+        SELECT id, artistId, name FROM t_artist WHERE artistId = #{artistId} limit 0, 1
     </select>
 
     <select id="addHotArtist" parameterType="List">

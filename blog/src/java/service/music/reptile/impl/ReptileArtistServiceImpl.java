@@ -14,6 +14,7 @@ import service.music.IArtistService;
 import service.music.reptile.IReptileArtistService;
 import utils.HttpClientHelper;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +37,12 @@ public class ReptileArtistServiceImpl extends BaseServiceImpl implements IReptil
         StringBuffer url = new StringBuffer();
         url.append(NetseaseUrl.API);
         url.append("/api/search/pc/");
-        url.append("?s=" + name);
+        url.append("?s=" + URLEncoder.encode(name));
         url.append("&limit=10");
         url.append("&type=100");
         url.append("&offset=0");
 
-        String result = HttpClientHelper.sendPost(url.toString(), null, "UTF-8");
+        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
         JSONObject jsonObject = JSONObject.parseObject(result);
         JSONObject object = (JSONObject) jsonObject.get("result");
         JSONArray artists = object.getJSONArray("artists");

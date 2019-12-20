@@ -30,8 +30,32 @@
         <fieldset class="layui-elem-field layui-field-title">
             <legend>消息列表</legend>
         </fieldset>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">消息ID</label>
+                    <div class="layui-input-inline">
+                        <input id="message-id" type="text" name="title" lay-verify="title" autocomplete="off" placeholder="消息ID" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <select name="quiz" id="status">
+                            <option value="">请选择状态</option>
+                            <option value="0">初始状态</option>
+                            <option value="1">消费成功</option>
+                            <option value="-1">消费失败</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-input-block" style="float: right">
+                    <button type="button" class="layui-btn layui-btn-primary" @click="rabbit.select()">查询</button>
+                </div>
+            </div>
+        </form>
         <div>
-            <table class="layui-table layui-table-template"  >
+            <table class="layui-table layui-table-template" style="text-align: center;">
                 <thead>
                 <tr style="height: 31px;">
                     <th>消息ID</th>
@@ -62,7 +86,9 @@
                         {{d.consumeTime}}
                     </td>
                     <td>
-                        重新发送
+                        <span v-if="d.status == -1" class="color-green cursor-pointer" @click="rabbit.reSendMessage(d.id)">重新发送</span>
+                        <span v-if="d.status != -1" class="color-green">-</span>
+
                     </td>
                 </tr>
                 </tbody>
@@ -77,11 +103,12 @@
 <script>
     rabbit.init();
 
-    layui.use(['layer', 'laypage', 'table'], function () {
+    layui.use(['layer', 'laypage', 'table', 'form'], function () {
 
         var layer = layui.layer;
         var laypage = layui.laypage;
         var table = layui.table;
+        var form = layui.form;
 
         laypage.render({
             elem: 'page'

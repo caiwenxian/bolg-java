@@ -30,6 +30,9 @@ public class MessageVO extends BaseVO {
     /**消息状态*/
     private String statusStr;
 
+    /** 消费后返回消息 */
+    private String returnMsg;
+
 
     public String getType() {
         return type;
@@ -96,5 +99,13 @@ public class MessageVO extends BaseVO {
 
     public void setStatusStr(String statusStr) {
         this.statusStr = statusStr;
+    }
+
+    public String getReturnMsg() {
+        return returnMsg;
+    }
+
+    public void setReturnMsg(String returnMsg) {
+        this.returnMsg = returnMsg;
     }
 }

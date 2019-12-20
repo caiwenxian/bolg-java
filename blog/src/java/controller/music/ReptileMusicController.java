@@ -11,10 +11,7 @@ import model.enums.music.SongListType;
 import model.enums.music.TopListType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import service.common.Result;
 import service.common.impl.ActResult;
 import service.music.IArtistHotSongService;
@@ -42,23 +39,42 @@ public class ReptileMusicController extends BaseController {
     IReptileArtistService reptileArtistService;
 
     /**
-     * 根据歌手id获取热门歌曲
+     * 根据歌手姓名获取热门歌曲
      *
      * @param
      * @return class
      * @version v1
      */
-    @GetMapping("/hotsong/{id}")
+    @PostMapping("/hotsong")
     @ResponseBody
-    public Result reptileArtistHotSong(@PathVariable String id) {
-        ArtistHotSongDTO dto = new ArtistHotSongDTO(new String[]{id});
-        dto.setLimit(50);
+    public Result reptileArtistHotSong(ArtistHotSongDTO dto) {
         try {
+            dto.setLimit(50);
             reptileSongService.reptileHotSongs(dto);
             return ActResult.success("success");
         } catch (SerException e) {
             return ActResult.error(303, e.getMessage());
         }
+    }
+
+    /**
+     * 歌手信息
+     *
+     * @param
+     * @return class
+     * @version v1
+     */
+    @PostMapping("/artist")
+    @ResponseBody
+    public Result reptileArtist(String name) {
+
+        try {
+            reptileArtistService.reptileArtist(name);
+            return ActResult.success("success");
+        } catch (SerException e) {
+            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
+        }
+
     }
 
     /**
@@ -133,26 +149,6 @@ public class ReptileMusicController extends BaseController {
     }
 
     /**
-     * 歌手信息
-     *
-     * @param
-     * @return class
-     * @version v1
-     */
-    @GetMapping("/artist/{name}")
-    @ResponseBody
-    public Result reptileArtist(@PathVariable String name) {
-
-        try {
-            reptileArtistService.reptileArtist(name);
-            return ActResult.success("success");
-        } catch (SerException e) {
-            return ActResult.error(ErrorCode.GENERAL, e.getMessage());
-        }
-
-    }
-
-    /**
      * 推荐歌单
      *
      * @param
@@ -202,9 +198,9 @@ public class ReptileMusicController extends BaseController {
      * @return class
      * @version v1
      */
-    @GetMapping("/songlist/{order}/{type}")
+    @GetMapping("/songlist")
     @ResponseBody
-    public Result reptileSongListByType(@PathVariable String order, @PathVariable String type) {
+    public Result reptileSongListByType(String order, String type) {
         try {
             SongListDTO dto = new SongListDTO();
             dto.setOrder(order);

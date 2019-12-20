@@ -35,7 +35,7 @@ public class ArtistServiceImpl extends BaseServiceImpl implements IArtistService
     IReptileArtistService reptileArtistService;
 
     public void addArtist(ArtistPO po) throws SerException {
-        synchronized (this) {
+        synchronized (ArtistServiceImpl.class) {
             if (StringUtils.isBlank(po.getArtistId())) {
                 throw new SerException("歌手artistId为空");
             }

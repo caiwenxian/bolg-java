@@ -24,6 +24,7 @@ import service.music.ITopListService;
 import service.music.reptile.IReptileSongService;
 import utils.HttpClientHelper;
 
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Iterator;
 
@@ -116,39 +117,84 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
 
     @Override
     public void reptileMp3Url(String songId) throws SerException {
-        Thread thread = new Thread(new ReptilepMp3(songId));
-        thread.start();
+        /*Thread thread = new Thread(new ReptilepMp3(songId));
+        thread.start();*/
+        //放到消息队列
+        try {
+            MessagePO messagePO = new MessagePO();
+            messagePO.setData(songId);
+            messagePO.setType("2");
+            //发送到消息队列
+            rabbiProducer.sendMessageQueue2(messagePO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SerException();
+        }
+    }
+
+    @Override
+    public void reptileMp3UrlV2(String songId) throws SerException {
+        try {
+            StringBuffer url = new StringBuffer();
+            url.append(NetseaseUrl.API);
+            url.append("/api/song/enhance/player/url/");
+            url.append("?id=" + songId);
+            url.append("&ids=[" + songId + "]");
+            url.append("&br=3200000");
+
+            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            JSONArray songs = jsonObject.getJSONArray("data");
+            JSONObject song = songs.getJSONObject(0);
+            String map3Url = song.getString("url");
+            String size = song.getString("size");
+            String type = song.getString("type");
+
+            logger.info("爬取mp3url完成");
+            //添加歌曲mp3url
+            songService.addMp3Url(songId, map3Url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SerException();
+        }
     }
 
     @Override
     public void reptileHotSongs(ArtistHotSongDTO dto) throws SerException {
-
-        if (dto.getIds().length == 0) {
-            logger.info("歌手ids集合为空");
-            return;
-        }
-        for (String id : dto.getIds()) {
+        try {
             StringBuffer url = new StringBuffer();
-            url.append("http://music.163.com/api/artist/");
-            url.append(id);
-            url.append("?limit=" + dto.getLimit());
+            url.append(NetseaseUrl.API);
+            url.append("/api/search/pc/");
+            url.append("?s=" + URLEncoder.encode(dto.getName()));
+            url.append("&limit=1");
+            url.append("&type=100");
             url.append("&offset=0");
-            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF8");
-            JSONObject jsonObject = JSONObject.parseObject(result);
-            String code = jsonObject.getString("code");
-            if (!"200".equals(code)) {
-                continue;
-            }
-            JSONObject artist = (JSONObject) jsonObject.get("artist");  //歌手信息
-            JSONArray songs = jsonObject.getJSONArray("hotSongs");  //热门歌曲
 
-            //保存歌手
+            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            JSONObject object = (JSONObject) jsonObject.get("result");
+            JSONArray artists = object.getJSONArray("artists");
+            if (artists == null || artists.size() < 1) {
+                throw new SerException("未爬取到相关信息");
+            }
+            JSONObject artist = (JSONObject) artists.get(0);
             ArtistPO artistPO = new ArtistPO();
-            String artistId = artist.getString("id");
-            artistPO.setArtistId(artistId);
+            artistPO.setArtistId(artist.getString("id"));
             artistPO.setName(artist.getString("name"));
             artistPO.setOrigin(Origin.WANG_YI.getName());
             artistService.addArtist(artistPO);
+            logger.info("爬取歌手完成");
+
+            //爬取歌曲
+            StringBuffer url2 = new StringBuffer();
+            url2.append("http://music.163.com/api/artist/");
+            url2.append(artistPO.getArtistId());
+            url2.append("?limit=" + dto.getLimit());
+            url2.append("&offset=0");
+            String result2 = HttpClientHelper.sendGet(url2.toString(), null, "UTF8");
+            JSONObject jsonObject2 = JSONObject.parseObject(result2);
+            String code = jsonObject2.getString("code");
+            JSONArray songs = jsonObject2.getJSONArray("hotSongs");  //热门歌曲
 
             //保存歌曲
             int num = 1;
@@ -164,13 +210,15 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
                 //爬取歌曲url
 //                songService.reptileMp3Url(po.getSongId());
                 //歌手-热门歌曲关联
-                ArtistHotSongPO artistHotSongPO = new ArtistHotSongPO(songId, artistId, num);
+                ArtistHotSongPO artistHotSongPO = new ArtistHotSongPO(songId, artistPO.getArtistId(), num);
                 artistHotSongService.addArtistHotSong(artistHotSongPO);
 
                 num++;
             }
             num = 1;
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SerException();
         }
     }
 
@@ -322,7 +370,7 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
             artistPO.setOrigin(Origin.WANG_YI.getName());
             artistService.addArtist(artistPO);
 
-
+            //保存歌曲
             String songId = song.getString("id");
             String name = song.getString("name");
             int num = Integer.valueOf(song.getString("num"));
@@ -376,46 +424,52 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
 
     @Override
     public void reptileSongListByType(SongListDTO dto) throws SerException {
-//        http://music.163.com/api/playlist/list/?limit=10&order=new&cat=华语&offset=0&total=true
-        int offset = (dto.getPage() - 1) * dto.getLimit();
-        String order = dto.getOrder() == null ? "hot" : dto.getOrder();
-        String cat = dto.getSongListType() == null ? "全部" : dto.getSongListType().getName();
-        StringBuffer url = new StringBuffer();
-        url.append(NetseaseUrl.API);
-        url.append("/api/playlist/list/");
-        url.append("?limit=" + dto.getLimit());
-        url.append("&order=" + order);
-        url.append("&cat=" + cat);
-        url.append("&offset=" + offset);
-        url.append("&total=true");
+        try {
+            //        http://music.163.com/api/playlist/list/?limit=10&order=new&cat=华语&offset=0&total=true
+            int offset = (dto.getPage() - 1) * dto.getLimit();
+            String order = dto.getOrder() == null ? "hot" : dto.getOrder();
+            String cat = dto.getSongListType() == null ? "全部" : dto.getSongListType().getName();
+            StringBuffer url = new StringBuffer();
+            url.append(NetseaseUrl.API);
+            url.append("/api/playlist/list/");
+            url.append("?limit=" + dto.getLimit());
+            url.append("&order=" + order);
+            url.append("&cat=" + URLEncoder.encode(cat));
+            url.append("&offset=" + offset);
+            url.append("&total=true");
 
-        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        if (!"200".equals(jsonObject.getString("code"))) {
-            return;
-        }
+            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            if (!"200".equals(jsonObject.getString("code"))) {
+                return;
+            }
 //        JSONObject object = (JSONObject)jsonObject.get("result");
-        JSONArray songs = jsonObject.getJSONArray("playlists");
-        int num = 1;
-        for (Object song1 : songs) {
-            JSONObject song = (JSONObject) song1;
-            String id = song.getString("id");
-            String name = song.getString("name");
-            String picUrl = song.getString("coverImgUrl");
-            Integer playCount = song.getInteger("playCount");
-            String trackUpdateTime = song.getString("trackUpdateTime");
-            SongListPO po = new SongListPO(id, name, picUrl, playCount, Origin.WANG_YI.name(), trackUpdateTime);
-            songService.addSongList(po);
+            JSONArray songs = jsonObject.getJSONArray("playlists");
+            int num = 1;
+            for (Object song1 : songs) {
+                JSONObject song = (JSONObject) song1;
+                String id = song.getString("id");
+                String name = song.getString("name");
+                String picUrl = song.getString("coverImgUrl");
+                Integer playCount = song.getInteger("playCount");
+                String trackUpdateTime = song.getString("trackUpdateTime");
+                SongListPO po = new SongListPO(id, name, picUrl, playCount, Origin.WANG_YI.name(), trackUpdateTime);
+                songService.addSongList(po);
 
-            songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
-            num++;
+                songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
+                num++;
 
 //            reptileSongListDetails(po.getSongListId());
-            //开启多线程处理
-            new Thread(new Reptilep(3, new Object[]{po.getSongListId()})).start();
+                //开启多线程处理
+                new Thread(new Reptilep(3, new Object[]{po.getSongListId()})).start();
 
+            }
+            logger.info("爬取歌单(按列别)完成:" + Calendar.getInstance().getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SerException();
         }
-        logger.info("爬取歌单(按列别)完成:" + Calendar.getInstance().getTime());
+
     }
 
     /**
@@ -460,6 +514,8 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
     void reptileMp3() {
 
     }
+
+
 
     /**
      * 异步爬取mp3url

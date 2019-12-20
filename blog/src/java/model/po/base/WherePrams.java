@@ -27,6 +27,10 @@ public class WherePrams {
         this.pram = " where ";
     }
 
+    public WherePrams(boolean auto) {
+        this.pram = " where 1 = 1 ";
+    }
+
     public WherePrams(String file, String where, Serializable value) {
 
         if (null == file && null == where && value == where) {

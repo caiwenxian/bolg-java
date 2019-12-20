@@ -7,7 +7,10 @@ rabbit.vm = new Vue({
     el: '.vue-content',
     data: {
         list: null,
-        search: null,
+        search: {
+            id: $('#message-id').val(),
+            status: $('#status').val()
+        },
         page: 1,
         totalSize: 0
     },
@@ -17,11 +20,14 @@ rabbit.vm = new Vue({
     },
     methods: {
         /**获取消息列表*/
-        listRabbitMessage: function () {
+        listRabbitMessage: function (notInitPage) {
+
             var url = '/rabbitmq/listRabbitMessage/' +  this.page;
-            http.get(url, null, function (result) {
+            http.post(url, this.search, function (result) {
                 rabbit.vm.list = result.data.data;
-                rabbit.vm.totalSize = result.data.totalSize;
+                if (!notInitPage) {
+                    rabbit.vm.totalSize = result.data.totalSize;
+                }
             });
         },
         /* 搜索 */
@@ -34,12 +40,32 @@ rabbit.vm = new Vue({
     computed: {
         rabbitPage: function () {
             return this.page;
+        },
+        rabbitTotalSize: function () {
+            return this.totalSize;
         }
     },
     watch: {
         rabbitPage: function () {
-            this.listRabbitMessage();
+            this.listRabbitMessage(true);
+        },
+        rabbitTotalSize: function () {
+            layui.use('laypage', function() {
+                layui.laypage.render({
+                    elem: 'page'
+                    , count: rabbit.vm.totalSize
+                    , limit: 15
+                    , theme: '#1E9FFF'
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            rabbit.vm.page = obj.curr;
+
+                        }
+                    }
+                });
+            });
         }
+        
     },
     filters: {
         date: function (value, fmt) {
@@ -75,6 +101,32 @@ rabbit.showMessageDetails = function (index) {
         }
     });
 };
+
+/** 查询 */
+rabbit.select = function () {
+    rabbit.vm.search = {
+        id: $('#message-id').val(),
+        status: $('#status').val()
+    };
+    var url = '/rabbitmq/listRabbitMessage/' +  rabbit.vm.page;
+    http.post(url, rabbit.vm.search, function (result) {
+        rabbit.vm.list = result.data.data;
+        rabbit.vm.totalSize = result.data.totalSize;
+    });
+}
+
+/** 重新发送消息 */
+rabbit.reSendMessage = function (id) {
+    var url = '/rabbitmq/reSendRabbitMessage';
+
+    http.post(url, {id: id}, function (result) {
+        layer.open({
+            title: '信息',
+            content: result.msg
+        });
+        rabbit.select();
+    });
+}
 
 
 function jsonShowFn(json){

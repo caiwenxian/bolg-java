@@ -51,12 +51,16 @@ public class RabbitProducer extends BaseServiceImpl implements ConfirmCallback, 
             CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
             MessagePO messagePO = new MessagePO("0", 0, content);
             messagePO.setId(RandomUtil.getUid());
+            messagePO.setType("MSG");
             Message message = MessageBuilder
                     .withBody(SerializationUtils.serialize(messagePO))
                     .setContentType(MessageProperties.CONTENT_TYPE_JSON)
                     .build();
             logger.info("开始发送消息");
-            rabbitTemplate.convertAndSend("spring-boot-exchange", "spring-boot-routingKey", message, correlationData);
+            for (int i = 0; i < 5; i ++) {
+                rabbitTemplate.convertAndSend("spring-boot-exchange2", "spring-boot-routingKey2", message, correlationData);
+            }
+
             //存储消息到数据库
             messagePO.setCorrelationDataId(correlationData.getId());
             rabbitMessageDao.addMessage(messagePO);
@@ -81,6 +85,55 @@ public class RabbitProducer extends BaseServiceImpl implements ConfirmCallback, 
             CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
             logger.info("producer开始发送消息");
             rabbitTemplate.convertAndSend("spring-boot-exchange", "spring-boot-routingKey", message, correlationData);
+            //存储消息到数据库
+            messagePO.setCorrelationDataId(correlationData.getId());
+            messagePO.setSendTime(LocalDateTime.now());
+            rabbitMessageDao.addMessage(messagePO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 重新发送消息
+     * @author caiwx
+     * @date 2019/12/19 18:03
+     * @return
+     */
+    public void reSendMessage(MessagePO messagePO){
+        try {
+            Message message = MessageBuilder
+                    .withBody(SerializationUtils.serialize(messagePO))
+                    .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                    .build();
+            CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+            logger.info("producer开始发送消息");
+            rabbitTemplate.convertAndSend("spring-boot-exchange", "spring-boot-routingKey", message, correlationData);
+            //存储消息到数据库
+//            messagePO.setCorrelationDataId(correlationData.getId());
+//            messagePO.setSendTime(LocalDateTime.now());
+//            rabbitMessageDao.addMessage(messagePO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 发送消息
+     * @author caiwx
+     * @date 2019年02月25日 11:09
+     *
+     */
+    public void sendMessageQueue2(MessagePO messagePO){
+        try {
+            messagePO.setId(RandomUtil.getUid());
+            Message message = MessageBuilder
+                    .withBody(SerializationUtils.serialize(messagePO))
+                    .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                    .build();
+            CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+            logger.info("producer开始发送消息");
+            rabbitTemplate.convertAndSend("spring-boot-exchange2", "spring-boot-routingKey2", message, correlationData);
             //存储消息到数据库
             messagePO.setCorrelationDataId(correlationData.getId());
             messagePO.setSendTime(LocalDateTime.now());

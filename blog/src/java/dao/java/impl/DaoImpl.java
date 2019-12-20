@@ -146,6 +146,7 @@ public class DaoImpl<T extends Po, PK extends Serializable> implements Dao<T, PK
         sql += prams + ") value (" + values + ");";
 
 //        SqlUtil.setFileValue(po, "id", RandomUtil.getUid());
+//        sql = sql.replaceAll("'", "''");  //单引号替换成两个单引号
         logger.debug("sql:" + sql);
         return sqlSessionTemplateASS.insert("addEntity", sql);
     }

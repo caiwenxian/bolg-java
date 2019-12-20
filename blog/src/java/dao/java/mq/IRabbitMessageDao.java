@@ -43,4 +43,14 @@ public interface IRabbitMessageDao {
        * @return:
        */
     List<MessagePO> listMessage(MessageDTO messageDTO) throws SerException;
+
+    /**
+     * 获取消息
+     * @author caiwx
+     * @date 2019/12/19 17:57
+     * @return
+     */
+    MessagePO getMessage(MessageDTO messageDTO) throws SerException;
+
+
 }

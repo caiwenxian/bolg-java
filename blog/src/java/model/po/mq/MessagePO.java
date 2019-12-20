@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
  @TableName(name = "t_rabbit_message")
 public class MessagePO extends BasePO implements Serializable {
 
+    private static final long serialVersionUID = -9018118238271043366L;
+
     /** 消息类型
      * 0: 测试消息
      * 1：爬取并存储歌曲详情（）
@@ -36,6 +38,9 @@ public class MessagePO extends BasePO implements Serializable {
 
     /** 消费时间 */
     private LocalDateTime consumeTime;
+
+    /** 消费后返回消息 */
+    private String returnMsg;
 
     public MessagePO() {}
 
@@ -91,5 +96,13 @@ public class MessagePO extends BasePO implements Serializable {
 
     public void setConsumeTime(LocalDateTime consumeTime) {
         this.consumeTime = consumeTime;
+    }
+
+    public String getReturnMsg() {
+        return returnMsg;
+    }
+
+    public void setReturnMsg(String returnMsg) {
+        this.returnMsg = returnMsg;
     }
 }

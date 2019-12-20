@@ -28,7 +28,7 @@ public class QueueListener extends BaseServiceImpl implements ChannelAwareMessag
 
     @Override
     public void onMessage(Message message, Channel channel) throws Exception {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         byte[] body = message.getBody();
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
         Boolean redelivered = message.getMessageProperties().getRedelivered();
@@ -62,19 +62,30 @@ public class QueueListener extends BaseServiceImpl implements ChannelAwareMessag
 //        channel.basicNack(deliveryTag, false, false);
         // 代表消费者拒绝当前消息，第二个参数表示是否把当前消息重新入队
 //        channel.basicReject(deliveryTag,false);
-
-        MessagePO messagePO = (MessagePO) SerializeUtil.deSerialize(body);
-        messagePO.setConsumeTime(LocalDateTime.now());
+        MessagePO messagePO = new MessagePO();
         try {
+            Object object = SerializeUtil.deSerialize(body);
+            messagePO = (MessagePO) object;
+            messagePO.setConsumeTime(LocalDateTime.now());
             logger.info("消息id：" + messagePO.getId());
+
+            //保存歌单歌曲
             if ("1".equals(messagePO.getType())) {
                 reptileSongService.saveSongWithSongList(JSONObject.parseObject(messagePO.getData()));
+            }
+            //文本
+            if ("MSG".equals(messagePO.getType())) {
+                logger.info("文本消息");
+            }
+            //爬取歌曲的URL
+            if ("2".equals(messagePO.getType())) {
+                logger.info("消费者：爬取歌曲的URL");
+                reptileSongService.reptileMp3UrlV2(messagePO.getData());
             }
 
             channel.basicAck(deliveryTag, false);
             //更新消息状态
             messagePO.setStatus(1);
-
             rabbitMessageDao.updateMessageStatus(messagePO);
 
         } catch(Exception e) {
@@ -86,7 +97,10 @@ public class QueueListener extends BaseServiceImpl implements ChannelAwareMessag
                // 如果是重复投递的消息,拒绝消息并且不重新放入队列
                 channel.basicReject(deliveryTag,false);
                 //更新消息状态
+//                messagePO = messagePO == null ? new MessagePO() : messagePO;
                 messagePO.setStatus(-1);
+                messagePO.setConsumeTime(LocalDateTime.now());
+                messagePO.setReturnMsg("消费消息失败:" + e.getMessage());
                 rabbitMessageDao.updateMessageStatus(messagePO);
             }
 

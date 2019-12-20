@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 
 /**
  * @Author: [caiwenxian]
@@ -26,6 +27,8 @@ import org.apache.http.message.BasicNameValuePair;
  * @Copy: [com.bjike]
  */
 public class HttpClientHelper {
+
+    private static Logger logger = Logger.getLogger(HttpClientHelper.class);
 
     /**
      * 请求数
@@ -38,6 +41,8 @@ public class HttpClientHelper {
      * @time:2016年5月17日 下午3:26:07
      */
     public static String sendPost(String urlParam, Map<String, Object> params, String charset) {
+        logger.info("url:" + urlParam);
+        logger.info("params:" + (params == null ? "" : params.toString()));
         StringBuffer resultBuffer = null;
         // 构建请求参数
         StringBuffer sbParams = new StringBuffer();
@@ -83,6 +88,7 @@ public class HttpClientHelper {
                 }
 //            }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             if (requestNum / 100 == 0) {
@@ -268,6 +274,8 @@ public class HttpClientHelper {
      * @time:2016年5月17日 下午3:27:29
      */
     public static String sendGet(String urlParam, Map<String, Object> params, String charset) {
+        logger.info("url:" + urlParam);
+        logger.info("params:" + (params == null ? "" : params.toString()));
         StringBuffer resultBuffer = null;
         // 构建请求参数
         StringBuffer sbParams = new StringBuffer();
@@ -288,6 +296,7 @@ public class HttpClientHelper {
             } else {
                 url = new URL(urlParam);
             }
+
             con = (HttpURLConnection) url.openConnection();
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestProperty("Accept", "*/*");
@@ -304,6 +313,7 @@ public class HttpClientHelper {
                 resultBuffer.append(temp);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             if (requestNum / 100 == 0) {

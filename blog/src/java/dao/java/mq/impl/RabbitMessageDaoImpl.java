@@ -23,6 +23,7 @@ public class RabbitMessageDaoImpl extends DaoImpl<MessagePO, String> implements 
     @Override
     public void addMessage(MessagePO messagePO) throws SerException {
         try {
+            messagePO.setData(messagePO.getData().replaceAll("'", "''"));   //单引号替换成两个单引号
             add(messagePO, true);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -42,6 +43,7 @@ public class RabbitMessageDaoImpl extends DaoImpl<MessagePO, String> implements 
                     old.setConsumeTime(messagePO.getConsumeTime());
                 }
                 old.setStatus(messagePO.getStatus());
+                old.setData(old.getData().replaceAll("'", "''"));
                 update(old);
                 return;
             }
@@ -54,12 +56,12 @@ public class RabbitMessageDaoImpl extends DaoImpl<MessagePO, String> implements 
     @Override
     public int countMessage(MessageDTO messageDTO) throws SerException {
         try {
-            WherePrams wherePrams = new WherePrams(null, null, null);
+            WherePrams wherePrams = new WherePrams(true);
             if (StringUtils.isNotBlank(messageDTO.getId())) {
-                wherePrams.and("id", "==", messageDTO.getId());
+                wherePrams.and("id", "=", messageDTO.getId());
             }
             if (messageDTO.getStatus() != null) {
-                wherePrams.and("status", "==", messageDTO.getStatus());
+                wherePrams.and("status", "=", messageDTO.getStatus());
             }
 
             return (int) count(wherePrams);
@@ -72,18 +74,30 @@ public class RabbitMessageDaoImpl extends DaoImpl<MessagePO, String> implements 
     @Override
     public List<MessagePO> listMessage(MessageDTO messageDTO) throws SerException {
         try {
-            WherePrams wherePrams = new WherePrams(null, null, null);
+            WherePrams wherePrams = new WherePrams(true);
             if (StringUtils.isNotBlank(messageDTO.getId())) {
-                wherePrams.and("id", "==", messageDTO.getId());
+                wherePrams.and("id", "like", messageDTO.getId());
             }
             if (messageDTO.getStatus() != null) {
-                wherePrams.and("status", "==", messageDTO.getStatus());
+                wherePrams.and("status", "=", messageDTO.getStatus());
             }
             wherePrams.orderBy("status asc, createTime desc");
             wherePrams.limit(messageDTO.getStartRow(), messageDTO.getLimit());
             return list(wherePrams);
         } catch (Exception e) {
             logger.error("获取消息列表失败：", e);
+            throw new SerException();
+        }
+    }
+
+    @Override
+    public MessagePO getMessage(MessageDTO messageDTO) throws SerException {
+        try {
+            WherePrams wherePrams = new WherePrams(true);
+            wherePrams.and("id", "=", messageDTO.getId());
+            return get(wherePrams);
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new SerException();
         }
     }

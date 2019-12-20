@@ -80,6 +80,25 @@ public class RabbitMQController extends BaseController {
             logger.error("获取rabbit消息列表失败：", e);
             throw new SerException();
         }
-
     }
+
+    /**
+     * 重新发送消息
+     * @author caiwx
+     * @date 2019/12/19 17:55
+     * @return
+     */
+    @RequestMapping("reSendRabbitMessage")
+    @ResponseBody
+    public Result reSendRabbitMessage(MessageDTO messageDTO) throws SerException{
+        try {
+            rabbitMessageService.reSendRabbitMessage(messageDTO);
+            return ActResult.success();
+        } catch (SerException e) {
+            logger.error("操作失败：", e);
+            throw new SerException();
+        }
+    }
+
+
 }

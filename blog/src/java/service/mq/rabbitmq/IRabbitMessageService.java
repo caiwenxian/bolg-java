@@ -23,4 +23,12 @@ public interface IRabbitMessageService {
        * @return:
        */
     PagePO<MessageVO> listRabbitService(MessageDTO messageDTO) throws SerException;
+
+    /**
+     * 重新发送消息
+     * @author caiwx
+     * @date 2019/12/19 17:56
+     * @return
+     */
+    void reSendRabbitMessage(MessageDTO messageDTO) throws SerException;
 }

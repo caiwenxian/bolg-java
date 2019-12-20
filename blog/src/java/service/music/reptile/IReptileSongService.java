@@ -37,6 +37,14 @@ public interface IReptileSongService {
     void reptileMp3Url(String songId) throws SerException;
 
     /**
+     * 爬取歌曲url
+     * @author caiwx
+     * @date 2019/12/19 15:38
+     * @return
+     */
+    void reptileMp3UrlV2(String songId) throws SerException;
+
+    /**
      * 爬取歌手热门歌曲
      *
      * @param dto

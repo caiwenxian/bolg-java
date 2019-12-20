@@ -11,10 +11,13 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.reflect.Modifier.*;
 
 
 /**
@@ -127,6 +130,9 @@ public class SqlUtil<T extends Po> {
                 Field[] fields = clazz.getDeclaredFields();
                 for (Field f : fields) {
                     if (/*!f.getName().equalsIgnoreCase("ID") && */!f.isAnnotationPresent(TempField.class)) {
+                        if (f.getModifiers() == (PRIVATE | STATIC | FINAL)) {   //变量为private final static 时跳过
+                            continue;
+                        }
                         String fName = f.getName();
 
                         //�ж��Ƿ���boolean����
@@ -185,6 +191,9 @@ public class SqlUtil<T extends Po> {
             Object o = thisClass.newInstance();
             for (Field f : fields) {
                 if (!f.getName().equalsIgnoreCase("ID") && !f.isAnnotationPresent(TempField.class)) {
+                    if (f.getModifiers() == (PRIVATE | STATIC | FINAL)) {   //变量为private final static 时跳过
+                        continue;
+                    }
                     String fName = f.getName();
 
                     //�ж��Ƿ���boolean����
@@ -242,6 +251,10 @@ public class SqlUtil<T extends Po> {
                 Object o = po.getClass().newInstance();
                 for (Field f : fields) {
                     if (!f.isAnnotationPresent(TempField.class)) {
+                        if (f.getModifiers() == (PRIVATE | STATIC | FINAL)) {   //变量为private final static 时跳过
+                            continue;
+                        }
+
                         String fName = f.getName();
                         //�ж��Ƿ���boolean����
                         String getf = "get";
@@ -308,10 +321,14 @@ public class SqlUtil<T extends Po> {
                 Object o = po.newInstance();
                 for (Field f : fields) {
                     if (!f.isAnnotationPresent(TempField.class)) {
+                        if(f.getModifiers() == (PRIVATE | STATIC | FINAL)) {    //变量为private final static 时跳过
+                            continue;
+                        }
                         String fName = f.getName();
                         //�ж��Ƿ���boolean����
                         String getf = "get";
                         String fieldType = f.getGenericType().toString();
+
                         if (fieldType.indexOf("boolean") != -1 || fieldType.indexOf("Boolean") != -1) {
                             getf = "is";
                         }

@@ -39,8 +39,17 @@
         <constructor-arg name="durable" value="true"/>
     </bean>
 
+    <bean id="queue2" class="org.springframework.amqp.core.Queue">
+        <constructor-arg name="name" value="spring-boot-queue2"/>
+        <constructor-arg name="durable" value="true"/>
+    </bean>
+
     <bean id="exchange" class="org.springframework.amqp.core.DirectExchange">
         <constructor-arg name="name" value="spring-boot-exchange"/>
+    </bean>
+
+    <bean id="exchange2" class="org.springframework.amqp.core.DirectExchange">
+        <constructor-arg name="name" value="spring-boot-exchange2"/>
     </bean>
 
     <bean id="binding" class="service.mq.rabbitmq.MyBinding" init-method="createBinding">
@@ -49,17 +58,35 @@
         <constructor-arg index="2" value="spring-boot-routingKey"/>
     </bean>
 
+    <bean id="binding2" class="service.mq.rabbitmq.MyBinding" init-method="createBinding">
+        <constructor-arg index="0" ref="queue2"/>
+        <constructor-arg index="1" ref="exchange2"/>
+        <constructor-arg index="2" value="spring-boot-routingKey2"/>
+    </bean>
+
     <bean id="messageContainer" class="org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer">
         <!--指定队列-->
         <property name="queues" ref="queue"/>
         <property name="exposeListenerChannel" value="true"/>
-        <property name="maxConcurrentConsumers" value="2"/>
-        <property name="concurrentConsumers" value="1"/>
+        <property name="maxConcurrentConsumers" value="10"/>
+        <property name="concurrentConsumers" value="5"/>
         <property name="connectionFactory" ref="connectionFactory"/>
         <!--设置消费者的 ack 模式为手动确认模式-->
         <property name="acknowledgeMode" value="MANUAL"/>
         <!--指定消费者-->
         <property name="messageListener" ref="queueListener"/>
+    </bean>
 
+    <bean id="messageContainer2" class="org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer">
+        <!--指定队列-->
+        <property name="queues" ref="queue2"/>
+        <property name="exposeListenerChannel" value="true"/>
+        <property name="maxConcurrentConsumers" value="5"/>
+        <property name="concurrentConsumers" value="2"/>
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <!--设置消费者的 ack 模式为手动确认模式-->
+        <property name="acknowledgeMode" value="MANUAL"/>
+        <!--指定消费者-->
+        <property name="messageListener" ref="queueListener"/>
     </bean>
 </beans>

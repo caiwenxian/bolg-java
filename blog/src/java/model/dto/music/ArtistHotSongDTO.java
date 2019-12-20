@@ -16,6 +16,8 @@ public class ArtistHotSongDTO extends BaseDTO {
      */
     private String[] ids;
 
+    private String name;
+
     public ArtistHotSongDTO() {
     }
 
@@ -44,5 +46,13 @@ public class ArtistHotSongDTO extends BaseDTO {
 
     public void setIds(String[] ids) {
         this.ids = ids;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

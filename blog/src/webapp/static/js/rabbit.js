@@ -1,3 +1,6 @@
+
+
+
 var rabbit = {};
 rabbit.init = function () {
     rabbit.vm.listRabbitMessage();
@@ -21,9 +24,17 @@ rabbit.vm = new Vue({
     methods: {
         /**获取消息列表*/
         listRabbitMessage: function (notInitPage) {
+            var index = null;
+            layui.use(['layer'], function () {
+                index = layui.layer.load(2);
+            });
+
 
             var url = '/rabbitmq/listRabbitMessage/' +  this.page;
             http.post(url, this.search, function (result) {
+                layui.use(['layer'], function () {
+                    layui.layer.close(index);
+                });
                 rabbit.vm.list = result.data.data;
                 if (!notInitPage) {
                     rabbit.vm.totalSize = result.data.totalSize;
@@ -104,12 +115,19 @@ rabbit.showMessageDetails = function (index) {
 
 /** 查询 */
 rabbit.select = function () {
+    var index = null;
+    layui.use(['layer'], function () {
+        index = layui.layer.load(2);
+    });
     rabbit.vm.search = {
         id: $('#message-id').val(),
         status: $('#status').val()
     };
     var url = '/rabbitmq/listRabbitMessage/' +  rabbit.vm.page;
     http.post(url, rabbit.vm.search, function (result) {
+        layui.use(['layer'], function () {
+            layui.layer.close(index);
+        });
         rabbit.vm.list = result.data.data;
         rabbit.vm.totalSize = result.data.totalSize;
     });

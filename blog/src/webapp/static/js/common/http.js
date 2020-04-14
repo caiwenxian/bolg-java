@@ -50,7 +50,7 @@ http.post = function (url, data, callback) {
         },
         crossDomain: true,
         data: data,
-        async: false,
+        async: true,
         success: function (result) {
             /*if (result.code === 401) {
                 notLoginMsg();

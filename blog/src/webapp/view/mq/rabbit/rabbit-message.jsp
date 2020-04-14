@@ -102,7 +102,6 @@
 <script src="${pageContext.request.contextPath}/static/js/rabbit.js"></script>
 <script>
     rabbit.init();
-
     layui.use(['layer', 'laypage', 'table', 'form'], function () {
 
         var layer = layui.layer;

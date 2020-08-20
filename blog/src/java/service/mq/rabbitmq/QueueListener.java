@@ -3,11 +3,14 @@ package service.mq.rabbitmq;
 import com.alibaba.fastjson.JSONObject;
 import com.rabbitmq.client.Channel;
 import dao.java.mq.IRabbitMessageDao;
+import model.constant.MessageType;
 import model.po.mq.MessagePO;
+import model.vo.ins.PictureVo;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import service.common.impl.BaseServiceImpl;
+import service.ins.InsService;
 import service.music.reptile.IReptileSongService;
 import utils.SerializeUtil;
 
@@ -25,6 +28,8 @@ public class QueueListener extends BaseServiceImpl implements ChannelAwareMessag
     IReptileSongService reptileSongService;
     @Autowired
     IRabbitMessageDao rabbitMessageDao;
+    @Autowired
+    InsService insService;
 
     @Override
     public void onMessage(Message message, Channel channel) throws Exception {
@@ -81,6 +86,13 @@ public class QueueListener extends BaseServiceImpl implements ChannelAwareMessag
             if ("2".equals(messagePO.getType())) {
                 logger.info("消费者：爬取歌曲的URL");
                 reptileSongService.reptileMp3UrlV2(messagePO.getData());
+            }
+
+            //下载图片
+            if (MessageType.DOWNLOAD_PICTURE.equals(messagePO.getType())) {
+                logger.info("消费者：下载图片");
+                insService.downPicture(JSONObject.parseObject(messagePO.getData(), PictureVo.class));
+
             }
 
             channel.basicAck(deliveryTag, false);

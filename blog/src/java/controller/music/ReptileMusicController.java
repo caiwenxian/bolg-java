@@ -180,7 +180,7 @@ public class ReptileMusicController extends BaseController {
         try {
             reptileSongService.reptileRecommendSongList(offset, limit);
             return ActResult.success("success");
-        } catch (SerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ActResult.error(ErrorCode.GENERAL, e.getMessage());
         }

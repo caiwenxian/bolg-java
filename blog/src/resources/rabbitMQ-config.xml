@@ -10,9 +10,9 @@
     <!-- 连接配置 -->
     <bean id="connectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
         <property name="username" value="root"></property>
-        <property name="password" value="3344"></property>
+        <property name="password" value="root"></property>
         <property name="virtualHost" value="/"></property>
-        <property name="addresses" value="127.0.0.1:5672"></property>
+        <property name="addresses" value="192.168.165.128:5672"></property>
         <!--设置 生产者 confirms-->
         <property name="publisherConfirms" value="true"></property>
         <!--设置 生产者 Returns-->
@@ -81,8 +81,8 @@
         <!--指定队列-->
         <property name="queues" ref="queue2"/>
         <property name="exposeListenerChannel" value="true"/>
-        <property name="maxConcurrentConsumers" value="5"/>
-        <property name="concurrentConsumers" value="2"/>
+        <property name="maxConcurrentConsumers" value="3"/>
+        <property name="concurrentConsumers" value="1"/>
         <property name="connectionFactory" ref="connectionFactory"/>
         <!--设置消费者的 ack 模式为手动确认模式-->
         <property name="acknowledgeMode" value="MANUAL"/>

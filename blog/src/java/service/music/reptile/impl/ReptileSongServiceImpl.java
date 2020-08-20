@@ -332,39 +332,44 @@ public class ReptileSongServiceImpl extends BaseServiceImpl implements IReptileS
 
     @Override
     public void reptileRecommendSongList(Integer offset, Integer limit) throws SerException {
-        offset = offset == null ? 0 : offset;
-        limit = limit == 0 ? 10 : limit;
-        StringBuffer url = new StringBuffer();
-        url.append(NetseaseUrl.API);
-        url.append("/api/personalized/playlist");
-        url.append("?offset=" + offset);
-        url.append("&limit=" + limit);
+        try {
+            offset = offset == null ? 0 : offset;
+            limit = limit == 0 ? 10 : limit;
+            StringBuffer url = new StringBuffer();
+            url.append(NetseaseUrl.API);
+            url.append("/api/personalized/playlist");
+            url.append("?offset=" + offset);
+            url.append("&limit=" + limit);
 
-        String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        if (!"200".equals(jsonObject.getString("code"))) {
-            return;
+            String result = HttpClientHelper.sendGet(url.toString(), null, "UTF-8");
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            if (!"200".equals(jsonObject.getString("code"))) {
+                return;
+            }
+            JSONArray object = jsonObject.getJSONArray("result");
+            int num = 1;
+            for (Object song1 : object) {
+                JSONObject song = (JSONObject) song1;
+                String id = song.getString("id");
+                String name = song.getString("name");
+                String picUrl = song.getString("picUrl");
+                Integer playCount = song.getInteger("playCount");
+                SongListPO po = new SongListPO(id, name, picUrl, playCount, Origin.WANG_YI.name(), null);
+                //新增歌单信息
+                songService.addSongList(po);
+
+                //新增推荐歌单
+                songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
+                num++;
+
+                //爬取歌单详细信息
+                reptileSongListDetails(po.getSongListId());
+            }
+            logger.info("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
+        } catch (SerException e) {
+            e.printStackTrace();
+            throw new SerException();
         }
-        JSONArray object = jsonObject.getJSONArray("result");
-        int num = 1;
-        for (Object song1 : object) {
-            JSONObject song = (JSONObject) song1;
-            String id = song.getString("id");
-            String name = song.getString("name");
-            String picUrl = song.getString("picUrl");
-            Integer playCount = song.getInteger("playCount");
-            SongListPO po = new SongListPO(id, name, picUrl, playCount, Origin.WANG_YI.name(), null);
-            //新增歌单信息
-            songService.addSongList(po);
-
-            //新增推荐歌单
-            songService.addRecommendSongList(new RecommendSongListPO(id, num, String.valueOf(Calendar.getInstance().getTimeInMillis())));
-            num++;
-
-            //爬取歌单详细信息
-            reptileSongListDetails(po.getSongListId());
-        }
-        logger.info("爬取推荐歌单完成:" + Calendar.getInstance().getTime());
     }
 
     /**

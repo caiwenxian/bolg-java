@@ -1,5 +1,6 @@
 var http = {};
-http.URL = 'http://localhost:4398';
+// http.URL = 'http://127.0.0.1:4398';
+http.URL = '';
 
 var notLoginMsg = function () {
     layui.use('layer', function () {
@@ -26,7 +27,6 @@ http.get = function (url, data, callback) {
             }
         },
         error: function (result) {
-
             if (result.status === 500) {
                 layui.use('layer', function () {
                     layer.open({

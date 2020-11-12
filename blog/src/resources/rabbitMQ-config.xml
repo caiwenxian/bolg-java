@@ -68,8 +68,8 @@
         <!--指定队列-->
         <property name="queues" ref="queue"/>
         <property name="exposeListenerChannel" value="true"/>
-        <property name="maxConcurrentConsumers" value="10"/>
-        <property name="concurrentConsumers" value="5"/>
+        <property name="maxConcurrentConsumers" value="3"/>
+        <property name="concurrentConsumers" value="1"/>
         <property name="connectionFactory" ref="connectionFactory"/>
         <!--设置消费者的 ack 模式为手动确认模式-->
         <property name="acknowledgeMode" value="MANUAL"/>

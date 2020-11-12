@@ -33,6 +33,13 @@ public class Test {
     }
 
     @org.junit.Test
+    public void test_1() throws InterruptedException {
+        String r = SpiderUtil.get("https://www.instagram.com/guan._.xiaotong/?__a=1","utf-8");
+
+        System.out.println("r: " + r);
+    }
+
+    @org.junit.Test
     public void test1() throws InterruptedException {
         String queryHash = "7437567ae0de0773fd96545592359a6b";
         String userId = "37048332785";

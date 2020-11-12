@@ -115,7 +115,7 @@ public class InsServiceImpl extends BaseServiceImpl implements InsService {
         listPictureUrlById(id, "", list);
 
         //发送到消息队列
-        if (list != null && list.size() > 0) {
+        if (list.size() > 0) {
             for (PictureVo pictureVo : list) {
                 MessagePO messagePO = new MessagePO();
                 messagePO.setData(JSONObject.toJSON(pictureVo).toString());

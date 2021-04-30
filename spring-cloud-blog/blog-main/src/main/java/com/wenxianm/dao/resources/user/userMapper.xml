@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.user.IUserDao">
+
+    <insert id="addUser" parameterType="model.po.user.UserPO">
+        INSERT INTO t_user (id, name, password, type, createTime, modifyTime)VALUES (#{id}, #{name}, #{password},
+        #{type}, NOW(), NOW())
+    </insert>
+
+    <select id="getUserByName" parameterType="java.lang.String" resultType="model.po.user.UserPO">
+        SELECT id, name, password, type FROM t_user WHERE name = #{name}
+    </select>
+
+    <select id="getUserInfoByName" parameterType="java.lang.String" resultType="model.po.user.UserPO">
+        SELECT id, name, type FROM t_user WHERE name = #{name}
+    </select>
+
+
+</mapper>

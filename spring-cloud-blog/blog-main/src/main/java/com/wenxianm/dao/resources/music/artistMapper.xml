@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.music.IArtistDao">
+
+    <insert id="addArtist" parameterType="model.po.music.ArtistPO">
+        INSERT INTO t_artist (id, name, artistId, origin, createTime, modifyTime)VALUES
+        (#{id}, #{name}, #{artistId}, #{origin}, NOW(), NOW())
+    </insert>
+
+    <select id="getArtistByArtistId" parameterType="java.lang.String" resultType="model.po.music.ArtistPO">
+        SELECT id, artistId, name FROM t_artist WHERE artistId = #{artistId} limit 0, 1
+    </select>
+
+    <select id="addHotArtist" parameterType="List">
+        INSERT INTO t_hotartist (id, artistId, num, createTime, modifyTime)VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id, jdbcType=VARCHAR}, #{item.artistId,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER}, NOW(),
+            NOW())
+        </foreach>
+    </select>
+
+    <select id="listArtistByName" parameterType="java.lang.String" resultType="model.po.music.ArtistPO">
+        SELECT id, artistId, name FROM t_artist WHERE name LIKE CONCAT('%', #{name}, '%')
+    </select>
+
+</mapper>

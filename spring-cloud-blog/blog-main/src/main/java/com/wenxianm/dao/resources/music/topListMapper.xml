@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.music.ITopListDao">
+
+    <insert id="add" parameterType="model.po.music.TopListPO">
+        INSERT INTO t_toplist (id, name, topListId, origin, trackUpdateTime, createTime, modifyTime)
+        VALUES (#{id}, #{name}, #{topListId}, #{origin}, #{trackUpdateTime}, NOW(), NOW())
+    </insert>
+
+    <select id="getByTopListId" parameterType="java.lang.String" resultType="model.po.music.TopListPO">
+        SELECT id, name, topListId, origin, trackUpdateTime, createTime, modifyTime
+        FROM t_toplist WHERE topListId = #{topListId}
+    </select>
+
+    <update id="updateTrackUpDateTime" parameterType="model.po.music.TopListPO">
+        UPDATE t_toplist SET trackUpdateTime = #{trackUpdateTime}, modifyTime = NOW()
+        WHERE topListId = #{topListId}
+    </update>
+
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.music.IArtistHotSongDao">
+
+    <insert id="addArtistHotSong" parameterType="model.po.music.ArtistHotSongPO">
+        INSERT INTO t_artist_hotsong (id, songId, artistId, num, createTime, modifyTime)VALUES
+        (#{id}, #{songId}, #{artistId}, #{num}, NOW(), NOW())
+    </insert>
+
+    <select id="getBySongIdAndArtistId" resultType="model.po.music.ArtistHotSongPO">
+        SELECT id, songId, artistId, num FROM t_artist_hotsong
+        WHERE songId = #{songId} AND artistId = #{artistId}
+    </select>
+
+    <select id="listHotSongByArtistId" resultType="model.po.music.SongInfoPO">
+        SELECT s.id, s.name, s.songId, s.artistId, s.lyricId, s.mp3Url, s.origin, s.createTime, s.modifyTime
+        FROM t_artist_hotsong ah
+        INNER JOIN t_song s ON ah.songId = s.songId
+        WHERE ah.artistId = #{artistId} ORDER BY ah.num
+    </select>
+
+    <sql id="song">
+        　　　　 id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+        　　
+    </sql>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.knowledge.IKnowledgeDao">
+
+    <select id="countArticle" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_article
+        <where>
+            <if test="title != null">
+                title = #{title}
+            </if>
+            status = #{status}
+        </where>
+    </select>
+
+    <select id="listArticleByPage" resultMap="article">
+        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount,
+        a.commentAmount, u.id as userId, u.name as userName
+        FROM t_article a LEFT JOIN t_user u ON a.userId = u.id
+        <where>
+            <if test="title != null">
+                a.title = #{title}
+            </if>
+            status = #{status}
+        </where>
+        ORDER BY a.createTime DESC limit #{startRow}, #{endRow}
+    </select>
+
+    <insert id="addArticle" parameterType="model.po.knowledge.ArticlePO">
+        INSERT INTO t_article (id, title, content, type, status, contentText, userId, createTime, modifyTime)
+        VALUES (#{id}, #{title}, #{content}, #{type}, #{status}, #{contentText}, #{userId}, NOW(), NOW())
+    </insert>
+
+    <select id="getArticle" resultMap="article">
+        SELECT a.id, a.content, a.title, a.status, a.type, a.contentText, a.createTime, a.modifyTime, a.browseAmount,
+        a.commentAmount, u.id as userId, u.name as userName
+        FROM t_article a LEFT JOIN t_user u ON a.userId = u.id
+        WHERE a.id = #{id}
+    </select>
+
+
+    <resultMap id="article" type="model.po.knowledge.ArticlePO">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="title" column="title"/>
+        <result property="status" column="status"/>
+        <result property="type" column="type"/>
+        <result property="contentText" column="contentText"/>
+        <result property="createTime" column="createTime"/>
+        <result property="modifyTime" column="modifyTime"/>
+        <result property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+        <result property="browseAmount" column="browseAmount"/>
+        <result property="commentAmount" column="commentAmount"/>
+    </resultMap>
+
+</mapper>

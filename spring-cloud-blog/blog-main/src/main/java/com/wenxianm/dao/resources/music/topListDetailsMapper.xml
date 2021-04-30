@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.music.ITopListDetailsDao">
+
+    <insert id="add" parameterType="model.po.music.TopListDetailsPO">
+        INSERT INTO t_toplist_details (id, topListId, songId, num, createTime, modifyTime)
+        VALUES (#{id}, #{topListId}, #{songId}, #{num}, NOW(), NOW())
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM t_toplist_details WHERE topListId = #{topListId}
+    </delete>
+
+    <select id="getByTopListIdAndSongId" resultType="model.po.music.TopListDetailsPO">
+        SELECT id, topListId, songId, num, createTime, modifyTime
+        FROM t_toplist_details
+        WHERE topListId = #{topListId} AND songId = #{songId}
+    </select>
+
+</mapper>

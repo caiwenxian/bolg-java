@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.knowledge.IArticleCommentDao">
+
+    <select id="countArticleComment" resultType="java.lang.Integer">
+        SELECT count(1) FROM t_article_comment
+        <where>
+            parentId IS null
+            <if test="articleId != null">
+                and articleId = #{articleId}
+            </if>
+        </where>
+    </select>
+
+    <select id="listArticleCommentByPage" resultMap="articleVO">
+        <!--SELECT ac.comment as ac_comment, ac.id as ac_id, ac.parentId as ac_parentId, ac.articleId as ac_articleId, ac.createTime, ac.modifyTime,-->
+        <!--u.name as u_name, ac.userId as u_id, a.id as a_id, ac.approve as ac_approve-->
+
+        <!--FROM t_article_comment ac-->
+        <!--LEFT JOIN t_user u ON ac.userId = u.id-->
+        <!--LEFT JOIN t_article a ON a.id = ac.articleId-->
+        <!--<where>-->
+        <!--<if test="articleId != null">-->
+        <!--articleId = #{articleId}-->
+        <!--</if>-->
+        <!--</where>-->
+        <!--ORDER BY a.createTime DESC limit #{startRow}, #{endRow}-->
+
+        SELECT ac.comment as ac_comment, ac.id as ac_id, ac.parentId as ac_parentId, ac.articleId as ac_articleId,
+        ac.createTime, ac.modifyTime,
+        u.name as u_name, ac.userId as u_id, a.id as a_id, ac.approve as ac_approve
+        FROM t_article_comment ac
+        LEFT JOIN t_user u ON ac.userId = u.id
+        LEFT JOIN t_article a ON a.id = ac.articleId
+        where ac.parentId in (SELECT * from (SELECT id FROM t_article_comment WHERE parentId is null AND articleId =
+        #{articleId}
+        ORDER BY createTime DESC limit #{startRow}, #{endRow})m) OR
+        ac.id in (SELECT * from (SELECT id FROM t_article_comment WHERE parentId is null and articleId = #{articleId}
+        ORDER BY createTime DESC limit #{startRow}, #{endRow})m)
+
+    </select>
+
+    <insert id="addArticleComment" parameterType="model.po.knowledge.ArticleCommentPO">
+        INSERT INTO t_article (id, userId, articleId, parentId, comment, createTime, modifyTime)
+        VALUES (#{id}, #{userId}, #{articleId}, #{parentId}, #{comment}, NOW(), NOW())
+    </insert>
+
+
+    <resultMap id="article" type="model.po.knowledge.ArticleCommentPO">
+        <id property="id" column="id"/>
+        <result property="userId" column="userId"/>
+        <result property="articleId" column="articleId"/>
+        <result property="parentId" column="parentId"/>
+        <result property="comment" column="comment"/>
+        <result property="createTime" column="createTime"/>
+        <result property="modifyTime" column="modifyTime"/>
+    </resultMap>
+
+    <resultMap id="articleVO" type="model.vo.knowledge.ArticleCommentVO">
+        <id property="id" column="ac_id"/>
+        <result property="user.id" column="u_id"/>
+        <result property="user.name" column="u_name"/>
+        <result property="articleId" column="ac_articleId"/>
+        <result property="parentId" column="ac_parentId"/>
+        <result property="comment" column="ac_comment"/>
+        <result property="approve" column="ac_approve"/>
+        <result property="createTime" column="createTime"/>
+        <result property="modifyTime" column="modifyTime"/>
+    </resultMap>
+
+</mapper>

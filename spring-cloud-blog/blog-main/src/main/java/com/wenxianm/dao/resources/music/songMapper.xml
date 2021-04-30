@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.java.music.ISongDao">
+
+    <insert id="add" parameterType="model.po.music.SongInfoPO">
+        INSERT INTO t_song (id, name, songId, artistId, lyricId, mp3Url, origin, num, createTime, modifyTime)VALUES
+        (#{id}, #{name}, #{songId}, #{artistId}, #{lyricId}, #{mp3Url}, #{origin}, #{num}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="model.po.music.SongInfoPO">
+        UPDATE t_song SET mp3Url = #{mp3Url}, modifyTime = NOW() WHERE songId = #{songId}
+    </update>
+
+    <select id="getBySongId" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
+        SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+        FROM t_song WHERE songId = #{songId}
+    </select>
+
+    <select id="listSongByName" parameterType="java.lang.String" resultType="model.po.music.SongInfoPO">
+        SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+        FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC
+    </select>
+
+    <select id="listSongByNameByPage" resultType="model.po.music.SongInfoPO">
+        SELECT id, name, songId, artistId, lyricId, mp3Url, origin, createTime, modifyTime
+        FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%") ORDER BY num ASC LIMIT #{startRow}, #{endRow}
+    </select>
+
+    <select id="countSongByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM t_song WHERE name LIKE CONCAT("%", #{name}, "%")
+    </select>
+
+    <select id="listTopList" parameterType="List" resultType="model.po.music.SongInfoPO">
+        SELECT s.id, s.name, s.songId, s.artistId, s.lyricId, s.mp3Url, s.origin, s.createTime, s.modifyTime
+        FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
+        WHERE td.topListId IN
+        <foreach collection="ids" item="item" index="index" separator=",">
+            (#{item,jdbcType=VARCHAR})
+        </foreach>
+    </select>
+
+    <select id="countTopList" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
+        WHERE td.topListId = #{id}
+    </select>
+
+    <select id="listTopListByPage" resultType="model.po.music.SongInfoPO">
+        SELECT s.id, s.name, s.songId, s.artistId, s.lyricId, s.mp3Url, s.origin, s.createTime, s.modifyTime
+        FROM t_toplist_details td INNER JOIN t_song s ON td.songId = s.songId
+        WHERE td.topListId = #{id} ORDER BY td.num limit #{startRow}, #{endRow}
+    </select>
+
+    <insert id="addSongList" parameterType="model.po.music.SongListPO">
+        INSERT INTO t_songlist (id, songListId, name, picUrl, playCount, origin, trackUpdateTime, createTime,
+        modifyTime)VALUES
+        (#{id}, #{songListId}, #{name}, #{picUrl}, #{playCount}, #{origin}, #{trackUpdateTime}, NOW(), NOW())
+    </insert>
+
+    <select id="getSongListBySongListId" parameterType="java.lang.String" resultType="model.po.music.SongListPO">
+        SELECT id, songListId, name, picUrl, playCount, origin, trackUpdateTime, createTime, modifyTime
+        FROM t_songlist WHERE songListId = #{songListId}
+    </select>
+
+    <update id="updateSongList" parameterType="java.lang.String">
+        UPDATE t_songlist SET trackUpdateTime = #{trackUpdateTime}, modifyTime = NOW()
+        WHERE songListId = #{songListId}
+    </update>
+
+    <insert id="addRecommendSongList" parameterType="model.po.music.RecommendSongListPO">
+        INSERT INTO t_songlist_recommend (id, songListId, num, trackUpdateTime, createTime, modifyTime)VALUES
+        (#{id}, #{songListId}, #{num}, #{trackUpdateTime}, NOW(), NOW())
+    </insert>
+
+    <select id="getRecommendSongListBySongListId" parameterType="java.lang.String"
+            resultType="model.po.music.RecommendSongListPO">
+        SELECT id, songListId, num, createTime, modifyTime
+        FROM t_songlist_recommend WHERE songListId = #{songListId}
+    </select>
+
+    <insert id="addSongListDetails" parameterType="model.po.music.SongListDetailsPO">
+        INSERT INTO t_songlist_details (id, songListId, songId, num, createTime, modifyTime)VALUES
+        (#{id}, #{songListId}, #{songId}, #{num}, NOW(), NOW())
+    </insert>
+
+    <select id="getSongListDetails" resultType="model.po.music.SongListDetailsPO">
+        SELECT id, songListId, songId, num, createTime, modifyTime
+        FROM t_songlist_details WHERE songListId = #{songListId} AND songId = #{songId}
+    </select>
+
+</mapper>
